@@ -1,76 +1,66 @@
 [
   {
     "id": "c_1781639333933_aw24a5",
-    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
-    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
-    "element_selector": "body > div > main > div > div",
-    "element_snapshot": "<div class=\"grid grid-cols-1 md:grid-cols-4 gap-6 mb-8\">\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content\">\n              <div>\n                <p class=\"text-slate-700 text-base font-semibold\">Total Projects</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">12</p>\n                <p class=\"text-green-700 text-base font-medium mt-3\">+2 this month</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content\">\n              <div>\n                <p class=\"text-slate-700 text-base font-semibold\">Active Tasks</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">34</p>\n                <p class=\"text-amber-700 text-base font-medium mt-3\">8 overdue</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content\">\n              <div>\n                <p class=\"text-slate-700 text-base font-semibold\">Team Members</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">24</p>\n                <p class=\"text-blue-700 text-base font-medium mt-3\">+3 invited</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content\">\n              <div class=\"\">\n                <p class=\"text-slate-700 text-base font-semibold\">Completion Rate</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">87%</p>\n                <p class=\"text-green-700 text-base font-medium mt-3\">↑ 5% from last week</p>\n              </div>\n            </div>\n          </div>\n        </div>",
-    "element_tag": "div",
-    "element_classes": [
-      "grid",
-      "grid-cols-1",
-      "md:grid-cols-4",
-      "gap-6",
-      "mb-8"
-    ],
-    "element_id": null,
-    "computed_styles": {
-      "color": "rgb(15, 23, 42)",
-      "background-color": "rgba(0, 0, 0, 0)",
-      "font-size": "16px",
-      "font-weight": "400",
-      "margin": "0px 0px 32px",
-      "padding": "0px",
-      "border": "0px solid rgb(229, 231, 235)",
-      "text-align": "start",
-      "display": "grid",
-      "flex-direction": "row"
+    "apply_type": "reply",
+    "apply_reply_id": "r_1781639442147_3q5w13",
+    "original_comment": {
+      "text": "Add icons to the cards inside this section on top right corner make size big and opacity 50%",
+      "status": "applied"
     },
-    "applied_css_rules": [
+    "replies": [
       {
-        "selector": "*, ::before, ::after",
-        "styles": "--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ;"
-      },
-      {
-        "selector": "*, ::after, ::before",
-        "styles": "box-sizing: border-box; border-width: 0px; border-style: solid; border-color: rgb(229, 231, 235);"
-      },
-      {
-        "selector": ".mb-8",
-        "styles": "margin-bottom: 2rem;"
-      },
-      {
-        "selector": ".grid",
-        "styles": "display: grid;"
-      },
-      {
-        "selector": ".grid-cols-1",
-        "styles": "grid-template-columns: repeat(1, minmax(0px, 1fr));"
-      },
-      {
-        "selector": ".gap-6",
-        "styles": "gap: 1.5rem;"
-      },
-      {
-        "selector": "*",
-        "styles": "box-sizing: border-box;"
+        "id": "r_1781639442147_3q5w13",
+        "author": "Osama",
+        "text": "icons is too big, make it smaller and each icon with different color",
+        "created_at": "2026-06-16T19:50:42.147Z",
+        "status": "applied"
       }
     ],
-    "parent_element_info": {
-      "tag": "div",
-      "classes": [
-        "p-8"
-      ],
-      "id": null
-    },
-    "pin_x": 75.66489361702128,
-    "pin_y": 44.44444444444444,
+    "element_selector": "body > div > main > div > div",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
     "author": "Osama",
-    "text": "Add icons to the cards inside this section on top right corner make size big and opacity 50%",
+    "created_at": "2026-06-16T19:48:53.933Z",
+    "pin_x": 75.66489361702128,
+    "pin_y": 44.44444444444444
+  },
+  {
+    "id": "c_1781639463629_mzr4so",
+    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "element_selector": "body > div > main > div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
+    "author": "Osama",
+    "text": "Add one more item here , so total will be 5",
     "status": "applied",
     "scope": "element",
     "apply_to": "element-only",
-    "created_at": "2026-06-16T19:48:53.933Z",
+    "created_at": "2026-06-16T19:51:03.629Z",
+    "replies": []
+  },
+  {
+    "id": "c_1781639487444_xiodcq",
+    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "element_selector": "body > div > main > div > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div",
+    "author": "Osama",
+    "text": "increase the space between these elements",
+    "status": "applied",
+    "scope": "element",
+    "apply_to": "element-only",
+    "created_at": "2026-06-16T19:51:27.444Z",
+    "replies": []
+  },
+  {
+    "id": "c_1781639524460_pe3j5o",
+    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "element_selector": "body > div > main > div > div:nth-of-type(2) > div > div",
+    "author": "Osama",
+    "text": "Change this section shadow \"Recent Tasks\" to be same shadow as section \"Active Projects\"",
+    "status": "applied",
+    "scope": "element",
+    "apply_to": "element-only",
+    "created_at": "2026-06-16T19:52:04.460Z",
     "replies": []
   }
 ]
