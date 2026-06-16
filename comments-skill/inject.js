@@ -693,7 +693,44 @@ const renderSidebar = () => {
   }
 
   html += '</div>';
+
+  // Save state before re-rendering
+  const sidebarContent = document.getElementById('hct-sidebar-content');
+  let collapsedStates = {};
+  let scrollPosition = 0;
+
+  if (sidebarContent) {
+    scrollPosition = sidebarContent.scrollTop;
+    document.querySelectorAll('[data-comment-id]').forEach(card => {
+      const commentId = card.getAttribute('data-comment-id');
+      const isCollapsed = card.classList.contains('hct-comment-collapsed');
+      collapsedStates[commentId] = isCollapsed;
+    });
+  }
+
   sidebar.innerHTML = html;
+
+  // Restore collapsed states
+  setTimeout(() => {
+    Object.entries(collapsedStates).forEach(([commentId, wasCollapsed]) => {
+      if (wasCollapsed) {
+        const content = document.querySelector(`[data-collapsed="${commentId}"]`);
+        const btn = document.querySelector(`[data-comment-id="${commentId}"] .hct-collapse-btn`);
+        const card = document.querySelector(`[data-comment-id="${commentId}"]`);
+        if (content && btn && card) {
+          content.classList.add('collapsed');
+          btn.classList.add('collapsed');
+          card.classList.add('hct-comment-collapsed');
+        }
+      }
+    });
+
+    // Restore scroll position
+    const newSidebarContent = document.getElementById('hct-sidebar-content');
+    if (newSidebarContent) {
+      newSidebarContent.scrollTop = scrollPosition;
+    }
+  }, 0);
 
   window.HCT.toggleReply = (commentId) => {
     const textarea = document.querySelector(`[data-reply-id="${commentId}"]`);
