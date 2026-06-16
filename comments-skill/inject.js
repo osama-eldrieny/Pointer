@@ -935,16 +935,6 @@ const startAutoRefreshCheck = () => {
           // Silently ignore errors - server might be down or file doesn't exist yet
         });
     });
-
-    // Also check for status changes (applied comments) to refresh
-    const appliedCount = pageComments.filter(c => c.status === 'applied').length;
-    if (appliedCount > 0) {
-      // Comments have been applied by AI - refresh to show changes
-      setTimeout(() => {
-        showToast('✨ All changes applied! Refreshing page...', 'success');
-        window.location.reload();
-      }, 500);
-    }
   };
 
   setInterval(checkForChanges, 2000);
