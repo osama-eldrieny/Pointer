@@ -1,66 +1,27 @@
 [
   {
-    "id": "c_1781639333933_aw24a5",
+    "id": "c_1781639524460_pe3j5o",
     "apply_type": "reply",
-    "apply_reply_id": "r_1781639442147_3q5w13",
+    "apply_reply_id": "r_1781639730691_k2ovm3",
     "original_comment": {
-      "text": "Add icons to the cards inside this section on top right corner make size big and opacity 50%",
+      "text": "Change this section shadow \"Recent Tasks\" to be same shadow as section \"Active Projects\"",
       "status": "applied"
     },
     "replies": [
       {
-        "id": "r_1781639442147_3q5w13",
+        "id": "r_1781639730691_k2ovm3",
         "author": "Osama",
-        "text": "icons is too big, make it smaller and each icon with different color",
-        "created_at": "2026-06-16T19:50:42.147Z",
+        "text": "You did the opposite, old shadow for Active projects section should applyied on ecent Tasks section. the correct shadow now is \"upcoming deadlines\" section, use it to be applyied on other sections",
+        "created_at": "2026-06-16T19:55:30.691Z",
         "status": "applied"
       }
     ],
-    "element_selector": "body > div > main > div > div",
-    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
-    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
-    "author": "Osama",
-    "created_at": "2026-06-16T19:48:53.933Z",
-    "pin_x": 75.66489361702128,
-    "pin_y": 44.44444444444444
-  },
-  {
-    "id": "c_1781639463629_mzr4so",
-    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
-    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
-    "element_selector": "body > div > main > div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)",
-    "author": "Osama",
-    "text": "Add one more item here , so total will be 5",
-    "status": "applied",
-    "scope": "element",
-    "apply_to": "element-only",
-    "created_at": "2026-06-16T19:51:03.629Z",
-    "replies": []
-  },
-  {
-    "id": "c_1781639487444_xiodcq",
-    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
-    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
-    "element_selector": "body > div > main > div > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div",
-    "author": "Osama",
-    "text": "increase the space between these elements",
-    "status": "applied",
-    "scope": "element",
-    "apply_to": "element-only",
-    "created_at": "2026-06-16T19:51:27.444Z",
-    "replies": []
-  },
-  {
-    "id": "c_1781639524460_pe3j5o",
-    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
-    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
     "element_selector": "body > div > main > div > div:nth-of-type(2) > div > div",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
     "author": "Osama",
-    "text": "Change this section shadow \"Recent Tasks\" to be same shadow as section \"Active Projects\"",
-    "status": "applied",
-    "scope": "element",
-    "apply_to": "element-only",
     "created_at": "2026-06-16T19:52:04.460Z",
-    "replies": []
+    "pin_x": 99.79166666666667,
+    "pin_y": 12.261146496815286
   }
 ]
