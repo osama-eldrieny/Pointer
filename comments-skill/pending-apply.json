@@ -1,27 +1,15 @@
 [
   {
-    "id": "c_1781639524460_pe3j5o",
-    "apply_type": "reply",
-    "apply_reply_id": "r_1781639730691_k2ovm3",
-    "original_comment": {
-      "text": "Change this section shadow \"Recent Tasks\" to be same shadow as section \"Active Projects\"",
-      "status": "applied"
-    },
-    "replies": [
-      {
-        "id": "r_1781639730691_k2ovm3",
-        "author": "Osama",
-        "text": "You did the opposite, old shadow for Active projects section should applyied on ecent Tasks section. the correct shadow now is \"upcoming deadlines\" section, use it to be applyied on other sections",
-        "created_at": "2026-06-16T19:55:30.691Z",
-        "status": "applied"
-      }
-    ],
-    "element_selector": "body > div > main > div > div:nth-of-type(2) > div > div",
-    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "id": "c_1781639855132_r34xtk",
     "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "element_selector": "body > div > main > div > div",
     "author": "Osama",
-    "created_at": "2026-06-16T19:52:04.460Z",
-    "pin_x": 99.79166666666667,
-    "pin_y": 12.261146496815286
+    "text": "remove the icons from this section",
+    "status": "applied",
+    "scope": "element",
+    "apply_to": "element-only",
+    "created_at": "2026-06-16T19:57:35.132Z",
+    "replies": []
   }
 ]
