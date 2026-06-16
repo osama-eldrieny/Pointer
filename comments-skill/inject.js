@@ -281,7 +281,6 @@
       border-radius: 4px;
       font-size: 10px;
       font-weight: 700;
-      margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.3px;
     }
@@ -720,7 +719,7 @@ const renderSidebar = () => {
                 <span class="hct-comment-badge">${idx + 1}</span>
                 <span class="hct-comment-author">${escapeHtml(comment.author)}</span>
               </div>
-              <span class="hct-comment-time" style="font-size: 11px;">${getRelativeTime(comment.created_at)}</span>
+              <span class="hct-comment-time" style="font-size: 11px; padding-left: 30px;">${getRelativeTime(comment.created_at)}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="hct-comment-status ${statusClass}" style="font-size: 11px; padding: 2px 6px;">${statusText}</div>
