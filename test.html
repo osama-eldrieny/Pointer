@@ -531,7 +531,7 @@
           <div>
             <div class="flex items-center gap-3">
               <svg class="w-10 h-10 text-blue-600" data-lucide="layout-dashboard" stroke="currentColor" stroke-width="2" fill="none"></svg>
-              <h1 class="text-4xl font-bold text-slate-900">Dashboard</h1>
+              <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dashboard</h1>
             </div>
             <p class="text-slate-600 text-base mt-1">Welcome back! Here's what's happening with your projects.</p>
           </div>
@@ -574,39 +574,43 @@
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div class="card shadow-lg">
-            <div class="card-content">
+            <div class="card-content flex items-start justify-between">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Total Projects</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">12</p>
                 <p class="text-green-700 text-base font-medium mt-3">+2 this month</p>
               </div>
+              <svg class="w-8 h-8 text-blue-500 flex-shrink-0 opacity-50" data-lucide="briefcase" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
           <div class="card shadow-lg">
-            <div class="card-content">
+            <div class="card-content flex items-start justify-between">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Active Tasks</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">34</p>
                 <p class="text-amber-700 text-base font-medium mt-3">8 overdue</p>
               </div>
+              <svg class="w-8 h-8 text-amber-500 flex-shrink-0 opacity-50" data-lucide="list-check" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
           <div class="card shadow-lg">
-            <div class="card-content">
+            <div class="card-content flex items-start justify-between">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Team Members</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">24</p>
                 <p class="text-blue-700 text-base font-medium mt-3">+3 invited</p>
               </div>
+              <svg class="w-8 h-8 text-purple-500 flex-shrink-0 opacity-50" data-lucide="users" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
           <div class="card shadow-lg">
-            <div class="card-content">
+            <div class="card-content flex items-start justify-between">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Completion Rate</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">87%</p>
                 <p class="text-green-700 text-base font-medium mt-3">↑ 5% from last week</p>
               </div>
+              <svg class="w-8 h-8 text-green-500 flex-shrink-0 opacity-50" data-lucide="trending-up" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
         </div>
@@ -615,7 +619,7 @@
         <div class="grid grid-cols-3 gap-8">
           <!-- Tasks Section -->
           <div>
-            <div class="card">
+            <div class="card shadow-lg">
               <div class="card-header flex items-center justify-between">
                 <h2 class="card-title">Recent Tasks</h2>
                 <button class="btn btn-primary btn-sm">New Task</button>
@@ -694,7 +698,7 @@
                     <span class="text-base font-semibold text-slate-900">75%</span>
                   </div>
                   <div class="progress">
-                    <div class="progress-bar" style="width: 75%; background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #1e40af 100%);"></div>
+                    <div class="progress-bar" style="width: 75%; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #0ea5e9 100%);"></div>
                   </div>
                 </div>
 
@@ -704,7 +708,7 @@
                     <span class="text-base font-semibold text-slate-900">45%</span>
                   </div>
                   <div class="progress">
-                    <div class="progress-bar" style="width: 45%; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #b45309 100%);"></div>
+                    <div class="progress-bar" style="width: 45%; background: linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #fbbf24 100%);"></div>
                   </div>
                 </div>
 
@@ -714,7 +718,7 @@
                     <span class="text-base font-semibold text-slate-900">90%</span>
                   </div>
                   <div class="progress">
-                    <div class="progress-bar" style="width: 90%; background: linear-gradient(135deg, #6ee7b7 0%, #10b981 50%, #047857 100%);"></div>
+                    <div class="progress-bar" style="width: 90%; background: linear-gradient(135deg, #047857 0%, #10b981 50%, #6ee7b7 100%);"></div>
                   </div>
                 </div>
 
@@ -724,7 +728,7 @@
                     <span class="text-base font-semibold text-slate-900">60%</span>
                   </div>
                   <div class="progress">
-                    <div class="progress-bar" style="width: 60%; background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1e3a8a 100%);"></div>
+                    <div class="progress-bar" style="width: 60%; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);"></div>
                   </div>
                 </div>
 
@@ -734,7 +738,7 @@
                     <span class="text-base font-semibold text-slate-900">85%</span>
                   </div>
                   <div class="progress">
-                    <div class="progress-bar" style="width: 85%; background: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 50%, #6b21a8 100%);"></div>
+                    <div class="progress-bar" style="width: 85%; background: linear-gradient(135deg, #6b21a8 0%, #8b5cf6 50%, #c4b5fd 100%);"></div>
                   </div>
                 </div>
               </div>
@@ -766,13 +770,6 @@
                 <div class="flex-1">
                   <p class="font-semibold text-base text-slate-900">Sprint Planning</p>
                   <p class="text-base text-slate-600 mt-1">Monday at 9:00 AM</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                <svg class="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" data-lucide="users" stroke="currentColor" stroke-width="2" fill="none"></svg>
-                <div class="flex-1">
-                  <p class="font-semibold text-base text-slate-900">Team Standup</p>
-                  <p class="text-base text-slate-600 mt-1">Daily at 10:30 AM</p>
                 </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
@@ -874,7 +871,7 @@
           <!-- Components Showcase -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Status & Indicators -->
-            <div class="card">
+            <div class="card shadow-lg">
               <div class="card-header">
                 <h3 class="card-title">Status Indicators</h3>
               </div>
@@ -911,7 +908,7 @@
             </div>
 
             <!-- Code Example -->
-            <div class="card">
+            <div class="card shadow-lg">
               <div class="card-header">
                 <h3 class="card-title">Installation Guide</h3>
               </div>
