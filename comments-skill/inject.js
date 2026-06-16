@@ -665,7 +665,6 @@ const renderSidebar = () => {
               <button class="hct-comment-btn" onclick="HCT.toggleApply('${comment.id}')">${comment.status === 'pending-apply' ? 'Cancel' : 'Ready to Apply'}</button>
               <button class="hct-comment-btn" onclick="HCT.deleteComment('${comment.id}')">Delete</button>
             </div>
-          </div>
       `;
 
       if (comment.replies && comment.replies.length > 0) {
@@ -689,7 +688,7 @@ const renderSidebar = () => {
         });
       }
 
-      html += `</div>`;
+      html += `</div></div>`;
     });
   }
 
