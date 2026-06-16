@@ -531,7 +531,7 @@
           <div>
             <div class="flex items-center gap-3">
               <svg class="w-10 h-10 text-blue-600" data-lucide="layout-dashboard" stroke="currentColor" stroke-width="2" fill="none"></svg>
-              <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dashboard</h1>
+              <h1 class="text-4xl font-bold text-slate-900">Dashboard</h1>
             </div>
             <p class="text-slate-600 text-base mt-1">Welcome back! Here's what's happening with your projects.</p>
           </div>
@@ -573,44 +573,40 @@
       <div class="p-8">
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div class="card">
-            <div class="card-content flex items-start justify-between">
+          <div class="card shadow-lg">
+            <div class="card-content">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Total Projects</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">12</p>
                 <p class="text-green-700 text-base font-medium mt-3">+2 this month</p>
               </div>
-              <svg class="w-12 h-12 text-blue-500 flex-shrink-0 opacity-50" data-lucide="briefcase" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
-          <div class="card">
-            <div class="card-content flex items-start justify-between">
+          <div class="card shadow-lg">
+            <div class="card-content">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Active Tasks</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">34</p>
                 <p class="text-amber-700 text-base font-medium mt-3">8 overdue</p>
               </div>
-              <svg class="w-12 h-12 text-amber-500 flex-shrink-0 opacity-50" data-lucide="list-check" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
-          <div class="card">
-            <div class="card-content flex items-start justify-between">
+          <div class="card shadow-lg">
+            <div class="card-content">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Team Members</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">24</p>
                 <p class="text-blue-700 text-base font-medium mt-3">+3 invited</p>
               </div>
-              <svg class="w-12 h-12 text-purple-500 flex-shrink-0 opacity-50" data-lucide="users" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
-          <div class="card">
-            <div class="card-content flex items-start justify-between">
+          <div class="card shadow-lg">
+            <div class="card-content">
               <div>
                 <p class="text-slate-700 text-base font-semibold">Completion Rate</p>
                 <p class="text-4xl font-bold mt-3 text-slate-900">87%</p>
                 <p class="text-green-700 text-base font-medium mt-3">↑ 5% from last week</p>
               </div>
-              <svg class="w-12 h-12 text-green-500 flex-shrink-0 opacity-50" data-lucide="trending-up" stroke="currentColor" stroke-width="1.5" fill="none"></svg>
             </div>
           </div>
         </div>
@@ -622,7 +618,7 @@
             <div class="card">
               <div class="card-header flex items-center justify-between">
                 <h2 class="card-title">Recent Tasks</h2>
-                <button class="btn btn-outline btn-sm">New Task</button>
+                <button class="btn btn-primary btn-sm">New Task</button>
               </div>
               <div class="card-content">
                 <div class="space-y-4">
@@ -691,7 +687,7 @@
               <h3 class="card-title">Active Projects</h3>
             </div>
             <div class="card-content space-y-4">
-              <div class="space-y-6">
+              <div class="space-y-8">
                 <div>
                   <div class="flex justify-between items-center mb-2">
                     <p class="text-base font-semibold text-slate-900">Web Design</p>
@@ -763,6 +759,27 @@
                 <div class="flex-1">
                   <p class="font-semibold text-base text-slate-900">Client Presentation</p>
                   <p class="text-base text-slate-600 mt-1">Friday at 10:00 AM</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" data-lucide="calendar" stroke="currentColor" stroke-width="2" fill="none"></svg>
+                <div class="flex-1">
+                  <p class="font-semibold text-base text-slate-900">Sprint Planning</p>
+                  <p class="text-base text-slate-600 mt-1">Monday at 9:00 AM</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                <svg class="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" data-lucide="users" stroke="currentColor" stroke-width="2" fill="none"></svg>
+                <div class="flex-1">
+                  <p class="font-semibold text-base text-slate-900">Team Standup</p>
+                  <p class="text-base text-slate-600 mt-1">Daily at 10:30 AM</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                <svg class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" data-lucide="check-circle" stroke="currentColor" stroke-width="2" fill="none"></svg>
+                <div class="flex-1">
+                  <p class="font-semibold text-base text-slate-900">Project Review</p>
+                  <p class="text-base text-slate-600 mt-1">Wednesday at 3:00 PM</p>
                 </div>
               </div>
             </div>
