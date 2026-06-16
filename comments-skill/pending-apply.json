@@ -1,1 +1,76 @@
-[]
+[
+  {
+    "id": "c_1781639132239_whqobi",
+    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "element_selector": "body > div > main > div > div",
+    "element_snapshot": "<div class=\"grid grid-cols-1 md:grid-cols-4 gap-6 mb-8\">\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content flex items-start justify-between\">\n              <div>\n                <p class=\"text-slate-700 text-base font-semibold\">Total Projects</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">12</p>\n                <p class=\"text-green-700 text-base font-medium mt-3\">+2 this month</p>\n              </div>\n              <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-lucide=\"briefcase\" aria-hidden=\"true\" class=\"lucide lucide-briefcase w-10 h-10 text-blue-500 flex-shrink-0 opacity-50\"><path d=\"M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16\"></path><rect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\"></rect></svg>\n            </div>\n          </div>\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content flex items-start justify-between\">\n              <div>\n                <p class=\"text-slate-700 text-base font-semibold\">Active Tasks</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">34</p>\n                <p class=\"text-amber-700 text-base font-medium mt-3\">8 overdue</p>\n              </div>\n              <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-lucide=\"list-check\" aria-hidden=\"true\" class=\"lucide lucide-list-check w-10 h-10 text-amber-500 flex-shrink-0 opacity-50\"><path d=\"M16 5H3\"></path><path d=\"M16 12H3\"></path><path d=\"M11 19H3\"></path><path d=\"m15 18 2 2 4-4\"></path></svg>\n            </div>\n          </div>\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content flex items-start justify-between\">\n              <div>\n                <p class=\"text-slate-700 text-base font-semibold\">Team Members</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">24</p>\n                <p class=\"text-blue-700 text-base font-medium mt-3\">+3 invited</p>\n              </div>\n              <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-lucide=\"users\" aria-hidden=\"true\" class=\"lucide lucide-users w-10 h-10 text-purple-500 flex-shrink-0 opacity-50\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"></path><path d=\"M16 3.128a4 4 0 0 1 0 7.744\"></path><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"></path><circle cx=\"9\" cy=\"7\" r=\"4\"></circle></svg>\n            </div>\n          </div>\n          <div class=\"card shadow-lg\">\n            <div class=\"card-content flex items-start justify-between\">\n              <div>\n                <p class=\"text-slate-700 text-base font-semibold\">Completion Rate</p>\n                <p class=\"text-4xl font-bold mt-3 text-slate-900\">87%</p>\n                <p class=\"text-green-700 text-base font-medium mt-3\">↑ 5% from last week</p>\n              </div>\n              <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-lucide=\"trending-up\" aria-hidden=\"true\" class=\"lucide lucide-trending-up w-10 h-10 text-green-500 flex-shrink-0 opacity-50\"><path d=\"M16 7h6v6\"></path><path d=\"m22 7-8.5 8.5-5-5L2 17\"></path></svg>\n            </div>\n          </div>\n        </div>",
+    "element_tag": "div",
+    "element_classes": [
+      "grid",
+      "grid-cols-1",
+      "md:grid-cols-4",
+      "gap-6",
+      "mb-8"
+    ],
+    "element_id": null,
+    "computed_styles": {
+      "color": "rgb(15, 23, 42)",
+      "background-color": "rgba(0, 0, 0, 0)",
+      "font-size": "16px",
+      "font-weight": "400",
+      "margin": "0px 0px 32px",
+      "padding": "0px",
+      "border": "0px solid rgb(229, 231, 235)",
+      "text-align": "start",
+      "display": "grid",
+      "flex-direction": "row"
+    },
+    "applied_css_rules": [
+      {
+        "selector": "*, ::before, ::after",
+        "styles": "--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ;"
+      },
+      {
+        "selector": "*, ::after, ::before",
+        "styles": "box-sizing: border-box; border-width: 0px; border-style: solid; border-color: rgb(229, 231, 235);"
+      },
+      {
+        "selector": ".mb-8",
+        "styles": "margin-bottom: 2rem;"
+      },
+      {
+        "selector": ".grid",
+        "styles": "display: grid;"
+      },
+      {
+        "selector": ".grid-cols-1",
+        "styles": "grid-template-columns: repeat(1, minmax(0px, 1fr));"
+      },
+      {
+        "selector": ".gap-6",
+        "styles": "gap: 1.5rem;"
+      },
+      {
+        "selector": "*",
+        "styles": "box-sizing: border-box;"
+      }
+    ],
+    "parent_element_info": {
+      "tag": "div",
+      "classes": [
+        "p-8"
+      ],
+      "id": null
+    },
+    "pin_x": 24.433656957928804,
+    "pin_y": 29.01234567901235,
+    "author": "Osama",
+    "text": "Remove the icons from the cards inside this section",
+    "status": "pending-apply",
+    "scope": "element",
+    "apply_to": "element-only",
+    "created_at": "2026-06-16T19:45:32.239Z",
+    "replies": []
+  }
+]
