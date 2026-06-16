@@ -384,6 +384,15 @@
       transform: rotate(-90deg);
     }
 
+    .hct-reply {
+      overflow: hidden;
+      transition: height 0.3s ease;
+    }
+
+    .hct-reply.collapsed {
+      height: 50px;
+    }
+
     .hct-reply-content {
       max-height: 1000px;
       overflow: hidden;
@@ -391,7 +400,7 @@
     }
 
     .hct-reply-content.collapsed {
-      max-height: 50px;
+      max-height: 0;
     }
 
     /* COMMENT ACTIONS */
@@ -796,11 +805,13 @@ const renderSidebar = () => {
     // Restore reply collapsed states
     Object.entries(replyCollapsedStates).forEach(([replyId, wasCollapsed]) => {
       if (wasCollapsed) {
+        const reply = document.querySelector(`[data-reply-id="${replyId}"]`);
         const content = document.querySelector(`[data-reply-collapsed="${replyId}"]`);
         const btn = document.querySelector(`[data-reply-id="${replyId}"] .hct-reply-collapse-btn`);
-        if (content && btn) {
+        if (content && btn && reply) {
           content.classList.add('collapsed');
           btn.classList.add('collapsed');
+          reply.classList.add('collapsed');
         }
       }
     });
@@ -957,11 +968,13 @@ const renderSidebar = () => {
   };
 
   window.HCT.toggleReplyCollapse = (commentId, replyId) => {
+    const reply = document.querySelector(`[data-reply-id="${replyId}"]`);
     const content = document.querySelector(`[data-reply-collapsed="${replyId}"]`);
     const btn = document.querySelector(`[data-reply-id="${replyId}"] .hct-reply-collapse-btn`);
-    if (content && btn) {
+    if (content && btn && reply) {
       content.classList.toggle('collapsed');
       btn.classList.toggle('collapsed');
+      reply.classList.toggle('collapsed');
     }
   };
 
