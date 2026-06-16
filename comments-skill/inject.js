@@ -852,6 +852,30 @@ const renderSidebar = () => {
       .catch(() => showToast('Error adding reply', 'error'));
   };
 
+  window.HCT.updateCommentStatusInDOM = (commentId, newStatus) => {
+    const statusClass = `hct-status-${newStatus.replace(/_/g, '-')}`;
+    const statusText = newStatus === 'pending-apply' ? 'Pending Apply' : newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+    const statusElement = document.querySelector(`[data-comment-id="${commentId}"] .hct-comment-status`);
+    if (statusElement) {
+      statusElement.className = `hct-comment-status ${statusClass}`;
+      statusElement.textContent = statusText;
+    }
+    const button = document.querySelector(`[data-comment-id="${commentId}"] .hct-comment-actions .hct-comment-btn:nth-child(2)`);
+    if (button) {
+      button.textContent = newStatus === 'pending-apply' ? 'Cancel' : 'Ready to Apply';
+    }
+  };
+
+  window.HCT.updateReplyStatusInDOM = (replyId, newStatus) => {
+    const statusClass = `hct-status-${newStatus.replace(/_/g, '-')}`;
+    const statusText = newStatus === 'pending-apply' ? 'Pending Apply' : newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+    const statusElement = document.querySelector(`[data-reply-id="${replyId}"] .hct-comment-status`);
+    if (statusElement) {
+      statusElement.className = `hct-comment-status ${statusClass}`;
+      statusElement.textContent = statusText;
+    }
+  };
+
   window.HCT.toggleApply = (commentId) => {
     const comment = HCT.comments.find(c => c.id === commentId);
     if (!comment) return;
@@ -865,7 +889,7 @@ const renderSidebar = () => {
     })
       .then(() => {
         comment.status = newStatus;
-        renderSidebar();
+        HCT.updateCommentStatusInDOM(commentId, newStatus);
         renderPins();
         showToast(newStatus === 'pending-apply' ? '✅ Ready to apply' : '❌ Not ready to apply', 'success');
       })
@@ -893,7 +917,7 @@ const renderSidebar = () => {
     })
       .then(() => {
         reply.status = newStatus;
-        renderSidebar();
+        HCT.updateReplyStatusInDOM(replyId, newStatus);
         showToast(newStatus === 'pending-apply' ? '✅ Reply ready to apply' : '❌ Reply not ready to apply', 'success');
       })
       .catch(() => showToast('Error updating reply', 'error'));
