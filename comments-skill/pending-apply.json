@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "id": "c_1781640382196_d5kipx",
+    "page_url": "file:///Users/oo/Desktop/Comments%20skill/test.html",
+    "html_file_path": "../file:/Users/oo/Desktop/Comments%20skill/test.html",
+    "element_selector": "body > div > main > header > div > div > div > h1",
+    "element_tag": "h1",
+    "element_classes": [
+      "text-4xl",
+      "font-bold",
+      "text-slate-900"
+    ],
+    "author": "Osama",
+    "text": "Make text color dark and solid, not garient",
+    "status": "applied",
+    "scope": "element",
+    "apply_to": "element-only",
+    "created_at": "2026-06-16T20:06:22.196Z",
+    "replies": []
+  }
+]
