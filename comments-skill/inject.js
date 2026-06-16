@@ -391,8 +391,7 @@
     }
 
     .hct-reply-content.collapsed {
-      max-height: 0;
-      height: 50px;
+      max-height: 50px;
     }
 
     /* COMMENT ACTIONS */
