@@ -93,7 +93,7 @@
       right: 0;
       top: 0;
       height: 100vh;
-      width: 430px;
+      width: 350px;
       background: #ffffff;
       border-left: 1px solid #e2e8f0;
       z-index: 2147483646;
@@ -144,7 +144,8 @@
       border: none;
       font-size: 24px;
       cursor: pointer;
-      padding: 8px;
+      padding: 0px 7px 3px;
+      line-height: 26px;
       border-radius: 8px;
       transition: all 0.2s;
       color: #64748b;
@@ -265,13 +266,13 @@
 
     .hct-comment-status {
       display: inline-block;
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
 
     .hct-status-open {
@@ -304,24 +305,64 @@
       word-wrap: break-word;
     }
 
+    /* COLLAPSE BUTTON */
+    .hct-collapse-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      padding: 4px;
+      transition: all 0.2s;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hct-collapse-btn:hover {
+      color: #475569;
+    }
+
+    .hct-collapse-icon {
+      transition: transform 0.2s;
+    }
+
+    .hct-collapse-btn.collapsed .hct-collapse-icon {
+      transform: rotate(-90deg);
+    }
+
+    /* COLLAPSED CONTENT */
+    .hct-comment-content {
+      max-height: 1000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .hct-comment-content.collapsed {
+      max-height: 0;
+    }
+
+    .hct-comment-collapsed {
+      padding-bottom: 8px;
+    }
+
     /* COMMENT ACTIONS */
     .hct-comment-actions {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #f1f5f9;
+      margin-top: 8px;
+      padding-top: 0;
     }
 
     .hct-comment-btn {
-      padding: 8px 12px;
-      font-size: 12px;
+      padding: 4px 8px;
+      font-size: 11px;
       font-weight: 600;
       border: 1px solid #e2e8f0;
       background: white;
       color: #1e293b;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -551,7 +592,7 @@
     }
 
     body.hct-sidebar-open {
-      margin-right: 430px;
+      margin-right: 350px;
     }
   `;
   document.head.appendChild(style);
@@ -561,15 +602,13 @@ const renderToolbar = () => {
   const toolbar = document.createElement('div');
   toolbar.id = 'hct-toolbar';
   toolbar.innerHTML = `
-    <button id="hct-btn-comment">+ Comment</button>
-    <button id="hct-btn-sidebar">Comments (<span id="hct-comment-count">0</span>)</button>
-    <button id="hct-btn-export">Export HTML</button>
+    <button id="hct-btn-comment">+ Add Comment</button>
+    <button id="hct-btn-sidebar">All Comments (<span id="hct-comment-count">0</span>)</button>
   `;
   document.body.appendChild(toolbar);
 
   document.getElementById('hct-btn-comment').addEventListener('click', togglePickMode);
   document.getElementById('hct-btn-sidebar').addEventListener('click', toggleSidebar);
-  document.getElementById('hct-btn-export').addEventListener('click', exportHTML);
 };
 
 const renderSidebar = () => {
@@ -600,7 +639,7 @@ const renderSidebar = () => {
           <path d="M12 16v-4M12 10v-.01"/>
         </svg>
         <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0;">No comments yet</p>
-        <p style="color: #94a3b8; font-size: 12px; margin: 8px 0 0 0;">Click "<strong>+ Comment</strong>" to add your first comment</p>
+        <p style="color: #94a3b8; font-size: 12px; margin: 8px 0 0 0;">Click "<strong>+ Add Comment</strong>" to add your first comment</p>
       </div>
     `;
   } else {
@@ -609,18 +648,23 @@ const renderSidebar = () => {
       const statusText = comment.status === 'pending-apply' ? 'Pending Apply' : comment.status.charAt(0).toUpperCase() + comment.status.slice(1);
 
       html += `
-        <div class="hct-comment-card" data-comment-id="${comment.id}" onclick="HCT.highlightCommentElement('${comment.id}')" style="cursor: pointer;">
-          <div class="hct-comment-header">
-            <span class="hct-comment-badge">${idx + 1}</span>
-            <span class="hct-comment-author">${escapeHtml(comment.author)}</span>
-            <span class="hct-comment-time">${getRelativeTime(comment.created_at)}</span>
+        <div class="hct-comment-card" data-comment-id="${comment.id}" style="cursor: default;">
+          <div class="hct-comment-header" onclick="HCT.highlightCommentElement('${comment.id}')" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+              <span class="hct-comment-badge">${idx + 1}</span>
+              <span class="hct-comment-author">${escapeHtml(comment.author)}</span>
+              <span class="hct-comment-time">${getRelativeTime(comment.created_at)}</span>
+            </div>
+            <button class="hct-collapse-btn" onclick="event.stopPropagation(); HCT.toggleCommentCollapse('${comment.id}')" title="Collapse/Expand"><svg class="hct-collapse-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
           </div>
-          <div class="hct-comment-status ${statusClass}">${statusText}</div>
-          <div class="hct-comment-text">${escapeHtml(comment.text)}</div>
-          <div class="hct-comment-actions">
-            <button class="hct-comment-btn" onclick="HCT.toggleReply('${comment.id}')">Reply</button>
-            <button class="hct-comment-btn" onclick="HCT.toggleApply('${comment.id}')">${comment.status === 'pending-apply' ? 'Cancel' : 'Mark Apply'}</button>
-            <button class="hct-comment-btn" onclick="HCT.deleteComment('${comment.id}')">Delete</button>
+          <div class="hct-comment-content" data-collapsed="${comment.id}">
+            <div class="hct-comment-status ${statusClass}">${statusText}</div>
+            <div class="hct-comment-text">${escapeHtml(comment.text)}</div>
+            <div class="hct-comment-actions">
+              <button class="hct-comment-btn" onclick="HCT.toggleReply('${comment.id}')">Reply</button>
+              <button class="hct-comment-btn" onclick="HCT.toggleApply('${comment.id}')">${comment.status === 'pending-apply' ? 'Cancel' : 'Ready to Apply'}</button>
+              <button class="hct-comment-btn" onclick="HCT.deleteComment('${comment.id}')">Delete</button>
+            </div>
           </div>
       `;
 
@@ -639,7 +683,7 @@ const renderSidebar = () => {
               </div>
               <div class="hct-reply-text">${escapeHtml(reply.text)}</div>
               <div style="font-size: 11px; color: #999; margin-top: 2px; margin-bottom: 8px;">${getRelativeTime(reply.created_at)}</div>
-              ${isAIReply ? '' : `<button class="hct-comment-btn" onclick="HCT.toggleReplyApply('${comment.id}', '${reply.id}')" style="font-size: 11px; padding: 4px 8px;">${replyStatus === 'pending-apply' ? 'Cancel Apply' : 'Mark Apply'}</button>`}
+              ${isAIReply ? '' : `<button class="hct-comment-btn" onclick="HCT.toggleReplyApply('${comment.id}', '${reply.id}')" style="font-size: 11px; padding: 4px 8px;">${replyStatus === 'pending-apply' ? 'Cancel' : 'Ready to Apply'}</button>`}
             </div>
           `;
         });
@@ -718,7 +762,7 @@ const renderSidebar = () => {
         comment.status = newStatus;
         renderSidebar();
         renderPins();
-        showToast(newStatus === 'pending-apply' ? 'Marked for AI apply' : 'Cancelled apply', 'success');
+        showToast(newStatus === 'pending-apply' ? '✅ Ready to apply' : '❌ Not ready to apply', 'success');
       })
       .catch(() => showToast('Error updating comment', 'error'));
   };
@@ -745,14 +789,12 @@ const renderSidebar = () => {
       .then(() => {
         reply.status = newStatus;
         renderSidebar();
-        showToast(newStatus === 'pending-apply' ? 'Reply marked for AI apply' : 'Reply apply cancelled', 'success');
+        showToast(newStatus === 'pending-apply' ? '✅ Reply ready to apply' : '❌ Reply not ready to apply', 'success');
       })
       .catch(() => showToast('Error updating reply', 'error'));
   };
 
   window.HCT.deleteComment = (commentId) => {
-    if (!confirm('Delete this comment and all its replies?')) return;
-
     fetch(`http://localhost:3001/api/comments/${commentId}`, { method: 'DELETE' })
       .then(() => {
         HCT.comments = HCT.comments.filter(c => c.id !== commentId);
@@ -761,6 +803,17 @@ const renderSidebar = () => {
         showToast('Comment deleted', 'success');
       })
       .catch(() => showToast('Error deleting comment', 'error'));
+  };
+
+  window.HCT.toggleCommentCollapse = (commentId) => {
+    const content = document.querySelector(`[data-collapsed="${commentId}"]`);
+    const btn = document.querySelector(`[data-comment-id="${commentId}"] .hct-collapse-btn`);
+    const card = document.querySelector(`[data-comment-id="${commentId}"]`);
+    if (content && btn && card) {
+      content.classList.toggle('collapsed');
+      btn.classList.toggle('collapsed');
+      card.classList.toggle('hct-comment-collapsed');
+    }
   };
 
   window.HCT.highlightCommentElement = highlightCommentElement;
@@ -847,27 +900,51 @@ const fetchComments = () => {
 };
 
 const startAutoRefreshCheck = () => {
-  let lastModified = null;
+  let lastModified = {};
+  let lastPendingCount = 0;
 
   const checkForChanges = () => {
-    const comment = HCT.comments[0];
-    if (!comment || !comment.html_file_path) return;
+    const pageUrl = window.location.href;
+    const pageComments = HCT.comments.filter(c => c.page_url === pageUrl);
 
-    const params = new URLSearchParams({ html_file_path: comment.html_file_path });
-    fetch(`http://localhost:3001/api/check-changes?${params}`)
-      .then(r => r.json())
-      .then(data => {
-        if (lastModified === null) {
-          lastModified = data.lastModified;
-        } else if (data.lastModified > lastModified) {
-          lastModified = data.lastModified;
-          showToast('✨ HTML updated! Refreshing page...', 'success');
-          setTimeout(() => window.location.reload(), 1500);
-        }
-      })
-      .catch(err => {
-        // Silently ignore errors - server might be down or file doesn't exist yet
-      });
+    if (pageComments.length === 0) return;
+
+    // Get unique html_file_paths from all comments on this page
+    const filePaths = [...new Set(pageComments.map(c => c.html_file_path).filter(Boolean))];
+
+    // Check each file for modifications (skip invalid paths)
+    filePaths.forEach(filePath => {
+      // Skip invalid paths (file:// URLs, paths with "file:", etc.)
+      if (!filePath || filePath.includes('file:') || filePath.includes('file%3A')) {
+        return;
+      }
+
+      const params = new URLSearchParams({ html_file_path: filePath });
+      fetch(`http://localhost:3001/api/check-changes?${params}`)
+        .then(r => r.json())
+        .then(data => {
+          if (!lastModified[filePath]) {
+            lastModified[filePath] = data.lastModified;
+          } else if (data.lastModified > lastModified[filePath]) {
+            lastModified[filePath] = data.lastModified;
+            showToast('✨ HTML updated! Refreshing page...', 'success');
+            setTimeout(() => window.location.reload(), 1500);
+          }
+        })
+        .catch(err => {
+          // Silently ignore errors - server might be down or file doesn't exist yet
+        });
+    });
+
+    // Also check for status changes (applied comments) to refresh
+    const appliedCount = pageComments.filter(c => c.status === 'applied').length;
+    if (appliedCount > 0) {
+      // Comments have been applied by AI - refresh to show changes
+      setTimeout(() => {
+        showToast('✨ All changes applied! Refreshing page...', 'success');
+        window.location.reload();
+      }, 500);
+    }
   };
 
   setInterval(checkForChanges, 2000);
@@ -1077,21 +1154,6 @@ const generateSelector = (el) => {
   }
 
   return parts.join(' > ');
-};
-
-const exportHTML = () => {
-  document.querySelectorAll('[id^="hct-"]').forEach(el => el.style.display = 'none');
-  const html = document.documentElement.outerHTML;
-  document.querySelectorAll('[id^="hct-"]').forEach(el => el.style.display = '');
-
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `export-${new Date().toISOString().slice(0, 10)}.html`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('HTML exported', 'success');
 };
 
 const showToast = (msg, type = 'success') => {

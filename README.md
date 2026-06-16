@@ -14,38 +14,90 @@ A **lightweight, zero-auth commenting skill** for HTML pages. Add collaborative 
 
 ## Quick Start
 
-### 1. Install & Start
+### Step 1: Clone the Repository
 
 ```bash
-cd comments-skill
+git clone https://github.com/yourusername/html-comments-skill.git
+```
+
+### Step 2: Start the Comments Server (Terminal 1)
+
+Navigate to the skill folder and start the server:
+
+```bash
+cd html-comments-skill/comments-skill
 npm install
 npm start
 ```
 
-Server runs on `http://localhost:3001`
+**Keep this terminal open** — the comments server must stay running for the bookmarklet to work.
 
-### 2. Serve Your HTML
-
-In another terminal, serve your HTML files on localhost:8000:
-
-```bash
-# Using Python
-python3 -m http.server 8000 --directory /path/to/your/html
-
-# Or use any other local server
+You'll see:
+```
+🎯 HTML Comments server running at http://localhost:3001
+📌 Bookmarklet page: http://localhost:3001/bookmarklet
 ```
 
-### 3. Install Bookmarklet
+### Step 3: Install the Bookmarklet
 
-Open `http://localhost:3001/bookmarklet` and drag **"HTML Comments"** to your bookmarks bar.
+1. Open `http://localhost:3001/bookmarklet` in your browser
+2. **Drag the "HTML Comments" button to your bookmarks bar** (click and hold, then drag)
+3. The button should now appear in your browser's bookmarks
 
-### 4. Add Comments
+**Tip:** The bookmarklet works like a browser bookmark — drag it to your toolbar for quick access.
 
-1. Open any HTML page on localhost:8000
-2. Click the bookmarklet
-3. Click any element to comment
-4. Type feedback and submit
-5. See numbered pins appear on the page
+### Step 4: Open Your Project in the Browser
+
+**Open your Project HTML file in the browser** — either as a local server or directly:
+
+- **Test file:** Open the included `test.html` file directly in your browser (file is at the project root)
+- **Your project:** Open your own HTML file or project URL
+- **Local server:** Open `http://localhost:8000`, `http://localhost:3000`, etc. (use whatever port your project runs on)
+- **Static file:** Open `file:///path/to/your/project.html` (open HTML file directly without a server)
+
+### Step 5: Start Commenting
+
+1. **Click the "HTML Comments" bookmarklet** from your bookmarks bar
+2. A toolbar appears in the top-right corner
+3. Click **"+ Add Comment"** button
+4. **Click any element on the page** to attach a comment
+5. Type your feedback and submit
+6. See **numbered pins** appear on the element
+
+### Step 6: View & Manage Comments
+
+1. Click **"All Comments"** button in the toolbar
+2. The sidebar opens showing all comments on the page
+3. You can:
+   - **Reply** to comments to discuss changes
+   - **Delete** comments you no longer need
+   - **Read** full comment history with replies
+
+### Step 7: Queue Changes for your AI Agent (e.g., Claude)
+
+When ready to apply a comment:
+
+1. Click **"Ready to Apply"** button on the comment
+2. The status changes to **"Pending Apply"** (highlighted in yellow)
+3. If the comment has replies, you can mark individual replies instead
+4. The comment is now in the queue for AI to process
+
+### Step 8: Apply Changes with your AI Agent (Claude)
+
+Tell Claude Code to apply your pending comments:
+
+```
+apply pending comments
+```
+
+Claude will:
+- Read all queued comments from `pending-apply.json`
+- Apply each change to the corresponding HTML file
+- Add an AI reply showing what was changed
+- Mark the comment as ✓ Applied
+- **Browser automatically refreshes** to show the changes
+
+**That's it!** Your HTML is now updated with all the changes. 🎉
 
 ## API Quick Reference
 

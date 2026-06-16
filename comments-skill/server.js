@@ -106,20 +106,50 @@ app.get('/bookmarklet', (req, res) => {
     <head>
       <title>HTML Comments Bookmarklet</title>
       <style>
-        body { font-family: system-ui, sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; }
-        h1 { color: #333; }
-        p { color: #666; line-height: 1.6; }
-        a.bookmark { display: inline-block; padding: 12px 24px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; cursor: move; font-weight: bold; user-select: none; }
-        a.bookmark:hover { background: #0056b3; }
-        .code { background: #f5f5f5; padding: 12px; border-radius: 4px; font-family: monospace; overflow-x: auto; margin: 10px 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; max-width: 700px; margin: 0 auto; }
+        h1 { color: #1f2937; font-size: 32px; margin-bottom: 24px; }
+        h2 { color: #374151; font-size: 18px; margin-top: 32px; margin-bottom: 12px; }
+        p { color: #4b5563; line-height: 1.8; margin: 12px 0; }
+        .bookmark-container { background: #f3f4f6; border: 2px dashed #2563eb; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center; }
+        a.bookmark { display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; text-decoration: none; border-radius: 8px; cursor: grab; font-weight: 600; font-size: 15px; user-select: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); transition: all 0.3s ease; }
+        a.bookmark:hover { background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35); transform: translateY(-2px); cursor: grab; }
+        a.bookmark:active { cursor: grabbing; }
+        .instruction-steps { background: #eff6ff; border-left: 4px solid #2563eb; padding: 16px; border-radius: 4px; margin: 16px 0; }
+        .instruction-steps li { margin: 8px 0; color: #1e40af; }
+        .code-block { background: #1f2937; color: #e5e7eb; padding: 16px; border-radius: 8px; font-family: 'Courier New', monospace; overflow-x: auto; margin: 12px 0; font-size: 12px; }
+        .success-icon { font-size: 20px; margin-right: 8px; }
+        .step-number { display: inline-block; background: #2563eb; color: white; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: bold; margin-right: 12px; }
       </style>
     </head>
     <body>
-      <h1>📝 HTML Comments Tool</h1>
-      <p><strong>Drag the link below to your bookmarks bar:</strong></p>
-      <a href="${bookmarklet}" class="bookmark" draggable="true">HTML Comments</a>
-      <p>Or copy-paste this into a new bookmark:</p>
-      <div class="code">${bookmarklet}</div>
+      <h1>📝 HTML Comments Bookmarklet Setup</h1>
+
+      <div class="bookmark-container">
+        <h2 style="margin-top: 0;">👇 Drag this button to your bookmarks bar:</h2>
+        <a href="${bookmarklet}" class="bookmark" draggable="true">📌 HTML Comments</a>
+        <p style="margin-top: 16px; color: #6b7280;"><strong>How to drag:</strong> Click and hold the button above, then drag it to your browser's bookmarks bar at the top.</p>
+      </div>
+
+      <h2>How It Works</h2>
+      <div class="instruction-steps">
+        <ol>
+          <li><strong>Bookmark added:</strong> "HTML Comments" appears in your bookmarks bar</li>
+          <li><strong>Open your HTML page:</strong> Visit your local project at http://localhost:8000</li>
+          <li><strong>Click the bookmarklet:</strong> Click "HTML Comments" from your bookmarks</li>
+          <li><strong>Start commenting:</strong> Use the toolbar to add comments to elements</li>
+        </ol>
+      </div>
+
+      <h2>Alternative: Manual Bookmark</h2>
+      <p>If you can't drag the button, copy and paste the code below into a new bookmark:</p>
+      <div class="code-block">${bookmarklet}</div>
+      <p style="color: #6b7280; font-size: 13px;"><strong>Steps:</strong> In your browser, right-click bookmarks bar → "Add page" → Paste code above → Name it "HTML Comments"</p>
+
+      <h2>⚠️ Important: Keep the Server Running</h2>
+      <p style="color: #7c2d12; background: #fed7aa; padding: 12px; border-radius: 4px;">The terminal running the comments server (port 3001) <strong>must stay open</strong> for the bookmarklet to work. Keep it running in the background while you use the tool.</p>
+
+      <h2>✨ Ready?</h2>
+      <p>Go back to your HTML page and click the <strong>"HTML Comments"</strong> bookmarklet from your bookmarks bar to start commenting!</p>
     </body>
     </html>
   `);
