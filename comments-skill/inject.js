@@ -361,12 +361,6 @@
       opacity: 1;
     }
 
-    .hct-comment-collapsed .hct-comment-time {
-      max-height: 0;
-      opacity: 0;
-      pointer-events: none;
-    }
-
     /* REPLY COLLAPSE */
     .hct-reply-collapse-btn {
       background: transparent;
