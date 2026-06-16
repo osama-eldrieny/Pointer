@@ -716,7 +716,7 @@ const renderSidebar = () => {
           <div class="hct-comment-header" onclick="HCT.highlightCommentElement('${comment.id}')" style="cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
             <div style="display: flex; gap: 6px; flex: 1;">
               <span class="hct-comment-badge">${idx + 1}</span>
-              <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="display: flex; flex-direction: column; margin-top: -3px;">
                 <span class="hct-comment-author">${escapeHtml(comment.author)}</span>
                 <span class="hct-comment-time" style="font-size: 11px;">${getRelativeTime(comment.created_at)}</span>
               </div>
