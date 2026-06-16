@@ -87,6 +87,17 @@
       transform: translateY(0);
     }
 
+    #hct-btn-sidebar {
+      background: #f1f5f9;
+      color: #1e293b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    #hct-btn-sidebar:hover {
+      background: #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
     /* SIDEBAR - Professional Layout */
     #hct-sidebar {
       position: fixed;
@@ -381,6 +392,7 @@
 
     .hct-reply-content.collapsed {
       max-height: 0;
+      height: 50px;
     }
 
     /* COMMENT ACTIONS */
