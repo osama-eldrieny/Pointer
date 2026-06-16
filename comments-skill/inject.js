@@ -666,6 +666,17 @@
     body.hct-sidebar-open {
       margin-right: 350px;
     }
+
+    /* Footer */
+    #hct-sidebar-footer {
+      border-top: 1px solid #e2e8f0;
+      padding: 12px 16px;
+      text-align: center;
+      background: #fafafa;
+      font-size: 10px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
   `;
   document.head.appendChild(style);
 };
@@ -779,6 +790,12 @@ const renderSidebar = () => {
   }
 
   html += '</div>';
+
+  html += `
+    <div id="hct-sidebar-footer">
+      Made with ❤️ by Osama Eldrieny
+    </div>
+  `;
 
   // Save state before re-rendering
   const sidebarContent = document.getElementById('hct-sidebar-content');
