@@ -17,7 +17,7 @@ A **lightweight, zero-auth commenting skill** for HTML pages. Add collaborative 
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/html-comments-skill.git
+git clone https://github.com/osama-eldrieny/html-comments-skill.git
 ```
 
 ### Step 2: Start the Comments Server (Terminal 1)
