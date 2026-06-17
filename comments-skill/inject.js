@@ -49,8 +49,8 @@
     /* TOOLBAR - Professional & Modern */
     #hct-toolbar {
       position: fixed;
-      top: 24px;
-      right: 24px;
+      top: 16px;
+      right: 16px;
       z-index: 2147483647;
       background: white;
       border: 1px solid #e2e8f0;
@@ -61,6 +61,40 @@
       display: flex;
       gap: 8px;
       backdrop-filter: blur(8px);
+      transition: gap 0.3s ease, padding 0.3s ease;
+    }
+
+    #hct-toolbar.hct-toolbar-collapsed {
+      padding: 10px 8px;
+    }
+
+    #hct-toolbar:not(.hct-toolbar-collapsed) {
+      width: 302px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: none;
+    }
+
+    .hct-toolbar-hidden {
+      display: none !important;
+    }
+
+    .hct-toolbar-toggle {
+      padding: 10px 8px !important;
+      background: transparent !important;
+      color: #64748b !important;
+      border: none !important;
+      box-shadow: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .hct-toolbar-toggle:hover {
+      background: #f1f5f9 !important;
+      color: #1e293b !important;
+      box-shadow: none !important;
+      transform: none !important;
     }
 
     #hct-toolbar button {
@@ -75,27 +109,34 @@
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     #hct-toolbar button:hover {
       background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
       box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
-      transform: translateY(-2px);
+      transform: none;
     }
 
     #hct-toolbar button:active {
-      transform: translateY(0);
+      transform: none;
     }
 
-    #hct-btn-sidebar {
-      background: #f1f5f9;
-      color: #1e293b;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    #hct-toolbar #hct-btn-sidebar {
+      background: white !important;
+      color: #2563eb !important;
+      border: 1.5px solid #2563eb !important;
+      box-shadow: none !important;
     }
 
-    #hct-btn-sidebar:hover {
-      background: #e2e8f0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    #hct-toolbar #hct-btn-sidebar:hover {
+      background: #eff6ff !important;
+      border-color: #1d4ed8 !important;
+      color: #1d4ed8 !important;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15) !important;
     }
 
     /* SIDEBAR - Professional Layout */
@@ -104,7 +145,7 @@
       right: 0;
       top: 0;
       height: 100vh;
-      width: 350px;
+      width: 335px;
       background: #ffffff;
       border-left: 1px solid #e2e8f0;
       z-index: 2147483646;
@@ -664,7 +705,7 @@
     }
 
     body.hct-sidebar-open {
-      margin-right: 350px;
+      margin-right: 335px;
     }
 
     /* Footer */
@@ -684,14 +725,41 @@
 const renderToolbar = () => {
   const toolbar = document.createElement('div');
   toolbar.id = 'hct-toolbar';
+  const isCollapsed = localStorage.getItem('hct_toolbar_collapsed') !== 'false';
   toolbar.innerHTML = `
-    <button id="hct-btn-comment">+ Add Comment</button>
-    <button id="hct-btn-sidebar">All Comments (<span id="hct-comment-count">0</span>)</button>
+    <button id="hct-btn-comment"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h8"/><path d="M12 8v8"/></svg><span id="hct-btn-comment-text" class="${isCollapsed ? 'hct-toolbar-hidden' : ''}">Add Comment</span></button>
+    <button id="hct-btn-toggle-toolbar" class="hct-toolbar-toggle"><svg id="hct-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${isCollapsed ? '<path d="m9 7-5 5 5 5"/><path d="m15 7 5 5-5 5"/>' : '<path d="m20 17-5-5 5-5"/><path d="m4 17 5-5-5-5"/>'}</svg></button>
   `;
   document.body.appendChild(toolbar);
+  if (isCollapsed) {
+    toolbar.classList.add('hct-toolbar-collapsed');
+  }
 
   document.getElementById('hct-btn-comment').addEventListener('click', togglePickMode);
-  document.getElementById('hct-btn-sidebar').addEventListener('click', toggleSidebar);
+  document.getElementById('hct-btn-toggle-toolbar').addEventListener('click', toggleToolbarCollapse);
+};
+
+const toggleToolbarCollapse = () => {
+  const toolbar = document.getElementById('hct-toolbar');
+  const commentText = document.getElementById('hct-btn-comment-text');
+  const toggleIcon = document.getElementById('hct-toggle-icon');
+  const isCollapsed = toolbar.classList.contains('hct-toolbar-collapsed');
+
+  if (isCollapsed) {
+    // Expand and open sidebar
+    toolbar.classList.remove('hct-toolbar-collapsed');
+    commentText.classList.remove('hct-toolbar-hidden');
+    toggleIcon.innerHTML = '<path d="m20 17-5-5 5-5"/><path d="m4 17 5-5-5-5"/>';
+    localStorage.setItem('hct_toolbar_collapsed', 'false');
+    toggleSidebar();
+  } else {
+    // Collapse and close sidebar
+    toolbar.classList.add('hct-toolbar-collapsed');
+    commentText.classList.add('hct-toolbar-hidden');
+    toggleIcon.innerHTML = '<path d="m9 7-5 5 5 5"/><path d="m15 7 5 5-5 5"/>';
+    localStorage.setItem('hct_toolbar_collapsed', 'true');
+    closeSidebar();
+  }
 };
 
 const renderSidebar = () => {
@@ -704,12 +772,10 @@ const renderSidebar = () => {
 
   const pageUrl = window.location.href;
   const pageComments = HCT.comments.filter(c => c.page_url === pageUrl);
-  document.getElementById('hct-comment-count').textContent = pageComments.length;
 
   let html = `
     <div id="hct-sidebar-header">
       <h3>Comments (${pageComments.length})</h3>
-      <button onclick="HCT.closeSidebar()">×</button>
     </div>
     <div id="hct-sidebar-content">
   `;
