@@ -30,7 +30,7 @@ npm install
 npm start
 ```
 
-**Keep this terminal open** — the comments server must stay running for the bookmarklet to work.
+> ⚠️ **IMPORTANT: Keep this terminal open** — the comments server must stay running for the bookmarklet to work.
 
 You'll see:
 ```
