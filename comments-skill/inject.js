@@ -17,6 +17,17 @@
 
   window.HCT = HCT;
 
+  const getBackendUrl = () => {
+    const origin = window.location.origin;
+    if (origin === 'http://localhost:8000' || origin.startsWith('http://localhost:8')) {
+      return 'http://localhost:3001';
+    }
+    if (origin.startsWith('file://')) {
+      return 'http://localhost:3001';
+    }
+    return origin;
+  };
+
   const initAuthor = () => {
     const stored = localStorage.getItem('hct_author');
     if (stored) {
@@ -1176,7 +1187,7 @@ const renderSidebar = () => {
       created_at: new Date().toISOString()
     };
 
-    fetch(`http://localhost:3001/api/comments/${commentId}/reply`, {
+    fetch(`${getBackendUrl()}/api/comments/${commentId}/reply`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ author: HCT.author, text: reply.text })
@@ -1219,7 +1230,7 @@ const renderSidebar = () => {
 
     const newStatus = comment.status === 'pending-apply' ? 'open' : 'pending-apply';
 
-    fetch(`http://localhost:3001/api/comments/${commentId}`, {
+    fetch(`${getBackendUrl()}/api/comments/${commentId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
@@ -1242,7 +1253,7 @@ const renderSidebar = () => {
 
     const newStatus = (reply.status || 'open') === 'pending-apply' ? 'open' : 'pending-apply';
 
-    fetch(`http://localhost:3001/api/comments/${commentId}`, {
+    fetch(`${getBackendUrl()}/api/comments/${commentId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1261,7 +1272,7 @@ const renderSidebar = () => {
   };
 
   window.HCT.deleteComment = (commentId) => {
-    fetch(`http://localhost:3001/api/comments/${commentId}`, { method: 'DELETE' })
+    fetch(`${getBackendUrl()}/api/comments/${commentId}`, { method: 'DELETE' })
       .then(() => {
         HCT.comments = HCT.comments.filter(c => c.id !== commentId);
         renderSidebar();
@@ -1415,7 +1426,7 @@ const toggleSidebar = (forceOpen = null) => {
 
 const fetchComments = () => {
   const params = new URLSearchParams({ page_url: window.location.href });
-  fetch(`http://localhost:3001/api/comments?${params}`)
+  fetch(`${getBackendUrl()}/api/comments?${params}`)
     .then(r => r.json())
     .then(comments => {
       HCT.comments = comments;
@@ -1449,7 +1460,7 @@ const startAutoRefreshCheck = () => {
       }
 
       const params = new URLSearchParams({ html_file_path: filePath });
-      fetch(`http://localhost:3001/api/check-changes?${params}`)
+      fetch(`${getBackendUrl()}/api/check-changes?${params}`)
         .then(r => r.json())
         .then(data => {
           if (!lastModified[filePath]) {
@@ -1888,7 +1899,7 @@ window.HCT.submitComment = () => {
     text: textarea.value.trim()
   };
 
-  fetch('http://localhost:3001/api/comments', {
+  fetch(`${getBackendUrl()}/api/comments`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
