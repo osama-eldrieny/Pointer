@@ -443,31 +443,24 @@ const init = () => {
       font-size: 18px;
       font-weight: 700;
       color: #0f172a;
-      display: flex;
-      align-items: center;
-      gap: 12px;
       letter-spacing: -0.5px;
     }
 
-    #hct-sidebar-header h3:before {
-      content: '💬';
-      font-size: 20px;
-      opacity: 0.9;
-    }
+
 
     #hct-sidebar-header button {
       background: none;
       border: none;
-      font-size: 24px;
       cursor: pointer;
-      padding: 0px 7px 3px;
-      line-height: 26px;
+      padding: 6px;
       border-radius: 8px;
       transition: all 0.2s;
       color: #64748b;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 36px;
+      height: 36px;
     }
 
     #hct-sidebar-header button:hover {
@@ -1067,7 +1060,7 @@ const renderToolbar = () => {
   const isCollapsed = localStorage.getItem('hct_toolbar_collapsed') !== 'false';
   toolbar.innerHTML = `
     <button id="hct-btn-comment"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h8"/><path d="M12 8v8"/></svg><span id="hct-btn-comment-text" class="${isCollapsed ? 'hct-toolbar-hidden' : ''}">Add Comment</span></button>
-    <button id="hct-btn-toggle-toolbar" class="hct-toolbar-toggle"><svg id="hct-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${isCollapsed ? '<path d="m9 7-5 5 5 5"/><path d="m15 7 5 5-5 5"/>' : '<path d="m20 17-5-5 5-5"/><path d="m4 17 5-5-5-5"/>'}</svg></button>
+    <button id="hct-btn-toggle-toolbar" class="hct-toolbar-toggle"><svg id="hct-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${isCollapsed ? '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/>' : '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>'}</svg></button>
   `;
   document.body.appendChild(toolbar);
   if (isCollapsed) {
@@ -1093,7 +1086,7 @@ const toggleToolbarCollapse = () => {
     // Expand and open sidebar
     toolbar.classList.remove('hct-toolbar-collapsed');
     commentText.classList.remove('hct-toolbar-hidden');
-    toggleIcon.innerHTML = '<path d="m20 17-5-5 5-5"/><path d="m4 17 5-5-5-5"/>';
+    toggleIcon.innerHTML = '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>';
     localStorage.setItem('hct_toolbar_collapsed', 'false');
     localStorage.setItem('hct_sidebar_open', 'true');
     toggleSidebar(true);
@@ -1101,7 +1094,7 @@ const toggleToolbarCollapse = () => {
     // Collapse and close sidebar
     toolbar.classList.add('hct-toolbar-collapsed');
     commentText.classList.add('hct-toolbar-hidden');
-    toggleIcon.innerHTML = '<path d="m9 7-5 5 5 5"/><path d="m15 7 5 5-5 5"/>';
+    toggleIcon.innerHTML = '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/>';
     localStorage.setItem('hct_toolbar_collapsed', 'true');
     localStorage.setItem('hct_sidebar_open', 'false');
     closeSidebar(true);
@@ -1123,6 +1116,13 @@ const renderSidebar = () => {
   let html = `
     <div id="hct-sidebar-header">
       <h3>Comments (${pageComments.length})</h3>
+      <button onclick="HCT.toggleSidebar(false)" title="Close sidebar" style="width: 32px; height: 32px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="18" x="3" y="3" rx="2"/>
+          <path d="M9 3v18"/>
+          <path d="m16 15-3-3 3-3"/>
+        </svg>
+      </button>
     </div>
     <div id="hct-sidebar-content">
   `;
