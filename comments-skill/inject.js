@@ -899,6 +899,15 @@
       margin-right: 335px;
     }
 
+    body.hct-sidebar-open #root {
+      width: calc(100vw - 335px);
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 0.2);
+    }
+
+    #root {
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 0.2);
+    }
+
     /* Footer */
     #hct-sidebar-footer {
       border-top: 1px solid #e2e8f0;
