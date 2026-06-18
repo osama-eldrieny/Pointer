@@ -17,6 +17,8 @@
 
   window.HCT = HCT;
 
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIU_9jZkued8MPl6pgFDl7K71jlm48HQLuiFWGH06LUwiyMJsLkufoQePm5NQ68pZS/exec';
+
   const getBackendUrl = () => {
     const origin = window.location.origin;
     if (origin === 'http://localhost:8000' || origin.startsWith('http://localhost:8')) {
@@ -45,8 +47,8 @@
     modal.innerHTML = `
       <div id="hct-author-modal">
         <div id="hct-author-modal-content">
-          <h2>Welcome to Comments Skill</h2>
-          <p>What's your name? We'll use it to identify your comments.</p>
+          <h2>Welcome to 🐕 Pointer</h2>
+          <p>Who's pointing? Tell us your name.</p>
           <input
             id="hct-author-input"
             type="text"
@@ -105,13 +107,13 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(15, 23, 42, 0.5);
+        background: rgba(15, 23, 42, 0.4);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 2147483649;
         animation: hct-fade-in 0.3s ease;
-        backdrop-filter: blur(4px);
+        overflow: hidden;
       }
 
       @keyframes hct-fade-in {
@@ -123,7 +125,34 @@
         }
       }
 
-      @keyframes hct-slide-up {
+      
+    /* Emoji decorations around modal */
+    .hct-emoji-bg {
+      position: absolute;
+      font-size: 48px;
+      opacity: 0.35;
+      animation: hct-float 3s ease-in-out infinite;
+      user-select: none;
+      pointer-events: none;
+    }
+    
+    .hct-emoji-bg.emoji-1 { top: -15px; left: 15px; font-size: 32px; animation-delay: 0s; }
+    .hct-emoji-bg.emoji-2 { top: 5px; right: 10px; font-size: 48px; animation-delay: 0.5s; }
+    .hct-emoji-bg.emoji-3 { bottom: 15px; left: 20px; font-size: 40px; animation-delay: 1s; }
+    .hct-emoji-bg.emoji-4 { bottom: 5px; right: 8px; font-size: 36px; animation-delay: 1.5s; }
+    .hct-emoji-bg.emoji-5 { top: 45%; left: -8px; font-size: 44px; animation-delay: 0.3s; }
+    .hct-emoji-bg.emoji-6 { top: 35%; right: -8px; font-size: 38px; animation-delay: 0.8s; }
+
+    @keyframes hct-float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    @keyframes hct-slide-up {
         from {
           transform: translateY(20px);
           opacity: 0;
@@ -135,12 +164,16 @@
       }
 
       #hct-author-modal {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 10px 30px rgba(0, 0, 0, 0.1);
-        animation: hct-slide-up 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18), inset 0 0px 0 rgba(255, 255, 255, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+        animation: hct-slide-up 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         max-width: 420px;
         width: 90%;
+        backdrop-filter: blur(12px) saturate(164%);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        position: relative;
+        z-index: 1;
       }
 
       #hct-author-modal-content {
@@ -167,24 +200,25 @@
         width: 100%;
         padding: 12px 14px;
         font-size: 14px;
-        border: 1.5px solid #e2e8f0;
+        border: 2px solid #e2e8f0;
         border-radius: 10px;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         color: #0f172a;
         margin-bottom: 24px;
         transition: all 0.2s ease;
         box-sizing: border-box;
+        background: #ffffff00;
       }
 
       #hct-author-input:focus {
         outline: none;
-        border-color: #2563eb;
+        border-color: #e2e8f0;
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        background-color: #f0f9ff;
+        background-color: rgba(0, 0, 0, 0.02);
       }
 
       #hct-author-input::placeholder {
-        color: #cbd5e1;
+        color: #64748b;
       }
 
       #hct-author-modal-actions {
@@ -234,11 +268,39 @@
     document.head.appendChild(style);
   };
 
-  const init = () => {
+  
+const fetchGlobalCounter = async () => {
+  try {
+    const response = await fetch(`${getBackendUrl()}/api/global-counter`);
+    const data = await response.json();
+    if (data.success) {
+      const counterEl = document.getElementById('hct-counter-number');
+      if (counterEl) {
+        counterEl.textContent = data.count.toLocaleString();
+      } else {
+        // If counter doesn't exist, recreate it
+        initGlobalCounter();
+      }
+    }
+  } catch (e) {
+    console.log('Error fetching global counter:', e.message);
+  }
+};
+
+const initGlobalCounter = () => {
+  console.log('🐕 Pointer counter initialized');
+  // Fetch initial count
+  fetchGlobalCounter();
+  // Update counter every 5 seconds
+  setInterval(fetchGlobalCounter, 5000);
+};
+
+const init = () => {
     injectStyles();
     renderToolbar();
     fetchComments();
     startAutoRefreshCheck();
+    initGlobalCounter();
   };
 
   const injectStyles = () => {
@@ -868,16 +930,15 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #1e293b;
-      color: white;
+      color: #1f2937;
       padding: 14px 20px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 500;
       z-index: 2147483648;
       animation: toastSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      border-left: 4px solid #64748b;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: #f5f5f5;
     }
 
     @keyframes toastSlideIn {
@@ -891,14 +952,73 @@
       }
     }
 
-    .hct-toast.error {
-      background: #dc2626;
-      border-left-color: #7f1d1d;
+    .hct-toast.success {
+      background: #dcfce7 !important;
+      color: #166534 !important;
     }
 
-    .hct-toast.success {
-      background: #16a34a;
-      border-left-color: #166534;
+    .hct-toast.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .hct-toast.info {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .hct-toast.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .hct-toast.applied {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    /* Global Counter Footer */
+    #hct-global-counter {
+      padding: 12px 16px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #64748b;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 8px;
+    }
+
+    #hct-counter-number {
+      font-weight: 700;
+      color: #2563eb;
+    }
+
+    #hct-counter-credits {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    #hct-global-counter a {
+      color: white;
+      text-decoration: none;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    #hct-global-counter a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    #hct-counter-number {
+      font-weight: 700;
+      font-size: 14px;
+      margin: 0 4px;
+    }
+
+    body.hct-sidebar-open {
+      margin-bottom: 0;
     }
 
     /* Body adjustment for sidebar animation */
@@ -1077,8 +1197,11 @@ const renderSidebar = () => {
   html += '</div>';
 
   html += `
-    <div id="hct-sidebar-footer">
-      Made with ❤️ by Osama Eldrieny
+    <div id="hct-global-counter">
+      🌍 <span id="hct-counter-number">0</span> comments worldwide
+      <div id="hct-counter-credits">
+        Made with ❤️ by Osama Eldrieny
+      </div>
     </div>
   `;
 
@@ -1165,6 +1288,11 @@ const renderSidebar = () => {
           <button class="hct-comment-btn" onclick="this.parentElement.remove()" style="background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;">Cancel</button>
         `;
         container.appendChild(replyForm);
+        // Auto-focus the textarea
+        const textarea = replyForm.querySelector('textarea');
+        if (textarea) {
+          setTimeout(() => textarea.focus(), 0);
+        }
       }
     }
   };
@@ -1195,7 +1323,8 @@ const renderSidebar = () => {
       .then(() => {
         comment.replies.push(reply);
         renderSidebar();
-        showToast('Reply added', 'success');
+        fetchGlobalCounter();
+        showToast('💬 Reply added', 'info');
       })
       .catch(() => showToast('Error adding reply', 'error'));
   };
@@ -1239,7 +1368,7 @@ const renderSidebar = () => {
         comment.status = newStatus;
         HCT.updateCommentStatusInDOM(commentId, newStatus);
         renderPins();
-        showToast(newStatus === 'pending-apply' ? '✅ Ready to apply' : '❌ Not ready to apply', 'success');
+        showToast(newStatus === 'pending-apply' ? '⏳ Ready to apply' : '❌ Not ready to apply', newStatus === 'pending-apply' ? 'pending' : 'error');
       })
       .catch(() => showToast('Error updating comment', 'error'));
   };
@@ -1266,7 +1395,7 @@ const renderSidebar = () => {
       .then(() => {
         reply.status = newStatus;
         HCT.updateReplyStatusInDOM(replyId, newStatus);
-        showToast(newStatus === 'pending-apply' ? '✅ Reply ready to apply' : '❌ Reply not ready to apply', 'success');
+        showToast(newStatus === 'pending-apply' ? '⏳ Reply ready to apply' : '❌ Reply not ready to apply', newStatus === 'pending-apply' ? 'pending' : 'error');
       })
       .catch(() => showToast('Error updating reply', 'error'));
   };
@@ -1277,7 +1406,7 @@ const renderSidebar = () => {
         HCT.comments = HCT.comments.filter(c => c.id !== commentId);
         renderSidebar();
         renderPins();
-        showToast('Comment deleted', 'success');
+        showToast('🗑️ Comment deleted', 'error');
       })
       .catch(() => showToast('Error deleting comment', 'error'));
   };
@@ -1297,10 +1426,10 @@ const renderSidebar = () => {
       replyElement.style.transition = 'opacity 0.2s ease';
       setTimeout(() => {
         replyElement.remove();
-        showToast('Reply deleted', 'success');
+        showToast('🗑️ Reply deleted', 'error');
       }, 200);
     } else {
-      showToast('Reply deleted', 'success');
+      showToast('🗑️ Reply deleted', 'error');
     }
   };
 
@@ -1349,7 +1478,7 @@ const togglePickMode = () => {
   if (HCT.pickMode) {
     btn.style.background = '#dc3545';
     document.addEventListener('mouseover', handlePickModeMouseOver);
-    showToast('Click any element to comment', 'success');
+    // showToast('Click any element to comment', 'success');
   } else {
     btn.style.background = '#007bff';
     document.removeEventListener('mouseover', handlePickModeMouseOver);
@@ -1454,8 +1583,8 @@ const startAutoRefreshCheck = () => {
 
     // Check each file for modifications (skip invalid paths)
     filePaths.forEach(filePath => {
-      // Skip invalid paths (file:// URLs, paths with "file:", etc.)
-      if (!filePath || filePath.includes('file:') || filePath.includes('file%3A')) {
+      // Skip invalid paths (file:// URLs, paths with "file:", paths with "http:", etc.)
+      if (!filePath || filePath.includes('file:') || filePath.includes('file%3A') || filePath.includes('http')) {
         return;
       }
 
@@ -1691,7 +1820,8 @@ const showToast = (msg, type = 'success') => {
   toast.className = 'hct-toast ' + type;
   toast.textContent = msg;
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  console.log('Toast created with class:', toast.className, 'Text:', msg);
+  setTimeout(() => toast.remove(), 15000);
 };
 
 const getRelativeTime = (isoString) => {
@@ -1745,6 +1875,10 @@ document.addEventListener('click', (e) => {
   HCT.pendingSnapshot = el.outerHTML;
   HCT.pendingPinX = pinX;
   HCT.pendingPinY = pinY;
+  HCT.pendingElement = el;
+
+  // Keep the highlight on the element
+  el.classList.add('hct-highlight');
 
   showCommentPopover(el);
 }, true);
@@ -1758,16 +1892,12 @@ const showCommentPopover = (el) => {
 
   const rect = el.getBoundingClientRect();
   const selector = HCT.pendingSelector || generateSelector(el);
-  const elementInfo = `<div style="font-size: 11px; color: #666; margin-bottom: 8px; padding: 6px; background: #f5f5f5; border-radius: 3px; border-left: 2px solid #007bff;">
-    <strong>Element:</strong> ${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''} ${el.className ? `.${el.className.split(' ').join('.')}` : ''}<br>
-    <strong>Selector:</strong> <code style="font-size: 10px; word-break: break-all;">${selector}</code>
-  </div>`;
 
   popover.innerHTML = `
-    ${elementInfo}
+    <div style="font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Add your comment</div>
     <textarea id="hct-popover-text" placeholder="Write your comment..."></textarea>
     <button class="hct-submit" onclick="HCT.submitComment()">Submit</button>
-    <button class="hct-cancel" onclick="document.getElementById('hct-popover').remove()">Cancel</button>
+    <button class="hct-cancel" onclick="HCT.cancelComment()">Cancel</button>
   `;
 
   document.body.appendChild(popover);
@@ -1909,10 +2039,28 @@ window.HCT.submitComment = () => {
       HCT.comments.push(comment);
       renderSidebar();
       renderPins();
+      fetchGlobalCounter();
+      if (HCT.pendingElement) HCT.pendingElement.classList.remove('hct-highlight');
       document.getElementById('hct-popover').remove();
-      showToast('Comment added', 'success');
+      showToast('🐕 Pointed! Comment added', 'success');
     })
     .catch(() => showToast('Error submitting comment', 'error'));
+};
+
+window.HCT.cancelComment = () => {
+  // Remove highlight from the element
+  if (HCT.pendingElement) {
+    HCT.pendingElement.classList.remove('hct-highlight');
+  }
+  // Remove the popover
+  const popover = document.getElementById('hct-popover');
+  if (popover) {
+    popover.remove();
+  }
+  // Clear pending data
+  HCT.pendingElement = null;
+  HCT.pendingSelector = null;
+  HCT.pendingSnapshot = null;
 };
 
   // Debounced pin update to avoid blocking main thread

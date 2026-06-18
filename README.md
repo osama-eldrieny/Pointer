@@ -1,6 +1,8 @@
-# HTML Comments Skill 💬
+# 🐕 Pointer
 
-A **lightweight, zero-auth commenting skill** for HTML pages. Add collaborative feedback directly to your mockups, prototypes, or documentation using a browser bookmarklet. Perfect for design reviews, feedback collection, and iterative development.
+Quick, targeted feedback directly on HTML elements. No lengthy descriptions—just **click, comment, and sync with AI**.
+
+> **Pointer** — Your team's fastest way to give element-level feedback on live HTML pages.
 
 ## Features
 
@@ -11,6 +13,22 @@ A **lightweight, zero-auth commenting skill** for HTML pages. Add collaborative 
 📝 **Threaded replies** — Discuss changes in context before applying  
 🎨 **Visual highlighting** — See which elements have comments  
 📍 **Pin positions** — Comments follow elements during scroll/zoom  
+
+## Why Pointer?
+
+Instead of lengthy feedback like:
+> *"Go to the contact page, find the header section, and change the title size to 24px"*
+
+With Pointer, just:
+1. 🐕 Click the element
+2. 💬 Say "Make this 24px"
+3. ✨ Done — AI gets it instantly
+
+**Perfect for:**
+- 👥 Design reviews with developers
+- 🤖 Feeding feedback to AI for implementation
+- ⚡ Quick iteration loops
+- 📱 Testing live pages (localhost, staging, production)
 
 ## Quick Start
 
@@ -43,7 +61,7 @@ You'll see:
 #### Method A: Using the Bookmarklet (Quick Testing)
 
 1. Open `http://localhost:3001/bookmarklet` in your browser
-2. **Drag the "HTML Comments" button to your bookmarks bar** (click and hold, then drag)
+2. **Drag the "Pointer" button to your bookmarks bar** (click and hold, then drag)
 3. The button should now appear in your browser's bookmarks
 4. On any page, click the bookmarklet to activate the comments UI
 

@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
 
+
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIU_9jZkued8MPl6pgFDl7K71jlm48HQLuiFWGH06LUwiyMJsLkufoQePm5NQ68pZS/exec';
+
 const app = express();
 const PORT = config.server_port || 3001;
 const COMMENTS_FILE = path.join(__dirname, config.comments_file);
@@ -11,6 +14,9 @@ const PENDING_APPLY_FILE = path.join(__dirname, './pending-apply.json');
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PATCH', 'DELETE'], allowedHeaders: ['Content-Type'] }));
 app.use(express.json({ limit: '10mb' }));
+app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(__dirname));
+
 
 const readComments = () => {
   try {
@@ -55,7 +61,9 @@ const generateReplyId = () => 'r_' + Date.now() + '_' + Math.random().toString(3
 
 const mapUrlToFilePath = (pageUrl) => {
   try {
-    const urlBase = config.url_base || 'http://localhost:8080';
+    // Extract the origin (protocol + host) from the URL dynamically
+    const url = new URL(pageUrl);
+    const urlBase = `${url.protocol}//${url.host}`;
     const relativePath = pageUrl.replace(urlBase, '');
     const filePath = path.join(config.project_root || '../', relativePath);
     return filePath;
@@ -171,6 +179,17 @@ app.get('/api/pending-apply', (req, res) => {
   res.json(pending);
 });
 
+
+const incrementGlobalCounter = () => {
+  try {
+    fetch(GOOGLE_SCRIPT_URL + '?action=increment').catch(err => {
+      console.log('Global counter update failed:', err.message);
+    });
+  } catch (e) {
+    console.log('Error incrementing global counter:', e.message);
+  }
+};
+
 app.post('/api/comments', (req, res) => {
   const { page_url, element_selector, element_snapshot, pin_x, pin_y, author, text, element_classes, element_tag, element_id, computed_styles, applied_css_rules, parent_element_info } = req.body;
 
@@ -247,6 +266,7 @@ app.post('/api/comments', (req, res) => {
 
   comments.push(newComment);
   writeComments(comments);
+  incrementGlobalCounter();
   res.status(201).json(newComment);
 });
 
@@ -274,6 +294,7 @@ app.post('/api/comments/:id/reply', (req, res) => {
 
   comment.replies.push(reply);
   writeComments(comments);
+  incrementGlobalCounter();
   res.status(201).json(reply);
 });
 
@@ -387,6 +408,23 @@ app.delete('/api/comments/:id', (req, res) => {
 
   writeComments(filtered);
   res.status(204).send();
+});
+
+
+app.get('/api/global-counter', (req, res) => {
+  try {
+    fetch(GOOGLE_SCRIPT_URL + '?action=getCount')
+      .then(r => r.json())
+      .then(data => {
+        res.json(data);
+      })
+      .catch(err => {
+        console.error('Error fetching from Google Sheet:', err.message);
+        res.status(500).json({ success: false, error: err.message });
+      });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
 });
 
 app.listen(PORT, () => {

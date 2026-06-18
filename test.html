@@ -10,7 +10,14 @@
 
   <!-- HTML Comments Skill: Copy this script tag to your own HTML file if you want to use the comments feature.
        Make sure the comments server is running on port 3001 before loading this page. -->
-  <script src="http://localhost:3001/inject.js"defer></script>
+  <script>
+  (function() {
+    var s = document.createElement('script');
+    s.src = 'http://localhost:3001/inject.js?t=' + Date.now();
+    s.defer = true;
+    document.head.appendChild(s);
+  })();
+</script>
   <style>
     /* Shadcn-style Button Component */
     .btn {
