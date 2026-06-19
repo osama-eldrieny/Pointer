@@ -273,6 +273,12 @@ const fetchGlobalCounter = async () => {
   try {
     const response = await fetch(`${getBackendUrl()}/api/global-counter`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Backend returned non-JSON response');
+    }
+
     const data = await response.json();
     if (data.success) {
       const counterEl = document.getElementById('hct-counter-number');
@@ -284,7 +290,7 @@ const fetchGlobalCounter = async () => {
       }
     }
   } catch (e) {
-    console.log('Error fetching global counter:', e.message);
+    // Silently fail - backend might not be ready yet
   }
 };
 
@@ -1569,6 +1575,10 @@ const fetchComments = () => {
   fetch(`${getBackendUrl()}/api/comments?${params}`)
     .then(r => {
       if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+      const contentType = r.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Backend returned non-JSON response');
+      }
       return r.json();
     })
     .then(comments => {
@@ -1609,6 +1619,10 @@ const startAutoRefreshCheck = () => {
       fetch(`${getBackendUrl()}/api/check-changes?${params}`)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const contentType = r.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Backend returned non-JSON response');
+          }
           return r.json();
         })
         .then(data => {
@@ -2058,6 +2072,10 @@ window.HCT.submitComment = () => {
   })
     .then(r => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const contentType = r.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Backend returned non-JSON response');
+      }
       return r.json();
     })
     .then(comment => {
