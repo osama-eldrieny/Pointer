@@ -1566,7 +1566,10 @@ const toggleSidebar = (forceOpen = null) => {
 const fetchComments = () => {
   const params = new URLSearchParams({ page_url: window.location.href });
   fetch(`${getBackendUrl()}/api/comments?${params}`)
-    .then(r => r.json())
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+      return r.json();
+    })
     .then(comments => {
       HCT.comments = comments;
       renderSidebar();
