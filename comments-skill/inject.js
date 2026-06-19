@@ -1585,8 +1585,11 @@ const fetchComments = () => {
 const startAutoRefreshCheck = () => {
   let lastModified = {};
   let lastPendingCount = 0;
+  let checkEndpointExists = true;
 
   const checkForChanges = () => {
+    if (!checkEndpointExists) return; // Skip if endpoint doesn't exist
+
     const pageUrl = window.location.href;
     const pageComments = HCT.comments.filter(c => c.page_url === pageUrl);
 
@@ -1618,7 +1621,9 @@ const startAutoRefreshCheck = () => {
           }
         })
         .catch(err => {
-          // Silently ignore errors - server might be down or file doesn't exist yet
+          if (err.message.includes('404')) {
+            checkEndpointExists = false; // Stop checking if endpoint doesn't exist
+          }
         });
     });
   };
