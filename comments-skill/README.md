@@ -1,4 +1,4 @@
-# 📝 HTML Comments Skill
+# 🐕 Pointer
 
 A collaborative commenting overlay for HTML pages that integrates with Claude Code. Team members can annotate elements on any localhost HTML page, then use Claude Code to automatically apply all pending changes at once.
 

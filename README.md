@@ -35,7 +35,7 @@ With Pointer, just:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/osama-eldrieny/html-comments-skill.git
+git clone https://github.com/osama-eldrieny/Pointer.git
 ```
 
 ### Step 2: Start the Comments Server (Terminal 1)
@@ -43,7 +43,7 @@ git clone https://github.com/osama-eldrieny/html-comments-skill.git
 Navigate to the skill folder and start the server:
 
 ```bash
-cd html-comments-skill/comments-skill
+cd Pointer/comments-skill
 npm install
 npm start
 ```
