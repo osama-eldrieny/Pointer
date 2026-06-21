@@ -8,6 +8,8 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 
 **For Designers, Front-end Developers, Business Analysts, Team Leads, Product Managers, and anyone on your team** — Give precise feedback on any element, discuss in context, and let AI apply the changes.
 
+
+
 ## Features
 
 ✨ **Bookmarklet-based** — Works on any localhost HTML page or static HTML file  
@@ -21,6 +23,8 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 📝 **Threaded replies** — Discuss changes in context before applying  
 🎨 **Visual highlighting** — See which elements have comments  
 📍 **Pin positions** — Comments follow elements during scroll/zoom  
+
+
 
 ## Why Pointer?
 
@@ -38,7 +42,9 @@ Make this 24px
 2. 💬 Say "Make this 24px"
 3. ✨ Done — AI gets it instantly
 
-**Perfect for:**
+
+
+## Perfect for:
 
 👨‍💼 **Product Managers**  
 Validate requirements before design, generate specs directly from live pages, gather feedback faster
@@ -58,13 +64,17 @@ Fix issues directly with AI assistance, iterate on live pages in real-time, pair
 ⚡ **Team Leads**  
 Facilitate faster design reviews and feedback loops, reduce communication overhead across team
 
+
+
 ## Quick Start
+
 
 ### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/osama-eldrieny/Pointer.git
 ```
+
 
 
 ### Step 2: Start the Comments Server (Terminal 1)
@@ -86,6 +96,8 @@ You'll see:
 <div style="background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 12px 16px; margin: 16px 0;">
   <strong>⚠️ IMPORTANT: Keep this terminal open</strong> — the comments server must stay running for the bookmarklet to work.
 </div>
+
+
 
 
 ### Step 3: Enable Comments (Choose One Method)
@@ -127,6 +139,8 @@ To make Pointer always open and survive page refreshes, add one of these script 
 ```
 
 
+
+
 ### Step 4: Open Your Project in the Browser
 
 **Open your Project HTML file in the browser** — either as a local server or directly:
@@ -135,6 +149,8 @@ To make Pointer always open and survive page refreshes, add one of these script 
 - **Your project:** Open your own HTML file or project URL
 - **Local server:** Open `http://localhost:8000`, `http://localhost:3000`, etc. (use whatever port your project runs on)
 - **Static file:** Open `file:///path/to/your/project.html` (open HTML file directly without a server)
+
+
 
 
 ### Step 5: Start Commenting
@@ -147,6 +163,8 @@ To make Pointer always open and survive page refreshes, add one of these script 
 6. See **numbered pins** appear on the element
 
 
+
+
 ### Step 6: View & Manage Comments
 
 1. Click **"All Comments"** button in the toolbar
@@ -157,6 +175,8 @@ To make Pointer always open and survive page refreshes, add one of these script 
    - **Read** full comment history with replies
 
 
+
+
 ### Step 7: Queue Changes for your AI Agent
 
 When ready to apply a comment:
@@ -165,6 +185,8 @@ When ready to apply a comment:
 2. The status changes to **"Pending Apply"** (highlighted in yellow)
 3. If the comment has replies, you can mark individual replies instead
 4. The comment is now in the queue for your AI to process
+
+
 
 
 ### Step 8: Apply Changes with your AI Agent
@@ -196,6 +218,8 @@ Your AI agent will:
 
 **That's it!** Your HTML is now updated with all the changes. 🎉
 
+
+
 ## API Quick Reference
 
 | Method | Endpoint | Purpose |
@@ -205,6 +229,9 @@ Your AI agent will:
 | POST | `/api/comments/:id/reply` | Add reply to comment |
 | PATCH | `/api/comments/:id` | Update status (for AI apply workflow) |
 | DELETE | `/api/comments/:id` | Delete comment |
+
+
+
 
 ## Apply with Claude Code
 
@@ -223,6 +250,10 @@ Claude will:
 - Mark comments as ✓ applied
 
 See [CLAUDE_CODE_INTEGRATION.md](comments-skill/CLAUDE_CODE_INTEGRATION.md) for details.
+
+
+
+
 
 ## File Structure
 
@@ -253,6 +284,9 @@ Pointer/
 └── package-lock.json                # Root dependencies lock
 ```
 
+
+
+
 ## Configuration
 
 Edit `comments-skill/config.json`:
@@ -266,12 +300,19 @@ Edit `comments-skill/config.json`:
 }
 ```
 
+
+
+
 ## Storage
 
 - **comments.json** — All comments with full history (append-only)
 - **pending-apply.json** — Work queue (auto-managed, cleared after applying)
 
 Both are plain JSON — edit directly if needed.
+
+
+
+
 
 ## Example Comment in comments.json
 
@@ -330,6 +371,10 @@ Both are plain JSON — edit directly if needed.
 }
 ```
 
+
+
+
+
 ## Example Pending Apply in pending-apply.json
 
 ```json
@@ -366,6 +411,9 @@ Both are plain JSON — edit directly if needed.
 }
 ```
 
+
+
+
 ## Workflow
 
 1. **Add** — Click element, type feedback, submit
@@ -373,6 +421,9 @@ Both are plain JSON — edit directly if needed.
 3. **Mark** — Click "Mark Apply" when ready for AI
 4. **Apply** — Tell Claude Code "apply pending comments"
 5. **Done** — AI replies appear, changes live, status → ✓
+
+
+
 
 ## Why This Approach?
 
@@ -382,12 +433,19 @@ Both are plain JSON — edit directly if needed.
 - **Portable** — Ship with your project, works anywhere
 - **Transparent** — See exactly what's being applied
 
+
+
+
 ## Limitations
 
 - Local/localhost only (not internet-facing)
 - Single-process concurrency (file-based writes)
 - No real-time sync across multiple users
 - Node.js 14+ required
+
+
+
+
 
 ## Troubleshooting
 
@@ -413,15 +471,24 @@ npm start
 - Check `comments-skill/comments.json` exists
 - Verify paths in config are correct
 
+
+
+
 ## Creator
 
 **Osama Eldrieny**
 - 🌐 [Website](https://www.osamaeldrieny.com/)
 - 💼 [LinkedIn](https://www.linkedin.com/in/osamaeldrieny/)
 
+
+
+
 ## License
 
 MIT
+
+
+
 
 ## See Also
 
