@@ -35,12 +35,24 @@ Go to the contact page, find the header section, and change the title size to 24
 3. ✨ Done — AI gets it instantly
 
 **Perfect for:**
-- 👨‍💼 **Product Managers** — Validate requirements before design, generate specs directly from live pages, gather feedback faster
-- 🎨 **Designers** — Convert requirements and user stories to interactive designs using AI, get precise feedback from stakeholders
-- 📋 **Business Analysts** — Prepare detailed user stories based on design mockups, validate business requirements against implementation
-- 🧪 **QA/Testers** — Highlight bugs and issues instantly without screenshot tools, give feedback faster with visual context, create test cases from comments
-- 💻 **Front-end Developers** — Fix issues directly with AI assistance, iterate on live pages in real-time, pair with AI for live coding sessions
-- ⚡ **Team Leads** — Facilitate faster design reviews and feedback loops, reduce communication overhead across team
+
+👨‍💼 **Product Managers**  
+Validate requirements before design, generate specs directly from live pages, gather feedback faster
+
+🎨 **Designers**  
+Convert requirements and user stories to interactive designs using AI, get precise feedback from stakeholders
+
+📋 **Business Analysts**  
+Prepare detailed user stories based on design mockups, validate business requirements against implementation
+
+🧪 **QA/Testers**  
+Highlight bugs and issues instantly without screenshot tools, give feedback faster with visual context, create test cases from comments
+
+💻 **Front-end Developers**  
+Fix issues directly with AI assistance, iterate on live pages in real-time, pair with AI for live coding sessions
+
+⚡ **Team Leads**  
+Facilitate faster design reviews and feedback loops, reduce communication overhead across team
 
 ## Quick Start
 
