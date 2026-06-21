@@ -901,20 +901,20 @@ const init = () => {
         linear-gradient(0deg, #7c3aed 50%, transparent 50%),
         linear-gradient(0deg, #2563eb 50%, transparent 50%) !important;
       background-repeat: repeat-x, repeat-x, repeat-y, repeat-y !important;
-      background-size: 12px 4px, 12px 4px, 4px 12px, 4px 12px !important;
-      background-position: 0 0, 0 100%, 0 100%, 100% 0 !important;
+      background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px !important;
+      background-position: 0 0, 100% 100%, 0 100%, 100% 0 !important;
       background-color: transparent !important;
       outline: none !important;
       padding: 0 !important;
-      animation: hct-border-dance 1.5s infinite linear !important;
+      animation: hct-border-dance 3s infinite linear !important;
     }
 
     @keyframes hct-border-dance {
       0% {
-        background-position: 0 0, 0 100%, 0 100%, 100% 0 !important;
+        background-position: 0 0, 100% 100%, 0 100%, 100% 0 !important;
       }
       100% {
-        background-position: 12px 0, -12px 100%, 0 -12px, 100% 12px !important;
+        background-position: -300px 0, calc(100% + 300px) 100%, 0 -300px, 100% 300px !important;
       }
     }
 
