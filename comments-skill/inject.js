@@ -895,9 +895,20 @@ const init = () => {
 
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
+      position: relative !important;
+    }
+
+    .hct-highlight::after {
+      content: '' !important;
+      position: absolute !important;
+      top: -3px !important;
+      left: -3px !important;
+      right: -3px !important;
+      bottom: -3px !important;
       outline: 3px dashed #2563eb !important;
-      outline-offset: 0px !important;
-      box-shadow: inset 0 0 19px 5px rgb(235 37 37 / 15%) !important;
+      border-radius: 9px !important;
+      box-shadow: inset 0 0 19px 5px rgb(235 37 37 / 12%) !important;
+      pointer-events: none !important;
     }
 
     /* COMMENT POPOVER */
