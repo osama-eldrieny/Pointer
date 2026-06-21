@@ -40,7 +40,7 @@ Go to the contact page, find the header section, and change the title size to 24
 Validate requirements before design, generate specs directly from live pages, gather feedback faster
 
 🎨 **Designers**  
-Convert requirements and user stories to interactive designs using AI, get precise feedback from stakeholders
+Convert requirements and user stories to interactive designs using AI, get precise feedback from stakeholders, streamline design reviews with visual comments
 
 📋 **Business Analysts**  
 Prepare detailed user stories based on design mockups, validate business requirements against implementation
