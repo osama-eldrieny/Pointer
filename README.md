@@ -101,15 +101,14 @@ This method:
 
 To make Pointer always open and survive page refreshes, add one of these script tags to your HTML `<head>` or before `</body>`:
 
-**Option 1: Standard (Production - uses browser cache)**
+**Option 1: Add this code in `<head>` tag**
 ```html
 <!-- HTML Comments Skill: Enables the comments UI on page load.
      Ensure the comments server is running on port 3001. -->
 <script src="http://localhost:3001/inject.js" defer></script>
 ```
-*Best for: Production or when you want faster page loads with cached files*
 
-**Option 2: Development (Always fresh - no caching)**
+**Option 2: Or add this code**
 ```html
 <script>
   (function() {
@@ -120,7 +119,6 @@ To make Pointer always open and survive page refreshes, add one of these script 
   })();
 </script>
 ```
-*Best for: Development - ensures you always get the latest inject.js code without clearing browser cache*
 
 **Which option to choose:**
 - **Option 1:** Use for production or when you want browser caching
