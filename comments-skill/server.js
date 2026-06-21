@@ -489,7 +489,15 @@ app.delete('/api/comments/:id/reply/:replyId', (req, res) => {
 
   // Remove from pending-apply.json if it was there
   const pending = readPendingApply();
-  const filteredPending = pending.filter(p => p.apply_reply_id !== replyId);
+  const filteredPending = pending.map(p => {
+    if (p.id === id) {
+      // Remove from apply_reply_ids array
+      if (p.apply_reply_ids) {
+        p.apply_reply_ids = p.apply_reply_ids.filter(rId => rId !== replyId);
+      }
+    }
+    return p;
+  }).filter(p => !(p.apply_reply_ids && p.apply_reply_ids.length === 0 && !p.apply_comment));
   writePendingApply(filteredPending);
 
   writeComments(comments);
