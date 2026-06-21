@@ -120,10 +120,6 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </script>
 ```
 
-**Which option to choose:**
-- **Option 1:** Use for production or when you want browser caching
-- **Option 2:** Use for development to always get the latest inject.js (cache busting)
-
 ### Step 4: Open Your Project in the Browser
 
 **Open your Project HTML file in the browser** — either as a local server or directly:
