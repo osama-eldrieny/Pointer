@@ -895,12 +895,26 @@ const init = () => {
 
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
-      outline: 3px dashed #2563eb !important;
-      outline-offset: -3px !important;
+      background:
+        linear-gradient(90deg, #2563eb 50%, transparent 50%),
+        linear-gradient(90deg, #9333ea 50%, transparent 50%),
+        linear-gradient(0deg, #7c3aed 50%, transparent 50%),
+        linear-gradient(0deg, #2563eb 50%, transparent 50%) !important;
+      background-repeat: repeat-x, repeat-x, repeat-y, repeat-y !important;
+      background-size: 8px 3px, 8px 3px, 3px 8px, 3px 8px !important;
+      background-position: 0 0, 0 100%, 0 100%, 100% 0 !important;
       background-color: transparent !important;
-      box-shadow:
-        inset 0 0 0 1px #9333ea,
-        inset 0 0 0 2px #7c3aed !important;
+      outline: none !important;
+      animation: hct-border-dance 2s infinite linear !important;
+    }
+
+    @keyframes hct-border-dance {
+      0% {
+        background-position: 0 0, 0 100%, 0 100%, 100% 0 !important;
+      }
+      100% {
+        background-position: 8px 0, -8px 100%, 0 0, 100% 8px !important;
+      }
     }
 
     /* COMMENT POPOVER */
