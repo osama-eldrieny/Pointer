@@ -10,7 +10,6 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 
 </br>
 </br>
-</br>
 
 ## Features
 
@@ -28,7 +27,7 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 
 </br>
 </br>
-</br>
+
 
 ## Why Pointer?
 
@@ -48,7 +47,7 @@ Make this 24px
 
 </br>
 </br>
-</br>
+
 
 ## Perfect for:
 
@@ -72,10 +71,10 @@ Facilitate faster design reviews and feedback loops, reduce communication overhe
 
 </br>
 </br>
-</br>
+
 
 ## Quick Start
-
+</br>
 
 ### Step 1: Clone the Repository
 
@@ -83,7 +82,6 @@ Facilitate faster design reviews and feedback loops, reduce communication overhe
 git clone https://github.com/osama-eldrieny/Pointer.git
 ```
 
-</br>
 </br>
 
 ### Step 2: Start the Comments Server (Terminal 1)
@@ -107,7 +105,6 @@ You'll see:
 </div>
 
 
-</br>
 </br>
 
 ### Step 3: Enable Comments (Choose One Method)
@@ -149,7 +146,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 ```
 
 </br>
-</br>
+
 
 
 ### Step 4: Open Your Project in the Browser
@@ -163,7 +160,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 
 
 </br>
-</br>
+
 
 ### Step 5: Start Commenting
 
@@ -176,7 +173,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 
 
 </br>
-</br>
+
 
 ### Step 6: View & Manage Comments
 
@@ -189,7 +186,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 
 
 </br>
-</br>
+
 
 ### Step 7: Queue Changes for your AI Agent
 
@@ -201,7 +198,7 @@ When ready to apply a comment:
 4. The comment is now in the queue for your AI to process
 
 </br>
-</br>
+
 
 
 ### Step 8: Apply Changes with your AI Agent
@@ -235,7 +232,6 @@ Your AI agent will:
 
 </br>
 </br>
-</br>
 
 ## API Quick Reference
 
@@ -248,7 +244,6 @@ Your AI agent will:
 | DELETE | `/api/comments/:id` | Delete comment |
 
 
-</br>
 </br>
 </br>
 
@@ -271,7 +266,6 @@ Claude will:
 See [CLAUDE_CODE_INTEGRATION.md](comments-skill/CLAUDE_CODE_INTEGRATION.md) for details.
 
 
-</br>
 </br>
 </br>
 
@@ -307,7 +301,6 @@ Pointer/
 
 </br>
 </br>
-</br>
 
 
 ## Configuration
@@ -326,7 +319,6 @@ Edit `comments-skill/config.json`:
 
 </br>
 </br>
-</br>
 
 ## Storage
 
@@ -336,7 +328,6 @@ Edit `comments-skill/config.json`:
 Both are plain JSON — edit directly if needed.
 
 
-</br>
 </br>
 </br>
 
@@ -401,7 +392,6 @@ Both are plain JSON — edit directly if needed.
 
 </br>
 </br>
-</br>
 
 
 ## Example Pending Apply in pending-apply.json
@@ -442,7 +432,6 @@ Both are plain JSON — edit directly if needed.
 
 </br>
 </br>
-</br>
 
 
 ## Workflow
@@ -454,7 +443,6 @@ Both are plain JSON — edit directly if needed.
 5. **Done** — AI replies appear, changes live, status → ✓
 
 
-</br>
 </br>
 </br>
 
@@ -469,7 +457,6 @@ Both are plain JSON — edit directly if needed.
 
 </br>
 </br>
-</br>
 
 ## Limitations
 
@@ -480,7 +467,6 @@ Both are plain JSON — edit directly if needed.
 
 
 
-</br>
 </br>
 </br>
 
@@ -511,7 +497,6 @@ npm start
 
 </br>
 </br>
-</br>
 
 ## Creator
 
@@ -522,14 +507,12 @@ npm start
 
 </br>
 </br>
-</br>
 
 ## License
 
 MIT
 
 
-</br>
 </br>
 </br>
 
