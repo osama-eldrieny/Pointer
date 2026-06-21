@@ -201,20 +201,32 @@ When ready to apply a comment:
 
 ### Step 9: Apply Changes with your AI Agent
 
-Tell your AI agent in a new terminal to apply your pending comments. Examples:
+#### First Time Setup (One-Time Only)
 
-**Claude Code:**
+Before applying comments, ask your AI agent to understand how Pointer works:
+
+```
+Check Pointer folder and understand how pointer tool works, don't create overview.md
+```
+
+This helps the AI agent understand the Pointer workflow, comments structure, and how to apply changes correctly.
+
+</br>
+
+#### Apply Pending Comments
+
+After the AI understands Pointer, use this single command with any AI agent:
+
 ```
 apply pending comments
 ```
 
-**ChatGPT, Gemini, or other AI agents:**
-```
-Apply the pending comments from pending-apply.json. 
-Read each comment, apply the requested changes to the corresponding HTML file,
-add AI replies to comments.json showing what was changed,
-and clear pending-apply.json when done.
-```
+**Supported AI Agents:**
+- Claude Code
+- ChatGPT
+- Gemini
+- Copilot
+- And any other AI agent
 
 Your AI agent will:
 - Read all queued comments from `pending-apply.json`
