@@ -4,12 +4,18 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 
 > **Pointer** — Your team's fastest way to give element-level feedback on live HTML pages.
 
+**For Designers, Front-end Developers, Business Analysts, Team Leads, Product Managers, and anyone on your team** — Give precise feedback on any element, discuss in context, and let AI apply the changes.
+
 ## Features
 
-✨ **Bookmarklet-based** — Works on any localhost HTML page  
+✨ **Bookmarklet-based** — Works on any localhost HTML page or static HTML file  
+- **Localhost:** `http://localhost:3000`, `http://localhost:8000`, etc.
+- **Static HTML:** `file:///path/to/your/page.html`
+
 💾 **File-based storage** — Comments saved as plain JSON (no database needed)  
 🎯 **Element selection** — Click any element to attach feedback  
-🔄 **AI-ready** — Export pending comments for Claude Code to apply changes  
+🔄 **AI-ready** — Export pending comments for any AI agent to apply changes  
+   (Claude Code, ChatGPT, Gemini, Copilot, or your favorite AI)  
 📝 **Threaded replies** — Discuss changes in context before applying  
 🎨 **Visual highlighting** — See which elements have comments  
 📍 **Pin positions** — Comments follow elements during scroll/zoom  
@@ -48,34 +54,24 @@ npm install
 npm start
 ```
 
-> ⚠️ **IMPORTANT: Keep this terminal open** — the comments server must stay running for the bookmarklet to work.
-
 You'll see:
 ```
 🎯 HTML Comments server running at http://localhost:3001
 📌 Bookmarklet page: http://localhost:3001/bookmarklet
 ```
 
+> ⚠️ **IMPORTANT: Keep this terminal open** — the comments server must stay running for the bookmarklet to work.
+
 ### Step 3: Enable Comments (Choose One Method)
 
 #### Method A: Using the Bookmarklet (Quick Testing)
 
 1. Open `http://localhost:3001/bookmarklet` in your browser
-2. **Drag the "Pointer" button to your bookmarks bar** (click and hold, then drag)
-3. The button should now appear in your browser's bookmarks
+2. **Drag the "Pointer" logo to your bookmarks bar** (click and hold, then drag)
+3. The pointer bookmark should now appear in your browser's bookmarks as "🐕 Pointer"
 4. On any page, click the bookmarklet to activate the comments UI
 
-**Tip:** The bookmarklet works like a browser bookmark — drag it to your toolbar for quick access.
-
-#### Method B: Direct Script Injection (Persistent)
-
-For persistent comments that survive page refreshes, add this script tag to your HTML `<head>` or before `</body>`:
-
-```html
-<!-- HTML Comments Skill: Enables the comments UI on page load.
-     Ensure the comments server is running on port 3001. -->
-<script src="http://localhost:3001/inject.js" defer></script>
-```
+#### Method B: Direct Script Injection (Always On)
 
 This method:
 - ✅ Comments UI loads **automatically** on every page load
@@ -83,7 +79,30 @@ This method:
 - ✅ Comments persist across page refreshes
 - ✅ Perfect for development workflows
 
-**Choose this method if:** You want comments to always be available while developing.
+For comments that are always open and survive page refreshes, add one of these script tags to your HTML `<head>` or before `</body>`:
+
+**Option 1: Simple (uses browser cache)**
+```html
+<!-- HTML Comments Skill: Enables the comments UI on page load.
+     Ensure the comments server is running on port 3001. -->
+<script src="http://localhost:3001/inject.js" defer></script>
+```
+
+**Option 2: Always Fresh (cache busting for development)**
+```html
+<script>
+  (function() {
+    var s = document.createElement('script');
+    s.src = 'http://localhost:3001/inject.js?t=' + Date.now();
+    s.defer = true;
+    document.head.appendChild(s);
+  })();
+</script>
+```
+
+**Which option to choose:**
+- **Option 1:** Use for production or when you want browser caching
+- **Option 2:** Use for development to always get the latest inject.js (cache busting)
 
 ### Step 4: Open Your Project in the Browser
 
@@ -96,7 +115,7 @@ This method:
 
 ### Step 5: Start Commenting
 
-1. **Click the "HTML Comments" bookmarklet** from your bookmarks bar
+1. **Click the "🐕 Pointer" bookmarklet** from your bookmarks bar if it's not opened
 2. A toolbar appears in the top-right corner
 3. Click **"+ Add Comment"** button
 4. **Click any element on the page** to attach a comment
@@ -112,29 +131,41 @@ This method:
    - **Delete** comments you no longer need
    - **Read** full comment history with replies
 
-### Step 7: Queue Changes for your AI Agent (e.g., Claude)
+### Step 7: Queue Changes for your AI Agent
 
 When ready to apply a comment:
 
 1. Click **"Ready to Apply"** button on the comment
 2. The status changes to **"Pending Apply"** (highlighted in yellow)
 3. If the comment has replies, you can mark individual replies instead
-4. The comment is now in the queue for AI to process
+4. The comment is now in the queue for your AI to process
 
-### Step 8: Apply Changes with your AI Agent (Claude)
+### Step 8: Apply Changes with your AI Agent
 
-Tell Claude Code to apply your pending comments:
+Tell your AI agent in a new terminal to apply your pending comments. Examples:
 
+**Claude Code:**
 ```
 apply pending comments
 ```
 
-Claude will:
+**ChatGPT, Gemini, or other AI agents:**
+```
+Apply the pending comments from pending-apply.json. 
+Read each comment, apply the requested changes to the corresponding HTML file,
+add AI replies to comments.json showing what was changed,
+and clear pending-apply.json when done.
+```
+
+Your AI agent will:
 - Read all queued comments from `pending-apply.json`
 - Apply each change to the corresponding HTML file
 - Add an AI reply showing what was changed
 - Mark the comment as ✓ Applied
-- **Browser automatically refreshes** to show the changes
+
+**Refresh your browser** to see the changes. 
+
+> 💡 **Pro tip:** If you want the browser to refresh automatically after applying comments, ask your AI agent to add a browser refresh step to the flow.
 
 **That's it!** Your HTML is now updated with all the changes. 🎉
 
@@ -169,18 +200,30 @@ See [CLAUDE_CODE_INTEGRATION.md](comments-skill/CLAUDE_CODE_INTEGRATION.md) for 
 ## File Structure
 
 ```
-comments-skill/
-├── server.js              # Express API server
-├── inject.js              # Browser overlay & UI (~22KB)
-├── comments.json          # All comments (auto-created)
-├── pending-apply.json     # Work queue for Claude Code
-├── config.json            # Configuration
-├── package.json           # Dependencies
-├── README.md              # Full documentation
-├── QUICK_REFERENCE.md     # Quick lookup
-└── CLAUDE_CODE_INTEGRATION.md  # AI apply workflow
-
-test.html                 # Example/demo page
+Pointer/
+├── comments-skill/
+│   ├── server.js                    # Express API server
+│   ├── inject.js                    # Browser overlay & UI (~22KB)
+│   ├── comments.json                # All comments (auto-created)
+│   ├── pending-apply.json           # Work queue for AI apply
+│   ├── config.json                  # Configuration
+│   ├── package.json                 # Dependencies
+│   ├── package-lock.json            # Locked dependencies
+│   ├── README.md                    # Full documentation
+│   ├── QUICK_REFERENCE.md           # Quick lookup
+│   ├── SKILL_SETUP.md               # Setup guide
+│   └── CLAUDE_CODE_INTEGRATION.md   # AI apply workflow
+│
+├── assets/
+│   └── images/
+│       ├── pointer-icon.png         # Main icon (draggable bookmark)
+│       ├── pointer-icon-16.png      # Small icon variant
+│       ├── pointer-icon-favicon.png # Favicon for bookmarklet page
+│       └── favicon.ico              # Standard favicon
+│
+├── test.html                        # Example/demo page
+├── README.md                        # Main documentation
+└── package-lock.json                # Root dependencies lock
 ```
 
 ## Configuration
@@ -203,32 +246,96 @@ Edit `comments-skill/config.json`:
 
 Both are plain JSON — edit directly if needed.
 
-## Example Comment
+## Example Comment in comments.json
 
 ```json
 {
   "id": "c_1718450000_abc123",
-  "page_url": "http://localhost:8000/test.html",
-  "html_file_path": "./test.html",
-  "element_selector": "#hero h1",
+  "page_url": "file:///Users/you/project/test.html",
+  "html_file_path": "../test.html",
+  "element_selector": "body > main > h1.title",
+  "element_snapshot": "<h1 class=\"title\">Dashboard</h1>",
+  "element_tag": "h1",
+  "element_classes": ["title"],
+  "element_id": null,
+  "computed_styles": {
+    "font-size": "36px",
+    "font-weight": "700"
+  },
+  "applied_css_rules": [],
+  "parent_element_info": {
+    "tag": "main",
+    "classes": [],
+    "id": null
+  },
+  "pin_x": 50.5,
+  "pin_y": 75.0,
   "author": "Alice",
   "text": "Change font to Inter",
-  "status": "open",
+  "status": "applied",
+  "scope": "element",
+  "apply_to": "element-only",
   "created_at": "2026-06-16T10:00:00Z",
   "replies": [
     {
       "id": "r_1718450100_xyz",
       "author": "Bob",
-      "text": "Agreed, looks better",
+      "text": "Suggested: use font-weight 600",
+      "created_at": "2026-06-16T10:05:00Z",
       "status": "open"
+    },
+    {
+      "id": "r_1718450150_uvw",
+      "author": "Charlie",
+      "text": "I think 700 is better",
+      "created_at": "2026-06-16T10:10:00Z",
+      "status": "pending-apply"
     },
     {
       "id": "r_1718450200_ai",
       "author": "AI",
-      "text": "Applied ✓ — Changed font-family to Inter",
+      "is_ai": true,
+      "text": "✓ Applied — Changed font-family to 'Inter', font-weight to 700",
+      "created_at": "2026-06-16T10:15:00Z",
       "status": "applied"
     }
   ]
+}
+```
+
+## Example Pending Apply in pending-apply.json
+
+```json
+{
+  "id": "c_1718450000_abc123",
+  "apply_comment": true,
+  "apply_reply_ids": ["r_1718450150_uvw"],
+  "original_comment": {
+    "text": "Change font to Inter",
+    "status": "applied"
+  },
+  "replies": [
+    {
+      "id": "r_1718450100_xyz",
+      "author": "Bob",
+      "text": "Suggested: use font-weight 600",
+      "created_at": "2026-06-16T10:05:00Z",
+      "status": "open"
+    },
+    {
+      "id": "r_1718450150_uvw",
+      "author": "Charlie",
+      "text": "I think 700 is better",
+      "created_at": "2026-06-16T10:10:00Z",
+      "status": "pending-apply"
+    }
+  ],
+  "element_selector": "body > main > h1.title",
+  "page_url": "file:///Users/you/project/test.html",
+  "author": "Alice",
+  "created_at": "2026-06-16T10:00:00Z",
+  "pin_x": 50.5,
+  "pin_y": 75.0
 }
 ```
 
