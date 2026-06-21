@@ -30,6 +30,10 @@ Go to the contact page, find the header section, and change the title size to 24
 ```
 
 **✅ The Pointer way (precise and instant):**
+```
+Make this 24px
+```
+
 1. 🐕 Click the element
 2. 💬 Say "Make this 24px"
 3. ✨ Done — AI gets it instantly
