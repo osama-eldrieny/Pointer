@@ -895,30 +895,46 @@ const init = () => {
 
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
-      outline: 3px dashed #2563eb !important;
-      outline-offset: -3px !important;
+      outline: none !important;
       background-color: rgba(37, 99, 235, 0.08) !important;
-      animation: hct-border-pulse 2s ease-in-out infinite !important;
+      position: relative !important;
+      background-image:
+        linear-gradient(90deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px),
+        linear-gradient(180deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px),
+        linear-gradient(90deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px),
+        linear-gradient(180deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px) !important;
+      background-size:
+        10px 3px,
+        3px 10px,
+        10px 3px,
+        3px 10px !important;
+      background-position:
+        0 0,
+        0 0,
+        0 calc(100% - 3px),
+        calc(100% - 3px) 0 !important;
+      background-repeat:
+        repeat-x,
+        repeat-y,
+        repeat-x,
+        repeat-y !important;
+      animation: hct-dash-move 1s linear infinite !important;
     }
 
-    @keyframes hct-border-pulse {
+    @keyframes hct-dash-move {
       0% {
-        box-shadow:
-          inset 0 0 0 3px rgba(37, 99, 235, 0.2),
-          0 0 8px 2px rgba(37, 99, 235, 0.4),
-          0 0 16px 4px rgba(37, 99, 235, 0.3) !important;
-      }
-      50% {
-        box-shadow:
-          inset 0 0 12px 3px rgba(37, 99, 235, 0.5),
-          0 0 24px 8px rgba(37, 99, 235, 0.7),
-          0 0 40px 12px rgba(37, 99, 235, 0.5) !important;
+        background-position:
+          0 0,
+          0 0,
+          0 calc(100% - 3px),
+          calc(100% - 3px) 0 !important;
       }
       100% {
-        box-shadow:
-          inset 0 0 0 3px rgba(37, 99, 235, 0.2),
-          0 0 8px 2px rgba(37, 99, 235, 0.4),
-          0 0 16px 4px rgba(37, 99, 235, 0.3) !important;
+        background-position:
+          10px 0,
+          0 10px,
+          -10px calc(100% - 3px),
+          calc(100% - 3px) -10px !important;
       }
     }
 
