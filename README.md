@@ -99,7 +99,7 @@ This method:
 - ✅ Comments persist across page refreshes
 - ✅ Perfect for development workflows
 
-For comments that are always open and survive page refreshes, add one of these script tags to your HTML `<head>` or before `</body>`:
+To make Pointer always open and survive page refreshes, add one of these script tags to your HTML `<head>` or before `</body>`:
 
 **Option 1: Standard (Production - uses browser cache)**
 ```html
