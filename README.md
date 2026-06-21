@@ -1,5 +1,9 @@
 # 🐕 Pointer
 
+<div align="center">
+  <img src="./assets/images/pointer-icon.png" alt="Pointer Logo" width="120" height="120">
+</div>
+
 Quick, targeted feedback directly on HTML elements. No lengthy descriptions—just **click, comment, and sync with AI**.
 
 > **Pointer** — Your team's fastest way to give element-level feedback on live HTML pages.
