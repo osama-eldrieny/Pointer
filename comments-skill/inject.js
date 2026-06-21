@@ -895,37 +895,10 @@ const init = () => {
 
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
+      outline: 3px dashed #2563eb !important;
+      outline-offset: -3px !important;
       background-color: rgba(37, 99, 235, 0.08) !important;
-      position: relative !important;
-      outline: none !important;
-    }
-
-    .hct-highlight::after {
-      content: '' !important;
-      position: absolute !important;
-      top: -3px !important;
-      left: -3px !important;
-      right: -3px !important;
-      bottom: -3px !important;
-      border: 3px dashed #2563eb !important;
-      pointer-events: none !important;
-      z-index: 1 !important;
-      animation: hct-dash-pulse 1.5s ease-in-out infinite !important;
-    }
-
-    @keyframes hct-dash-pulse {
-      0% {
-        opacity: 1;
-        border-color: #2563eb !important;
-      }
-      50% {
-        opacity: 0.5;
-        border-color: #1d4ed8 !important;
-      }
-      100% {
-        opacity: 1;
-        border-color: #2563eb !important;
-      }
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2) !important;
     }
 
     /* COMMENT POPOVER */
