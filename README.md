@@ -474,11 +474,8 @@ Both are plain JSON — edit directly if needed.
 
 **Server won't start?**
 ```bash
-# Check port
-lsof -i :3001
-
-# Kill if stuck
-kill -9 <PID>
+# Kill process on port 3001
+kill -9 $(lsof -t -i :3001)
 
 # Start fresh
 npm start
