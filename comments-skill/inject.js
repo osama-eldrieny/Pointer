@@ -895,10 +895,25 @@ const init = () => {
 
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
-      outline: 3px dashed #2563eb !important;
-      outline-offset: -3px !important;
-      background-color: rgba(37, 99, 235, 0.08) !important;
-      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2) !important;
+      outline: none !important;
+      background-color: transparent !important;
+      position: relative !important;
+    }
+
+    .hct-highlight::before {
+      content: '' !important;
+      position: absolute !important;
+      top: -3px !important;
+      left: -3px !important;
+      right: -3px !important;
+      bottom: -3px !important;
+      background: linear-gradient(135deg, #2563eb, #9333ea, #2563eb) !important;
+      pointer-events: none !important;
+      z-index: -1 !important;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+      -webkit-mask-composite: xor !important;
+      mask-composite: exclude !important;
+      padding: 3px !important;
     }
 
     /* COMMENT POPOVER */
