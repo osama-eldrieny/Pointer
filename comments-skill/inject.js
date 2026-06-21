@@ -901,11 +901,12 @@ const init = () => {
         linear-gradient(0deg, #7c3aed 50%, transparent 50%),
         linear-gradient(0deg, #2563eb 50%, transparent 50%) !important;
       background-repeat: repeat-x, repeat-x, repeat-y, repeat-y !important;
-      background-size: 8px 3px, 8px 3px, 3px 8px, 3px 8px !important;
+      background-size: 12px 4px, 12px 4px, 4px 12px, 4px 12px !important;
       background-position: 0 0, 0 100%, 0 100%, 100% 0 !important;
       background-color: transparent !important;
       outline: none !important;
-      animation: hct-border-dance 2s infinite linear !important;
+      padding: 0 !important;
+      animation: hct-border-dance 1.5s infinite linear !important;
     }
 
     @keyframes hct-border-dance {
@@ -913,7 +914,7 @@ const init = () => {
         background-position: 0 0, 0 100%, 0 100%, 100% 0 !important;
       }
       100% {
-        background-position: 8px 0, -8px 100%, 0 0, 100% 8px !important;
+        background-position: 12px 0, -12px 100%, 0 -12px, 100% 12px !important;
       }
     }
 
