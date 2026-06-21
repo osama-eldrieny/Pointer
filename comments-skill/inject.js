@@ -911,19 +911,19 @@ const init = () => {
 
     @keyframes hct-border-dance {
       0% {
-        background-position: 0 0, 100% 100%, 0 100%, 100% 0 !important;
+        background-position: 0 0, 100% 100%, 0 100%, 100% 0;
       }
       25% {
-        background-position: -75px 0, calc(100% + 75px) 100%, 0 -75px, 100% 75px !important;
+        background-position: -75px 0, calc(100% + 75px) 100%, 0 -75px, 100% 75px;
       }
       50% {
-        background-position: -150px 0, calc(100% + 150px) 100%, 0 -150px, 100% 150px !important;
+        background-position: -150px 0, calc(100% + 150px) 100%, 0 -150px, 100% 150px;
       }
       75% {
-        background-position: -225px 0, calc(100% + 225px) 100%, 0 -225px, 100% 225px !important;
+        background-position: -225px 0, calc(100% + 225px) 100%, 0 -225px, 100% 225px;
       }
       100% {
-        background-position: -300px 0, calc(100% + 300px) 100%, 0 -300px, 100% 300px !important;
+        background-position: -300px 0, calc(100% + 300px) 100%, 0 -300px, 100% 300px;
       }
     }
 
