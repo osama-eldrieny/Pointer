@@ -1242,7 +1242,7 @@ const renderSidebar = () => {
       if (comment.replies && comment.replies.length > 0) {
         comment.replies.forEach(reply => {
           const replyStatus = reply.status || 'open';
-          const isAIReply = reply.author === 'AI';
+          const isAIReply = reply.is_ai || reply.author === 'AI';
           const statusClass = `hct-status-${replyStatus.replace(/_/g, '-')}`;
           const statusText = replyStatus === 'pending-apply' ? 'Pending Apply' : replyStatus.charAt(0).toUpperCase() + replyStatus.slice(1);
 
