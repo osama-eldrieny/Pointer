@@ -895,7 +895,7 @@ const init = () => {
 
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
-      outline: 3px solid #2563eb !important;
+      outline: 3px dashed #2563eb !important;
       outline-offset: -3px !important;
       background-color: rgba(37, 99, 235, 0.08) !important;
       animation: hct-border-color-gradient 3s ease-in-out infinite !important;
