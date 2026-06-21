@@ -8,7 +8,9 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 
 **For Designers, Front-end Developers, Business Analysts, Team Leads, Product Managers, and anyone on your team** — Give precise feedback on any element, discuss in context, and let AI apply the changes.
 
-
+</br>
+</br>
+</br>
 
 ## Features
 
