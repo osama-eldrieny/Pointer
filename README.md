@@ -1,4 +1,4 @@
-<img src="./assets/images/pointer-icon.png" alt="Pointer Logo" width="80" height="80">
+<img src="./assets/images/pointer-icon.png" alt="Pointer Logo" width="120" height="120">
 
 # 🐕 Pointer
 
