@@ -903,13 +903,22 @@ const init = () => {
 
     @keyframes hct-border-pulse {
       0% {
-        box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.3), 0 0 4px rgba(37, 99, 235, 0.2) !important;
+        box-shadow:
+          inset 0 0 0 3px rgba(37, 99, 235, 0.2),
+          0 0 8px 2px rgba(37, 99, 235, 0.4),
+          0 0 16px 4px rgba(37, 99, 235, 0.3) !important;
       }
       50% {
-        box-shadow: inset 0 0 8px rgba(37, 99, 235, 0.4), 0 0 12px rgba(37, 99, 235, 0.4) !important;
+        box-shadow:
+          inset 0 0 12px 3px rgba(37, 99, 235, 0.5),
+          0 0 24px 8px rgba(37, 99, 235, 0.7),
+          0 0 40px 12px rgba(37, 99, 235, 0.5) !important;
       }
       100% {
-        box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.3), 0 0 4px rgba(37, 99, 235, 0.2) !important;
+        box-shadow:
+          inset 0 0 0 3px rgba(37, 99, 235, 0.2),
+          0 0 8px 2px rgba(37, 99, 235, 0.4),
+          0 0 16px 4px rgba(37, 99, 235, 0.3) !important;
       }
     }
 
