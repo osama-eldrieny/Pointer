@@ -116,7 +116,7 @@ You'll see:
 
 </br>
 
-### Step 4: Setup Pointer for Easy Access
+### Step 4: One-Time Setup - Pointer for Easy Access
 
 Benefits of this one-time setup:
 - ✅ Comments UI loads **automatically** on every page load
