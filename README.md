@@ -107,16 +107,16 @@ You'll see:
 
 </br>
 
-### Step 3: Enable Comments (Choose One Method)
-
-#### Method A: Using the Bookmarklet (Quick Testing)
+### Step 3: Enable Comments with Bookmarklet (Quick Testing)
 
 1. Open `http://localhost:3001/bookmarklet` in your browser
 2. **Drag the "Pointer" logo to your bookmarks bar** (click and hold, then drag)
 3. The pointer bookmark should now appear in your browser's bookmarks as "🐕 Pointer"
 4. On any page, click the bookmarklet to activate the comments UI
 
-#### Method B: Direct Script Injection (Always On)
+</br>
+
+### Step 4: Enable Comments with Direct Script Injection (Always On)
 
 This method:
 - ✅ Comments UI loads **automatically** on every page load
@@ -147,9 +147,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 
 </br>
 
-
-
-### Step 4: Open Your Project in the Browser
+### Step 5: Open Your Project in the Browser
 
 **Open your Project HTML file in the browser** — either as a local server or directly:
 
@@ -162,7 +160,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </br>
 
 
-### Step 5: Start Commenting
+### Step 6: Start Commenting
 
 1. **Click the "🐕 Pointer" bookmarklet** from your bookmarks bar if it's not opened
 2. A toolbar appears in the top-right corner
@@ -175,7 +173,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </br>
 
 
-### Step 6: View & Manage Comments
+### Step 7: View & Manage Comments
 
 1. Click **"All Comments"** button in the toolbar
 2. The sidebar opens showing all comments on the page
@@ -188,7 +186,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </br>
 
 
-### Step 7: Queue Changes for your AI Agent
+### Step 8: Queue Changes for your AI Agent
 
 When ready to apply a comment:
 
@@ -201,7 +199,7 @@ When ready to apply a comment:
 
 
 
-### Step 8: Apply Changes with your AI Agent
+### Step 9: Apply Changes with your AI Agent
 
 Tell your AI agent in a new terminal to apply your pending comments. Examples:
 
