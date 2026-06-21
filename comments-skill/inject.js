@@ -896,9 +896,37 @@ const init = () => {
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
       outline: 3px dashed #2563eb !important;
-      outline-offset: 3px !important;
+      outline-offset: -3px !important;
       background-color: rgba(37, 99, 235, 0.08) !important;
-      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2) !important;
+      box-shadow:
+        inset 0 0 0 2px rgba(37, 99, 235, 0.2),
+        inset 0 0 0 3px rgba(147, 51, 234, 0.3),
+        inset 0 0 10px rgba(37, 99, 235, 0.15) !important;
+      animation: hct-border-glow 3s ease-in-out infinite !important;
+    }
+
+    @keyframes hct-border-glow {
+      0% {
+        outline-color: #2563eb;
+        box-shadow:
+          inset 0 0 0 2px rgba(37, 99, 235, 0.2),
+          inset 0 0 0 3px rgba(147, 51, 234, 0.3),
+          inset 0 0 10px rgba(37, 99, 235, 0.15) !important;
+      }
+      50% {
+        outline-color: #9333ea;
+        box-shadow:
+          inset 0 0 0 2px rgba(147, 51, 234, 0.3),
+          inset 0 0 0 3px rgba(37, 99, 235, 0.2),
+          inset 0 0 15px rgba(147, 51, 234, 0.25) !important;
+      }
+      100% {
+        outline-color: #2563eb;
+        box-shadow:
+          inset 0 0 0 2px rgba(37, 99, 235, 0.2),
+          inset 0 0 0 3px rgba(147, 51, 234, 0.3),
+          inset 0 0 10px rgba(37, 99, 235, 0.15) !important;
+      }
     }
 
     /* COMMENT POPOVER */
