@@ -694,13 +694,14 @@ const init = () => {
 
     /* COLLAPSED CONTENT */
     .hct-comment-content {
-      max-height: 1000px;
-      overflow: hidden;
+      max-height: none;
+      overflow: visible;
       transition: max-height 0.3s ease;
     }
 
     .hct-comment-content.collapsed {
       max-height: 0;
+      overflow: hidden;
     }
 
     .hct-comment-collapsed {
@@ -762,13 +763,14 @@ const init = () => {
     }
 
     .hct-reply-content {
-      max-height: 1000px;
-      overflow: hidden;
+      max-height: none;
+      overflow: visible;
       transition: max-height 0.3s ease;
     }
 
     .hct-reply-content.collapsed {
       max-height: 0;
+      overflow: hidden;
     }
 
     /* COMMENT ACTIONS */
@@ -828,6 +830,7 @@ const init = () => {
     .hct-reply-text {
       color: #475569;
       line-height: 1.5;
+      word-wrap: break-word;
     }
 
     /* PIN OVERLAY & PINS */
