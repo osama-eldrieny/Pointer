@@ -895,46 +895,36 @@ const init = () => {
 
     /* ELEMENT HIGHLIGHT */
     .hct-highlight {
-      outline: none !important;
       background-color: rgba(37, 99, 235, 0.08) !important;
       position: relative !important;
-      background-image:
-        linear-gradient(90deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px),
-        linear-gradient(180deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px),
-        linear-gradient(90deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px),
-        linear-gradient(180deg, #2563eb 0%, #2563eb 5px, transparent 5px, transparent 10px) !important;
-      background-size:
-        10px 3px,
-        3px 10px,
-        10px 3px,
-        3px 10px !important;
-      background-position:
-        0 0,
-        0 0,
-        0 calc(100% - 3px),
-        calc(100% - 3px) 0 !important;
-      background-repeat:
-        repeat-x,
-        repeat-y,
-        repeat-x,
-        repeat-y !important;
-      animation: hct-dash-move 1s linear infinite !important;
+      outline: none !important;
     }
 
-    @keyframes hct-dash-move {
+    .hct-highlight::after {
+      content: '' !important;
+      position: absolute !important;
+      top: -3px !important;
+      left: -3px !important;
+      right: -3px !important;
+      bottom: -3px !important;
+      border: 3px dashed #2563eb !important;
+      pointer-events: none !important;
+      z-index: 1 !important;
+      animation: hct-dash-pulse 1.5s ease-in-out infinite !important;
+    }
+
+    @keyframes hct-dash-pulse {
       0% {
-        background-position:
-          0 0,
-          0 0,
-          0 calc(100% - 3px),
-          calc(100% - 3px) 0 !important;
+        opacity: 1;
+        border-color: #2563eb !important;
+      }
+      50% {
+        opacity: 0.5;
+        border-color: #1d4ed8 !important;
       }
       100% {
-        background-position:
-          10px 0,
-          0 10px,
-          -10px calc(100% - 3px),
-          calc(100% - 3px) -10px !important;
+        opacity: 1;
+        border-color: #2563eb !important;
       }
     }
 
