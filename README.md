@@ -116,9 +116,9 @@ You'll see:
 
 </br>
 
-### Step 4: Enable Comments with Direct Script Injection (Always On)
+### Step 4: Auto-Open Pointer on Every Page
 
-This method:
+Benefits:
 - ✅ Comments UI loads **automatically** on every page load
 - ✅ No need to click the bookmarklet each time
 - ✅ Comments persist across page refreshes
