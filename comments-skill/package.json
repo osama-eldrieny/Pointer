@@ -1,7 +1,7 @@
 {
   "name": "pointer",
   "version": "1.0.0",
-  "description": "Lightweight collaborative HTML commenting skill with Claude Code integration",
+  "description": "Zero-dependency element-level feedback tool: a web component + standalone Node server + AI skill",
   "author": {
     "name": "Osama Eldrieny",
     "url": "https://www.osamaeldrieny.com/"
@@ -9,31 +9,26 @@
   "license": "MIT",
   "type": "commonjs",
   "main": "server.js",
+  "bin": {
+    "pointer": "cli.js"
+  },
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "serve": "node server.js"
   },
   "keywords": [
     "comments",
-    "html",
     "feedback",
     "collaboration",
+    "web-component",
     "claude",
-    "ai",
-    "bookmarklet"
+    "ai"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/osama-eldrieny/Pointer"
   },
   "engines": {
-    "node": ">=14.0.0"
-  },
-  "dependencies": {
-    "express": "^4.19.2",
-    "cors": "^2.8.5"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
+    "node": ">=18.0.0"
   }
 }

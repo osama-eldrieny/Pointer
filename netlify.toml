@@ -1,0 +1,13 @@
+# Netlify deployment for the Pointer backend.
+#   - Static:   /pointer.js and /skill.md (copied into ./public at build)
+#   - API:      /api/*  → netlify/functions/api.mjs (Netlify Blobs storage)
+#
+# Apps point VITE_POINTER_SERVER at this site's URL. No persistent server needed.
+
+[build]
+  command = "mkdir -p public && cp comments-skill/pointer.js comments-skill/skill.md public/"
+  publish = "public"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

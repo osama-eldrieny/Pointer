@@ -4,3 +4,7 @@ node_modules/
 .env
 .env.local
 .claude/
+.netlify/
+# Build-copied static assets (sourced from comments-skill/)
+public/pointer.js
+public/skill.md

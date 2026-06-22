@@ -1,6 +1,9 @@
 node_modules/
 *.db
+data/
 comments.json
+pending-apply.json
+.pointer/
 .env
 .env.local
 .DS_Store

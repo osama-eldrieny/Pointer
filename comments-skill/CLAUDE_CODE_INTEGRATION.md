@@ -1,522 +1,98 @@
-# Claude Code Integration Guide
+# Applying Pointer Feedback with an AI Tool
 
-This document explains how to use Claude Code to apply pending HTML comments automatically.
+Pointer collects element-level feedback from stakeholders (client / PM / tester / developer) across many projects and environments, then hands it to **any AI coding tool** (Claude Code, Cursor, …) to apply. This guide describes that apply step.
 
-## The Flow
-
-```
-1. User marks comment as "Pending Apply" via bookmarklet UI
-   ↓
-2. Comment is automatically copied to pending-apply.json
-   ↓
-3. User opens Claude Code and says: "apply pending comments"
-   ↓
-4. Claude reads pending-apply.json (the work queue)
-   ↓
-5. Claude applies each change to the HTML files on disk
-   ↓
-6. Claude updates comments.json with AI reply and removes from pending-apply.json
-   ↓
-7. User refreshes browser, sees changes live + green ✓ badges
-```
-
-## 🔑 Key Design Principle
-
-**`pending-apply.json` is the single source of truth — completely self-contained.**
-
-When applying pending comments:
-- ✅ Read ONLY `pending-apply.json` — it has everything you need
-- ✅ Full conversation history is included in the `replies` array for context
-- ✅ All metadata (selectors, snapshots, etc.) is present
-- ❌ Do NOT need to check `comments.json` while applying
-- ❌ Do NOT need to cross-reference multiple files
-
-After applying:
-- Update `comments.json` with the results (mark as applied, add AI reply)
-- Server auto-removes from `pending-apply.json`
-
-This design prevents confusion and ensures the AI always has complete context.
-
-## Example Prompt for Claude Code
-
-Copy and paste this into Claude Code when you're ready to apply comments:
-
----
-
-### Prompt Template
+## The flow
 
 ```
-I'm using an HTML comments skill. Pending changes are in `comments-skill/pending-apply.json`.
+1. Stakeholders comment via the <pointer-feedback> web component (in any environment)
+   ↓
+2. The Pointer server stores them, partitioned by project, under data/<project>/
+   ↓
+3. A stakeholder marks a comment "Ready to Apply" → it lands in that project's pending queue
+   ↓
+4. The developer, in their repo, pulls only their project's queue:
+       npx pointer pull --project <their project>
+   → writes a gitignored .pointer/pending.json
+   ↓
+5. The developer tells their AI tool: "Apply the pending feedback in .pointer/pending.json"
+   ↓
+6. The AI edits the real source files, then writes results back:
+       npx pointer push           (or the AI PATCHes the server API directly)
+   → each comment marked "applied" + an AI reply; the server clears the queue
+   ↓
+7. The dev server's own HMR/live-reload shows the change. (Pointer no longer forces reloads.)
+```
 
-**🔴 SACRED RULE: ALWAYS update the actual CSS rule that styles the element. NEVER create new element-specific selector rules.**
+## Key principle: `.pointer/pending.json` is self-contained
 
-Why: The CSS rule identified in `applied_css_rules` is what's ACTUALLY styling the element. Update it directly.
+Each pending item carries everything needed to apply it — no need to cross-reference any other file:
 
-The comment metadata includes element context:
-- `element_selector`: CSS path to the element (e.g., `body > div > div:nth-of-type(2) > p`)
-- `element_snapshot`: HTML of that element (e.g., `<p class="section-label">Auth Types</p>`)
-- `element_classes`: CSS classes on it
-- `parent_element_info`: Parent tag, classes, id (e.g., parent is `<div class="field-box">`)
-- `computed_styles`: Current styles on the element
-- `applied_css_rules`: **IMPORTANT** - Which CSS rules are ACTUALLY applying to this element
-- `apply_to`: "element-only" = update rule for this element | "all-similar" = update rule for all with class
+| Field | Use |
+|---|---|
+| `project`, `environment`, `stakeholder`, `author` | Who/where the feedback came from |
+| `source_path` | **The precise source location** (e.g. `src/components/Cart.tsx:42`), captured from the configurable `source-attr` if the app emits it |
+| `element_snapshot` | Exact `outerHTML` of the element — fallback for finding source by search |
+| `element_selector`, `element_classes`, `parent_element_info` | Element identity + DOM context |
+| `applied_css_rules` | **Which CSS rules actually win on the element** (highest specificity) — drives correct CSS edits |
+| `original_comment.text` + `replies` | The change request and full discussion thread |
+| `apply_comment`, `apply_reply_ids` | Whether to apply the main comment and/or specific replies |
 
-**WORKFLOW: Element + Comment → Understand → Update**
+## How the AI should locate the source
 
-For each comment:
-1. **Combine two inputs:**
-   - Element metadata (selector, classes, parent, `applied_css_rules`)
-   - Change request (comment `text` + `apply_to` field)
+**Resolution order:**
 
-2. **Understand what's being asked:**
-   - Analyze element: which CSS rule is ACTUALLY styling it? (from `applied_css_rules`)
-   - Analyze request: what CSS property needs to change? (from `text`)
+1. **`source_path` present →** open that `file:line` directly. In a monorepo this lands in the correct app/package as long as the path is repo-relative. This is the precise, preferred path.
+2. **No `source_path` →** locate the source by codebase search, using (in order of signal):
+   - `element_snapshot` text content (search the repo for the literal copy/markup),
+   - `element_classes` and the selectors in `applied_css_rules` (find the component or stylesheet that defines them),
+   - `parent_element_info` to disambiguate between similar elements.
 
-3. **Update the correct rule and save**
+> 💡 To make apply deterministic, have your app emit a source attribute on elements (e.g. `data-component-source="src/.../X.tsx:NN"`) and set `source-attr` on the web component to match. A build-time plugin to auto-emit this everywhere is on the roadmap.
 
-**If apply_to is "element-only":**
+## The CSS sacred rule (unchanged)
 
-1. **Find the ACTUAL CSS rule** from `applied_css_rules`:
-   - Don't assume from element's classes alone
-   - Example: Element `<p class="section-label">` may appear to be styled by `.section-label` rule
-   - But `applied_css_rules` shows `.field-box p { margin: 0; }` is what's actually applied (higher specificity)
-   
-2. **Interpret the change** from comment text:
-   - "add 6px margin bottom" → change margin property to 6px
-   - "change color to blue" → change color property
-   - "increase font size" → increase font-size value
+**When a comment asks for a style change, edit the CSS rule that is _actually_ styling the element — read `applied_css_rules` to see which rule wins by specificity — and update _that_ rule. Do not invent a new, more-specific element selector.**
 
-3. **🔴 CRITICAL: ALWAYS UPDATE THE ACTUAL CSS RULE - NEVER create element-specific selector rules:**
-   - Find the existing CSS rule from `applied_css_rules`
-   - Update THAT rule, nothing else
-   - Find: `.field-box p { margin: 0 0 18px 0; }`
-   - Change to: `.field-box p { margin: 0 }`
-   - Save the HTML file
-   
-   **❌ WRONG:** Create `body > div > div > div:nth-of-type(3) > p { margin: 0 }`
-   **✅ CORRECT:** Update `.field-box p { margin: 0 }`
+Why: a new high-specificity rule can be overridden by, or fight with, the rule that's already applying, so the change silently doesn't take effect. In a framework app that winning rule usually lives in an external `.css`/`.scss`, a CSS module, or a styled-component — find it by search and edit it there.
 
-4. **Parent context naturally limits scope:**
-   - `.field-box p` already targets only `<p>` inside `.field-box`
-   - Multiple elements sharing that rule get consistent changes
-   - That's CORRECT behavior
-
-**If apply_to is "all-similar":**
-- User selected a pure CSS class
-- Modify the global class rule
-- This affects all elements with that class
-
-**CRITICAL EXAMPLE:**
-
-**Element**: `<p class="section-label">Auth Types</p>` in `<div class="field-box">`
-
-**Current CSS:**
+**Example.** Element `<p class="section-label">` shows two applied rules:
 ```css
-.section-label { font-size: 11px; margin: 0 0 18px 0; }
-.field-box p { margin: 0; }  /* ← This is what actually applies! */
+.section-label { margin: 0 0 18px 0; }
+.field-box p   { margin: 0; }   /* ← this one wins (more specific) */
 ```
+Comment: "add 6px margin bottom". ✅ Update `.field-box p { margin: 0 0 6px 0; }`. ❌ Don't add `.section-label { margin-bottom: 6px }` (overridden) or a brittle `body > … > p:nth-of-type(3)` rule.
 
-**Comment**: "add 6px margin bottom"
+## Writing results back
 
-**WRONG approach:** Modify `.section-label` rule
-- Result: `.section-label { margin: 0 0 24px 0; }`
-- Problem: The `.field-box p` rule overrides it, so change doesn't apply!
+After editing, record what was applied so the server can mark comments and clear the queue. Two equivalent options:
 
-**CORRECT approach:** Modify the actual rule that applies
-- Find: `.field-box p { margin: 0; }`
-- Update to: `.field-box p { margin: 0 0 6px 0; }`
-- Result: The element now has 6px margin-bottom as expected!
-
-**Steps:**
-
-1. Read `comments-skill/pending-apply.json`
-2. **For each comment, follow this workflow:**
-
-   **STEP A: Extract Element Information**
-   - `element_selector` - the specific path to this element
-   - `element_snapshot` - exact HTML of this element
-   - `element_classes` - CSS classes on this element
-   - `parent_element_info` - parent element's tag, classes, id
-   - `applied_css_rules` - **which CSS rules are currently styling this element** (CRITICAL)
-   
-   **STEP B: Extract Change Request**
-   - `text` - what does user want to change?
-   - `apply_to` - "element-only" or "all-similar"?
-   
-   **STEP C: Analyze the Element**
-   - Study `applied_css_rules` array to find which rule is ACTUALLY responsible for current styling
-   - This is the most important step!
-   - Example: Element may have class `.section-label` BUT be styled by `.field-box p` rule instead
-   - The `applied_css_rules` array shows you which rule wins (has highest specificity)
-   
-   **STEP D: Interpret the Change**
-   - Read comment text and understand what CSS property needs to change
-   - Example: "add 6px margin bottom" → add margin-bottom property
-   - Example: "change color to red" → update color property
-   - Example: "make it bold" → set font-weight
-   
-   **STEP E: Update the Correct Rule**
-   - Find the CSS rule from STEP C in the `<style>` tag
-   - Modify THAT rule to apply the change
-   - Save the HTML file
-   
-   **STEP F: Update Comment in comments.json**
-   - Add AI reply explaining which rule was modified and what changed
-   - Set status to "applied"
-   
-3. Remove from `pending-apply.json`
-4. **Report the change**: "Updated `.field-box p` rule: changed margin from `0` to `0 0 6px 0`"
-```
-
----
-
-## Example: Applying a Real Comment
-
-### Scenario: User clicks "Auth Types" label in connector card's Identity section
-
-The element is: `<p class="section-label">Auth Types</p>` inside `<div class="field-box">`
-
-### Step 1: User marks comment for apply
-
-The comment in `pending-apply.json` includes:
-
+**A. `pointer push`** — write `.pointer/results.json`, then run it:
 ```json
-{
-  "id": "c_1781540135907_n6ys5p",
-  "element_selector": "body > div > div > div > div > div:nth-of-type(2) > div > div:nth-of-type(3) > p",
-  "element_snapshot": "<p class=\"section-label\">Auth Types</p>",
-  "element_classes": ["section-label"],
-  "parent_element_info": {
-    "tag": "div",
-    "classes": ["field-box"],
-    "id": null
-  },
-  "computed_styles": {
-    "margin": "0px 0px 0px 0px",
-    "font-size": "11px"
-  },
-  "applied_css_rules": [
-    {
-      "selector": ".section-label",
-      "styles": "font-size: 11px; margin: 0 0 18px 0;"
-    },
-    {
-      "selector": ".field-box p",
-      "styles": "margin: 0;"
-    }
-  ],
-  "text": "add extra 6px margin bottom",
-  "apply_to": "element-only"
-}
+[
+  { "id": "c_…", "reply": "Applied ✓ — set .btn { background:#16a34a } in src/components/Hero.tsx" }
+]
 ```
+`pointer push` appends each `reply` as an `AI` reply, sets the comment `status: "applied"`, and the server removes it from the project's pending queue. (With no `results.json`, `push` marks every currently-pending comment `applied` with a generic note.)
 
-### Step 2: Claude Code reads and applies
+**B. Direct API** — `PATCH {server}/api/comments/:id` with `{ "project": "<p>", "status": "applied", "replies": [...with the AI reply...], "replyId": "<that reply id>" }`. The server syncs the pending queue automatically.
 
-Claude:
-1. Reads `../Integration_Cards_Complete1.html`
-2. Sees `apply_to: "element-only"` → apply to this specific element only
-3. **Reads `applied_css_rules`** → TWO rules apply:
-   - `.section-label { margin: 0 0 18px 0; }`
-   - `.field-box p { margin: 0; }` ← **This one wins!** (more specific)
-4. Reads `parent_element_info` → element is inside `.field-box`
-5. Identifies that `.field-box p` is the actual rule styling the element
-6. Interprets comment: "add 6px margin bottom" 
-7. **Updates the actual rule**:
-   ```css
-   .field-box p { margin: 0 0 6px 0; }
-   ```
-   - This is the rule that actually applies to the element
-   - Other `.field-box p` elements get this change too (they're similar in context)
-   - Elements outside `.field-box` are not affected
-8. Saves the HTML file
-9. Adds reply showing which rule was updated
-10. Sets status to "applied"
+## API reference (project-scoped)
 
-### Step 3: Result in comments.json
+All comment routes require a `project` — in the query string for `GET`/`DELETE`, in the JSON body for `POST`/`PATCH`.
 
-```json
-{
-  "id": "c_1781540135907_n6ys5p",
-  "element_snapshot": "<p class=\"section-label\">Auth Types</p>",
-  "text": "add extra 6px margin bottom",
-  "status": "applied",
-  "apply_to": "element-only",
-  "replies": [
-    {
-      "id": "r_1781540135_ai",
-      "author": "AI",
-      "text": "Applied ✓ — Updated CSS rule `.field-box p` from `margin: 0` to `margin: 0 0 6px 0`. This is the actual rule styling your element. Result: Auth Types label now has 6px margin-bottom. Similar elements in .field-box context also updated.",
-      "created_at": "2026-06-16T12:00:00Z"
-    }
-  ]
-}
-```
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/comments?project=P&page_url=…&environment=…` | Comments for a project (optionally filtered) |
+| POST | `/api/comments` | Create (body includes `project`, `environment`, `stakeholder`, `source_path`, element context) |
+| POST | `/api/comments/:id/reply` | Add a reply |
+| PATCH | `/api/comments/:id` | Update status/text; syncs the pending queue |
+| DELETE | `/api/comments/:id` | Delete a comment |
+| GET | `/api/pending-apply?project=P` | The project's work queue |
 
-**The Difference:**
-- ❌ Wrong: Create specific element rule → doesn't help because parent rule overrides it
-- ✅ Correct: Find and update the actual rule that applies → change takes effect immediately
+## Edge cases
 
-### Step 4: User sees the result
-
-1. User refreshes browser on `http://localhost:8080/index.html`
-2. Clicks the bookmarklet
-3. Sidebar shows the comment with:
-   - Green ✓ "Applied" badge
-   - AI reply showing what changed
-4. HTML page now has the new font and size
-5. User can export the updated HTML
-
----
-
-## Handling Edge Cases
-
-### When Element Selector is Stale
-
-If the HTML has changed and the selector no longer works:
-
-1. Claude tries the selector first: `document.querySelector(selector)`
-2. If not found, Claude searches for the element by snapshot: `outerHTML === element_snapshot`
-3. If still not found, Claude searches by text content
-4. If none work: the comment stays visible in sidebar but won't apply
-
-You can edit the comment or delete it and re-add it on the current element.
-
-### Multiple Pending Comments on Same Element
-
-Example:
-- Comment 1: "Make this text bold"
-- Comment 2: "Change color to blue"
-
-Claude reads them in order and applies both to the same element sequentially.
-
-### Comments Requesting Conflicting Changes
-
-Example:
-- Comment 1: "Make font size 16px"
-- Comment 2: "Make font size 20px"
-
-Claude should apply the last one (or ask for clarification in the AI reply). Typically the last marked-for-apply takes precedence.
-
----
-
-## Claude Code Workflow in Detail
-
-### 1. Read pending-apply.json
-```javascript
-// Pseudo-code
-const fs = require('fs');
-const pending = JSON.parse(fs.readFileSync('./comments-skill/pending-apply.json', 'utf8'));
-// That's it! All items in this file are ready to process
-```
-
-### 2. Group by HTML file (optional, for efficiency)
-```javascript
-const byFile = {};
-pending.forEach(c => {
-  if (!byFile[c.html_file_path]) byFile[c.html_file_path] = [];
-  byFile[c.html_file_path].push(c);
-});
-```
-
-### 3. Apply to each file
-```javascript
-Object.entries(byFile).forEach(([filePath, commentsForFile]) => {
-  let html = fs.readFileSync(filePath, 'utf8');
-  
-  commentsForFile.forEach(comment => {
-    // Get the element's CSS classes
-    const elementClasses = comment.element_classes || [];
-    
-    // Parse HTML to modify CSS rules
-    const DOM = new JSDOM(html);
-    const doc = DOM.window.document;
-    
-    // Find and modify the <style> tag
-    const styleTag = doc.querySelector('style');
-    if (styleTag && elementClasses.length > 0) {
-      let cssText = styleTag.textContent;
-      
-      // For each CSS class the element has, find and modify the rule
-      elementClasses.forEach(className => {
-        const classSelector = `.${className}`;
-        // This is simplified - you'll need more robust CSS parsing for complex rules
-        // Look for the rule and update it based on comment.text
-        // Example: if comment says "add margin-bottom: 40px"
-        // Find the rule: `.section-label { ... }` and add the style
-        cssText = updateCSSRule(cssText, classSelector, comment.text);
-      });
-      
-      styleTag.textContent = cssText;
-      html = DOM.serialize();
-    }
-    
-    // Update comment status
-    comment.status = 'applied';
-    comment.replies.push({
-      id: `r_${Date.now()}_ai`,
-      author: 'AI',
-      text: `Applied ✓ — ${summary of what CSS was modified}`,
-      created_at: new Date().toISOString()
-    });
-  });
-  
-  // Write updated HTML
-  fs.writeFileSync(filePath, html, 'utf8');
-});
-
-// 4. Update comments.json with AI replies and remove from pending-apply.json
-const allComments = JSON.parse(fs.readFileSync('./comments-skill/comments.json', 'utf8'));
-pending.forEach(appliedComment => {
-  const commentInFile = allComments.find(c => c.id === appliedComment.id);
-  if (commentInFile) {
-    commentInFile.replies.push({
-      id: `r_${Date.now()}_ai`,
-      author: 'AI',
-      text: `Applied ✓ — ${summary}`,
-      created_at: new Date().toISOString()
-    });
-    commentInFile.status = 'applied';
-  }
-});
-fs.writeFileSync('./comments-skill/comments.json', JSON.stringify(allComments, null, 2), 'utf8');
-fs.writeFileSync('./comments-skill/pending-apply.json', '[]', 'utf8'); // Clear the queue
-```
-
-### 4. Efficiency Notes
-
-Since `pending-apply.json` only contains items to process, you don't need to filter. Just read, process, and clear. Much simpler!
-
----
-
-## Natural Language Interpretation
-
-Claude needs to interpret plain English comments into actual HTML changes:
-
-| Comment | Interpretation |
-|---------|---|
-| "Change font to Inter" | `style="font-family: 'Inter, sans-serif'"` |
-| "Make it larger" | increase `font-size` by ~20% or from implicit to explicit |
-| "Make the button red" | `style="background-color: red"` or `class="btn-red"` |
-| "Fix typo: 'Welcom' → 'Welcome'" | find and replace text content |
-| "Center this text" | `style="text-align: center"` |
-| "Remove this element" | delete the entire tag |
-| "Add padding" | `style="padding: 20px"` (or increase existing) |
-
-Claude is good at this kind of interpretation, but for best results, comments should be:
-- **Specific**: "Change color to #007bff" (better than "make it blue")
-- **Contextual**: "Change the hero heading font to Inter" (better than "Change font")
-- **Actionable**: "Increase button padding from 10px to 15px" (better than "Make button bigger")
-
----
-
-## Testing Your Integration
-
-### Test 1: Simple Text Change
-
-1. Create a test comment: "Change the word 'Welcome' to 'Hello'"
-2. Mark it as pending-apply
-3. Tell Claude: "apply pending comments"
-4. Claude should find the element and replace "Welcome" with "Hello"
-5. Refresh browser → see change live
-
-### Test 2: Style Change
-
-1. Create a test comment: "Change the header background color to #f0f0f0"
-2. Mark it as pending-apply
-3. Tell Claude: "apply pending comments"
-4. Claude should add or modify the `style` attribute to include `background-color: #f0f0f0`
-5. Refresh browser → see change live
-
-### Test 3: Multiple Comments
-
-1. Add three different comments on different elements
-2. Mark all as pending-apply
-3. Tell Claude: "apply pending comments"
-4. Claude should apply all three and show three AI replies
-
----
-
-## Tips for Success
-
-### Do:
-- ✅ Be specific about what to change
-- ✅ Reference the element clearly (e.g., "the hero title" not just "text")
-- ✅ Tell Claude exactly what you want ("Change X to Y")
-- ✅ Let Claude ask questions if it's unclear
-
-### Don't:
-- ❌ Assume Claude knows which element you mean if there are multiple similar ones
-- ❌ Use vague terms ("make it better", "fix it")
-- ❌ Ask for complex refactoring in a comment (use chat for that)
-
-### If Claude Gets Stuck:
-- Clarify the element in a reply on the comment
-- Delete and re-comment with more specific wording
-- Use Claude Code chat to discuss the change first, then mark for apply
-
----
-
-## FAQ
-
-**Q: Can Claude apply comments to multiple HTML files?**
-A: Yes! Each comment has `html_file_path`. Claude will read/edit multiple files as needed.
-
-**Q: What if the HTML file doesn't exist?**
-A: Claude should report an error. Check that `html_file_path` is correct relative to the project root.
-
-**Q: Can I undo an applied comment?**
-A: Technically, but there's no automatic undo. You'd need to:
-1. Change comment status back to "pending-apply"
-2. Have Claude revert the change
-Or manually edit the HTML back.
-
-Better practice: use a new comment if you need a different change.
-
-**Q: Do comments persist after applying?**
-A: Yes! Comments stay in `comments.json` with status "applied" and the AI reply. This creates a history of all changes made.
-
-**Q: Can multiple people apply comments?**
-A: Each time someone tells Claude to apply, it reads the current state of `comments.json`. As long as you're taking turns or working on different files, it should be fine. For concurrent work, coordinate who's applying when.
-
----
-
-## Example: Full Workflow Transcript
-
-```
-[User in Claude Code]
-"Apply pending comments"
-
-[Claude]
-"I'll apply the pending comments from your HTML comments skill. Let me read the comments file first."
-[Claude reads comments-skill/comments.json]
-
-"Found 2 pending comments:
-1. On index.html: 'Change header font to Inter'
-2. On index.html: 'Make button red'
-
-Let me apply these..."
-
-[Claude edits index.html using the Edit tool]
-
-"Applied both comments! Here's what changed:
-- Added font-family: 'Inter, sans-serif' to the h1 element with id='header'
-- Changed the button's background color to red
-
-Updated comments.json with AI replies and marked both as 'applied'.
-You can refresh your browser and click the bookmarklet to see the changes."
-
-[User refreshes browser]
-"✓ Comments show as applied with green badges and AI replies!"
-```
-
----
-
-## Next Steps
-
-1. Create a test comment on your test.html
-2. Mark it as "Pending Apply"
-3. Open Claude Code and use the prompt from this guide
-4. Watch Claude apply the change
-5. Refresh your browser to see the result live
-
-Enjoy faster feedback loops! 🚀
+- **Stale selector / element moved:** prefer `source_path`; else match by `element_snapshot`, then by text content. If nothing matches, leave the comment unapplied and note why in the AI reply.
+- **Multiple comments on one element:** apply in order.
+- **Conflicting requests:** apply the most recent, or ask for clarification in the AI reply.
+- **Multiple files / monorepo:** each comment resolves independently via its own `source_path`/search.
