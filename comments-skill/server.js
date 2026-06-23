@@ -163,7 +163,7 @@ app.get('/bookmarklet', (req, res) => {
         <div class="setup-card">
           <div style="background: #dbeafe; color: #1e40af; padding: 12px; border-radius: 8px; font-weight: 600; margin-bottom: 16px; text-align: center;">Quick setup: Drag</div>
           <a href="${bookmarklet}" class="bookmark" draggable="true" title="🐕 Pointer" style="margin-bottom: 16px;">
-            <img src="http://localhost:3001/assets/images/pointer-icon.png" alt="🐕 Pointer">
+            <img src="https://uimarkets.com/images/pointer/assets/images/pointer-icon.png" alt="🐕 Pointer">
           </a>
           <p style="font-size: 14px; color: #0f172a; font-weight: 600; margin-bottom: 12px;">Drag this icon to your bookmarks bar</p>
           <p style="font-size: 13px; color: #6b7280; line-height: 1.6;">Click and hold the icon above, then drag it to your browser's bookmarks bar at the top.</p>

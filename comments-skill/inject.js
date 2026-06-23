@@ -1288,7 +1288,7 @@ const renderSidebar = () => {
 
   html += `
     <div id="hct-global-counter">
-      <img id="hct-dog-mascot" src="http://localhost:8000/assets/images/pointer-icon.png" alt="Pointer dog mascot">
+      <img id="hct-dog-mascot" src="https://uimarkets.com/images/pointer/assets/images/pointer-icon.png" alt="Pointer dog mascot">
       <div id="hct-counter-text">
         <div>🌍 <span id="hct-counter-number">0</span> comments worldwide</div>
         <div id="hct-counter-credits">
