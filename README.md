@@ -203,41 +203,36 @@ When ready to apply a comment:
 
 #### First Time Setup (One-Time Only)
 
-Before applying comments, ask your AI agent to understand how Pointer works:
+Install the Pointer skill file to your project (this teaches your AI agent how to apply comments):
 
+```bash
+mkdir -p .claude/skills/pointer
+curl -o .claude/skills/pointer/SKILL.md \
+  https://raw.githubusercontent.com/osama-eldrieny/Pointer/main/.claude/skills/pointer/SKILL.md
 ```
-Check Pointer folder and understand how pointer tool works, don't create overview.md
-```
-
-This helps the AI agent understand the Pointer workflow, comments structure, and how to apply changes correctly.
 
 </br>
 
 #### Apply Pending Comments
 
-After the AI understands Pointer, use this single command with any AI agent:
+Once the skill file is installed, simply tell Claude Code:
 
 ```
 apply pending comments
 ```
 
-**Supported AI Agents:**
-- Claude Code
-- ChatGPT
-- Gemini
-- Copilot
-- And any other AI agent
-
-Your AI agent will:
+Claude will:
 - Read all queued comments from `pending-apply.json`
 - Apply each change to the corresponding HTML file
 - Mark the comment/reply status as ✓ Applied
 
-**Refresh your browser** to see the changes. 
+**Refresh your browser** to see the changes.
 
-> 💡 **Pro tip:** If you want the browser to refresh automatically after applying comments, ask your AI agent to add a browser refresh step to the flow.
+> 💡 **Pro tip:** If you want the browser to refresh automatically after applying comments, ask Claude to add a browser refresh step to the flow.
 
 **That's it!** Your HTML is now updated with all the changes. 🎉
+
+**Note:** The skill file (`.claude/skills/pointer/SKILL.md`) is optional but recommended — it makes the apply workflow much smoother. If you prefer, you can also use Claude Code without it by providing manual instructions.
 
 </br>
 </br>
