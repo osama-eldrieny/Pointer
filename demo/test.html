@@ -4,20 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ProjectHub - Task Management Dashboard</title>
-  <link rel="icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/pointer-icon-favicon.png">
-  <link rel="apple-touch-icon" href="/assets/images/pointer-icon-favicon.png">
+  <link rel="icon" href="assets/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/pointer-icon-favicon.png">
+  <link rel="apple-touch-icon" href="assets/images/pointer-icon-favicon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- HTML Comments Skill: Copy this script tag to your own HTML file if you want to use the comments feature.
-       Make sure the comments server is running on port 3001 before loading this page. -->
-
-
-     
-  
-
-
+  <!-- ── Pointer feedback embed ──────────────────────────────────────────────
+       To enable Pointer in your own app, copy these two <script> tags plus the
+       <pointer-feedback></pointer-feedback> element (added just before </body>).
+       Set the server URL once — in the pointer.js <script src> below; `server`
+       is derived from it, so you don't repeat it in window.POINTER_CONFIG.
+       (This demo expects the Pointer server running at http://localhost:3001.) -->
+  <script>
+    window.POINTER_CONFIG = { project: "pointer-demo", environment: "local" };
+  </script>
+  <script src="http://localhost:3001/pointer.js" defer></script>
   <style>
     /* Shadcn-style Button Component */
     .btn {
@@ -1000,5 +1002,8 @@
       }
     });
   </script>
+
+  <!-- Config comes from window.POINTER_CONFIG above; attributes would override it if set. -->
+  <pointer-feedback></pointer-feedback>
 </body>
 </html>

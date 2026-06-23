@@ -1,6 +1,18 @@
 node_modules/
 .DS_Store
 *.log
+*.db
 .env
 .env.local
 .claude/
+.netlify/
+.pointer/
+
+# Per-project feedback storage (created at runtime by server.js)
+data/
+comments.json
+pending-apply.json
+
+# Build-copied static assets (sourced from src/ at deploy time)
+netlify/public/pointer.js
+netlify/public/skill.md
