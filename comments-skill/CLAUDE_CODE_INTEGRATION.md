@@ -32,7 +32,7 @@ When applying pending comments:
 - ❌ Do NOT need to cross-reference multiple files
 
 After applying:
-- Update `comments.json` with the results (mark as applied, add AI reply)
+- Update `comments.json` with the results (mark as applied)
 - Server auto-removes from `pending-apply.json`
 
 This design prevents confusion and ensures the AI always has complete context.
@@ -161,7 +161,6 @@ For each comment:
    - Save the HTML file
    
    **STEP F: Update Comment in comments.json**
-   - Add AI reply explaining which rule was modified and what changed
    - Set status to "applied"
    
 3. Remove from `pending-apply.json`
@@ -229,8 +228,7 @@ Claude:
    - Other `.field-box p` elements get this change too (they're similar in context)
    - Elements outside `.field-box` are not affected
 8. Saves the HTML file
-9. Adds reply showing which rule was updated
-10. Sets status to "applied"
+9. Sets status to "applied"
 
 ### Step 3: Result in comments.json
 
@@ -241,14 +239,7 @@ Claude:
   "text": "add extra 6px margin bottom",
   "status": "applied",
   "apply_to": "element-only",
-  "replies": [
-    {
-      "id": "r_1781540135_ai",
-      "author": "AI",
-      "text": "Applied ✓ — Updated CSS rule `.field-box p` from `margin: 0` to `margin: 0 0 6px 0`. This is the actual rule styling your element. Result: Auth Types label now has 6px margin-bottom. Similar elements in .field-box context also updated.",
-      "created_at": "2026-06-16T12:00:00Z"
-    }
-  ]
+  "replies": []
 }
 ```
 
@@ -262,8 +253,7 @@ Claude:
 2. Clicks the bookmarklet
 3. Sidebar shows the comment with:
    - Green ✓ "Applied" badge
-   - AI reply showing what changed
-4. HTML page now has the new font and size
+4. HTML page now has the new styles applied
 5. User can export the updated HTML
 
 ---
@@ -295,7 +285,7 @@ Example:
 - Comment 1: "Make font size 16px"
 - Comment 2: "Make font size 20px"
 
-Claude should apply the last one (or ask for clarification in the AI reply). Typically the last marked-for-apply takes precedence.
+Claude should apply the last one. Typically the last marked-for-apply takes precedence.
 
 ---
 
@@ -352,29 +342,17 @@ Object.entries(byFile).forEach(([filePath, commentsForFile]) => {
     
     // Update comment status
     comment.status = 'applied';
-    comment.replies.push({
-      id: `r_${Date.now()}_ai`,
-      author: 'AI',
-      text: `Applied ✓ — ${summary of what CSS was modified}`,
-      created_at: new Date().toISOString()
-    });
   });
   
   // Write updated HTML
   fs.writeFileSync(filePath, html, 'utf8');
 });
 
-// 4. Update comments.json with AI replies and remove from pending-apply.json
+// 4. Update comments.json and remove from pending-apply.json
 const allComments = JSON.parse(fs.readFileSync('./comments-skill/comments.json', 'utf8'));
 pending.forEach(appliedComment => {
   const commentInFile = allComments.find(c => c.id === appliedComment.id);
   if (commentInFile) {
-    commentInFile.replies.push({
-      id: `r_${Date.now()}_ai`,
-      author: 'AI',
-      text: `Applied ✓ — ${summary}`,
-      created_at: new Date().toISOString()
-    });
     commentInFile.status = 'applied';
   }
 });

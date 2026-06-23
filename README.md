@@ -231,8 +231,7 @@ apply pending comments
 Your AI agent will:
 - Read all queued comments from `pending-apply.json`
 - Apply each change to the corresponding HTML file
-- Add an AI reply showing what was changed
-- Mark the comment as ✓ Applied
+- Mark the comment/reply status as ✓ Applied
 
 **Refresh your browser** to see the changes. 
 
@@ -263,15 +262,14 @@ Mark comments as **"pending-apply"** in the UI, then tell Claude Code:
 
 ```
 Apply pending comments from pending-apply.json. Read the file,
-apply each requested change to its HTML file, add AI replies to comments.json,
+apply each requested change to its HTML file, mark status as applied,
 and clear pending-apply.json when done.
 ```
 
 Claude will:
 - Read `pending-apply.json` (auto-generated work queue)
 - Edit HTML files on disk
-- Update `comments.json` with AI replies
-- Mark comments as ✓ applied
+- Mark comments/replies as ✓ applied in `comments.json`
 
 See [CLAUDE_CODE_INTEGRATION.md](comments-skill/CLAUDE_CODE_INTEGRATION.md) for details.
 
@@ -450,7 +448,7 @@ Both are plain JSON — edit directly if needed.
 2. **Discuss** — Reply in context with team
 3. **Mark** — Click "Mark Apply" when ready for AI
 4. **Apply** — Tell Claude Code "apply pending comments"
-5. **Done** — AI replies appear, changes live, status → ✓
+5. **Done** — Changes live, status → ✓
 
 
 </br>

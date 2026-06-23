@@ -42,16 +42,15 @@ Copy-paste into Claude Code:
 
 ```
 Apply pending comments. Read pending-apply.json, 
-apply each to its HTML file, add AI replies to comments.json,
+apply each to its HTML file, mark status as applied,
 and remove from pending-apply.json when done.
 ```
 
 Claude will:
 - Read `pending-apply.json` (the work queue)
 - Edit HTML files on disk
-- Update `comments.json` with AI replies
+- Mark comments/replies as applied in `comments.json`
 - Clear `pending-apply.json` when done
-- Mark comments as applied ✓
 
 ## Config
 File: `comments-skill/config.json`
@@ -127,7 +126,7 @@ Apply pending comments from pending-apply.json. This file is self-contained with
 - Read element_selector and element_snapshot to locate the element
 - Read the marked item's text to understand what change is requested
 - Apply to the HTML file at html_file_path
-- Update comments.json: mark the applied item as status: "applied", add new AI reply with what changed
+- Update comments.json: mark the applied item as status: "applied"
 - pending-apply.json will be auto-cleared by the server
 ```
 

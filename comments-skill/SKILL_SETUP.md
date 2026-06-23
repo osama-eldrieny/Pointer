@@ -7,7 +7,7 @@ A **Figma-style commenting overlay** for HTML pages with **Claude Code integrati
 1. ✅ Click elements on any localhost HTML page to add comments
 2. ✅ See all comments in a sidebar with author, timestamp, and reply threads
 3. ✅ Mark comments as "Pending Apply" to queue them for Claude Code
-4. ✅ Tell Claude Code "apply pending comments" — Claude reads `comments.json`, edits HTML files, and adds AI replies showing what changed
+4. ✅ Tell Claude Code "apply pending comments" — Claude reads `comments.json`, edits HTML files, and marks them as applied
 5. ✅ Export clean HTML without the commenting overlay
 
 ---
@@ -88,7 +88,7 @@ Or with more detail:
 ```
 Apply all pending comments. Read pending-apply.json, 
 apply each change to the corresponding HTML file, 
-add AI replies to comments.json, and update statuses.
+and mark status as applied.
 ```
 
 The skill automatically:
@@ -99,7 +99,7 @@ The skill automatically:
 Claude will:
 - Read your `comments.json` (it's just JSON, no special parsing needed)
 - Edit your HTML files on disk
-- Update the comment file with "applied" status and AI replies
+- Update the comment file with "applied" status
 - Tell you what was changed
 
 ### Then Refresh
@@ -107,8 +107,7 @@ Claude will:
 1. Refresh the browser on your HTML page
 2. Click the bookmarklet again
 3. Your comments now show green ✓ pins
-4. In the sidebar, you'll see the AI reply thread on each applied comment
-5. Export the updated HTML if needed
+4. Export the updated HTML if needed
 
 ---
 
@@ -129,7 +128,7 @@ All comments marked as "Pending Apply"
   ↓
 Tell Claude Code: "Apply pending comments"
   ↓
-Claude Code reads comments.json, edits HTML, adds AI replies
+Claude Code reads comments.json, edits HTML, marks as applied
   ↓
 Refresh browser → all changes live
   ↓
@@ -285,7 +284,7 @@ When asking Claude to apply comments, be specific:
 ### Good prompts:
 - "Apply pending comments to my HTML files"
 - "Apply all pending-apply comments from comments.json"
-- "Make the changes described in the pending comments, update their status to applied, and add an AI reply summarizing the change"
+- "Make the changes described in the pending comments and update their status to applied"
 
 ### Less helpful:
 - "Fix the HTML" (Claude won't know to read comments.json)
@@ -345,7 +344,6 @@ comments.json (plain JSON)
 Claude Code
   ├─ Reads comments.json
   ├─ Edits HTML files on disk
-  ├─ Updates comments.json with AI replies
   └─ Marks comments as "applied"
 ```
 

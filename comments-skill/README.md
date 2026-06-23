@@ -51,8 +51,7 @@ When you're ready to apply comments:
 2. Claude will:
    - Read `comments-skill/pending-apply.json` (contains only comments marked for apply)
    - Apply each comment to the corresponding HTML file on disk
-   - Add an AI reply showing what was changed
-   - Update comment status to "Applied" ✓
+   - Mark comment/reply status as "Applied" ✓
 
 3. Refresh your browser and click the bookmarklet again — you'll see the applied changes
 
@@ -76,7 +75,7 @@ When you're ready to apply comments:
 
 When a comment has replies, you can mark individual user replies for application:
 
-- **Mark Replies**: Click "Mark Apply" on any user reply (not on AI replies)
+- **Mark Replies**: Click "Mark Apply" on any user reply to queue it for application
 - **Status Tracking**: Each reply has its own status: `open`, `pending-apply`, or `applied`
 - **Conversation History**: When applying a marked reply, Claude sees the full comment conversation for context
 - **Iterative Feedback**: Mark an initial comment for apply → Claude applies it → User replies with refinements → Mark the refinement for apply → Claude applies the revision
@@ -113,10 +112,9 @@ The workflow is clean and efficient:
    - **If `apply_to: "all-similar"`** → Rule is global, affects all with that class
 5. **Claude updates**: 
    - Modifies the HTML file on disk (finds and updates the actual CSS rule)
-   - Adds AI reply showing which rule was updated and the result
    - Removes the comment from `pending-apply.json`
    - Sets comment status to `applied`
-6. **Verify**: Refresh browser, click bookmarklet — see the applied changes with AI explanations
+6. **Verify**: Refresh browser, click bookmarklet — see the applied changes
 
 **🔒 Critical Rule:** Find and update the CSS rule that's ACTUALLY styling the element:
 - The skill captures which rules apply via `applied_css_rules`
@@ -218,7 +216,6 @@ comments-skill/
 4. **Update `comments.json`:**
    - Find the comment by id
    - Mark the applied reply as `status: "applied"`
-   - Add a new AI reply documenting what was changed
 5. **Remove from `pending-apply.json`** (server handles this automatically)
 
 **Why this design is better:**
@@ -257,7 +254,7 @@ comments-skill/
 
 When using Claude Code to apply comments:
 
-> "Apply pending comments. Read `comments-skill/pending-apply.json`, apply each change to the corresponding HTML file, add an AI reply to the comment in `comments.json` with what you changed, and remove the comment from `pending-apply.json`."
+> "Apply pending comments. Read `comments-skill/pending-apply.json`, apply each change to the corresponding HTML file, mark status as applied, and remove the comment from `pending-apply.json`."
 
 Or simply:
 
@@ -266,7 +263,7 @@ Or simply:
 Claude Code will:
 1. Read `pending-apply.json`
 2. For each comment: find the element, apply the change, update the HTML file
-3. Add an AI reply in `comments.json` with what was changed
+3. Mark the comment/reply status as `applied` in `comments.json`
 4. Remove from `pending-apply.json` and set status to `applied`
 
 ## License
