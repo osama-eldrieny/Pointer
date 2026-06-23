@@ -10,14 +10,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- HTML Comments Skill: Copy this script tag to your own HTML file if you want to use the comments feature.
-       Make sure the comments server is running on port 3001 before loading this page. -->
-
-
-     
-  
-
-
+  <!-- Pointer: copy these two lines into your own app to enable feedback.
+       Make sure the Pointer server is running on port 3001 before loading this page. -->
+  <script src="http://localhost:3001/pointer.js" defer></script>
   <style>
     /* Shadcn-style Button Component */
     .btn {
@@ -1000,5 +995,10 @@
       }
     });
   </script>
+
+  <pointer-feedback
+    project="pointer-demo"
+    environment="local"
+    server="http://localhost:3001"></pointer-feedback>
 </body>
 </html>

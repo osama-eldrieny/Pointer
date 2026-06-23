@@ -1,6 +1,4 @@
 {
-  "project_root": "../",
   "server_port": 3001,
-  "url_base": "http://localhost:8000",
-  "comments_file": "./comments.json"
+  "data_dir": "./data"
 }

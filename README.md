@@ -1,531 +1,122 @@
-<img src="./assets/images/pointer-icon.png" alt="Pointer Logo" width="120" height="120">
-
 # 🐕 Pointer
 
-Quick, targeted feedback directly on HTML elements. No lengthy descriptions—just **click, comment, and sync with AI**.
+Quick, targeted feedback directly on web elements. No lengthy descriptions—just **click, comment, and hand it to any AI to apply**.
 
-> **Pointer** — Your team's fastest way to give element-level feedback on live HTML pages.
+> **Pointer** — Your team's fastest way to give element-level feedback on any app, across every environment, and turn it into code.
 
-**For Designers, Front-end Developers, Business Analysts, Team Leads, Product Managers, and anyone on your team** — Give precise feedback on any element, discuss in context, and let AI apply the changes.
+## What it does
 
-</br>
-</br>
+Stakeholders (client, PM, tester, developer) click any element on a running app and leave a short comment. Comments are collected by a small server, **partitioned by project and tagged by environment and stakeholder**. A developer then pulls their project's queue and tells any AI coding tool to apply the changes to the real source files.
+
+```
+Instead of:  "Go to the checkout page, find the header, make the title 24px"
+With Pointer:  🐕 click the title → 💬 "Make this 24px" → ✨ AI applies it
+```
 
 ## Features
 
-✨ **Bookmarklet-based** — Works on any localhost HTML page or static HTML file  
-- **Localhost:** `http://localhost:3000`, `http://localhost:8000`, etc.
-- **Static HTML:** `file:///path/to/your/page.html`
+✨ **Two-line install, no package** — apps just point a `<script>` + tag at a deployed server
+📦 **Zero dependencies** — the server is one Node file (`node:http` only); run it with `node server.js`, no `npm install`
+🗂️ **Multi-project** — one server serves many apps (great for monorepos and separate repos)
+👥 **Multi-stakeholder / multi-environment** — every comment is tagged `{ project, environment, stakeholder, author }`
+🎯 **Element + source aware** — captures selector, snapshot, the CSS rules that actually apply, and an optional source path
+🤖 **AI-agnostic** — the AI fetches/applies feedback with plain `curl` (Claude Code, Cursor, …); no client install
+💾 **No database** — plain JSON files on the server, partitioned per project
+🛡️ **Style-isolated UI** — the overlay renders in a Shadow DOM, so it never clashes with your app's CSS
 
-💾 **File-based storage** — Comments saved as plain JSON (no database needed)  
-🎯 **Element selection** — Click any element to attach feedback  
-🔄 **AI-ready** — Export pending comments for any AI agent to apply changes  
-   (Claude Code, ChatGPT, Gemini, Copilot, or your favorite AI)  
-📝 **Threaded replies** — Discuss changes in context before applying  
-🎨 **Visual highlighting** — See which elements have comments  
-📍 **Pin positions** — Comments follow elements during scroll/zoom  
+## Quick start
 
-</br>
-</br>
-
-
-## Why Pointer?
-
-**❌ The old way (lengthy and error-prone):**
-```
-Go to the contact page, find the header section, and change the title size to 24px
-```
-
-**✅ The Pointer way (precise and instant):**
-```
-Make this 24px
-```
-
-1. 🐕 Click the element
-2. 💬 Say "Make this 24px"
-3. ✨ Done — AI gets it instantly
-
-</br>
-</br>
-
-
-## Perfect for:
-
-👨‍💼 **Product Managers**  
-Validate requirements before design, generate specs directly from live pages, gather feedback faster
-
-🎨 **Designers**  
-Convert requirements and user stories to interactive designs using AI, get precise feedback from stakeholders, streamline design reviews with visual comments
-
-📋 **Business Analysts**  
-Prepare detailed user stories based on design mockups, validate business requirements against implementation
-
-🧪 **QA/Testers**  
-Highlight bugs and issues instantly without screenshot tools, give feedback faster with visual context, create test cases from comments
-
-💻 **Front-end Developers**  
-Fix issues directly with AI assistance, iterate on live pages in real-time, pair with AI for live coding sessions
-
-⚡ **Team Leads**  
-Facilitate faster design reviews and feedback loops, reduce communication overhead across team
-
-</br>
-</br>
-
-
-## Quick Start
-</br>
-
-### Step 1: Clone the Repository
+### 1. Run the server (zero dependencies)
 
 ```bash
-git clone https://github.com/osama-eldrieny/Pointer.git
-```
-
-</br>
-
-### Step 2: Start the Comments Server (Terminal 1)
-
-Navigate to the skill folder and start the server:
-
-```bash
-cd Pointer/comments-skill
-npm install
-npm start
+cd comments-skill
+node server.js          # no npm install needed
 ```
 
 You'll see:
 ```
-🎯 HTML Comments server running at http://localhost:3001
-📌 Bookmarklet page: http://localhost:3001/bookmarklet
+🐕 Pointer server running at http://localhost:3001  (zero dependencies)
+🧩 Web component: http://localhost:3001/pointer.js
+🧠 AI skill:      http://localhost:3001/skill.md
+💾 Project data:  .../data/<project>/
 ```
 
-<div style="background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 12px 16px; margin: 16px 0;">
-  <strong>⚠️ IMPORTANT: Keep this terminal open</strong> — the comments server must stay running for the bookmarklet to work.
-</div>
+To **deploy once** for a team, copy `server.js` + `pointer.js` + `skill.md` + `config.json` to any host and run `node server.js` — no build, no install.
 
+### 2. Enable it in your app (no package, env-gated)
 
-</br>
+Pointer is a **review tool** — load it only in the environments where you want it, via a dedicated `VITE_POINTER_ENABLED` flag. Add an **inline guard** to your `index.html` (so a disabled env loads nothing):
 
-### Step 3: Enable Comments with Bookmarklet (Quick Testing)
-
-1. Open `http://localhost:3001/bookmarklet` in your browser
-2. **Drag the "Pointer" logo to your bookmarks bar** (click and hold, then drag)
-3. The pointer bookmark should now appear in your browser's bookmarks as "🐕 Pointer"
-4. On any page, click the bookmarklet to activate the comments UI
-
-</br>
-
-### Step 4: One-Time Setup - Pointer for Easy Access
-
-Benefits of this one-time setup:
-- ✅ Comments UI loads **automatically** on every page load
-- ✅ No need to click the bookmarklet each time
-- ✅ Comments persist across page refreshes
-- ✅ Perfect for development workflows
-
-To make Pointer always open and survive page refreshes, add one of these script tags to your HTML `<head>` or before `</body>`:
-
-**Option 1: Add this code in `<head>` tag**
-```html
-<!-- HTML Comments Skill: Enables the comments UI on page load.
-     Ensure the comments server is running on port 3001. -->
-<script src="http://localhost:3001/inject.js" defer></script>
-```
-
-**Option 2: Or add this code**
 ```html
 <script>
-  (function() {
-    var s = document.createElement('script');
-    s.src = 'http://localhost:3001/inject.js?t=' + Date.now();
-    s.defer = true;
+  if ("%VITE_POINTER_ENABLED%" === "true" && "%VITE_POINTER_SERVER%".indexOf("http") === 0) {
+    var s = document.createElement("script");
+    s.src = "%VITE_POINTER_SERVER%/pointer.js"; s.defer = true;
     document.head.appendChild(s);
-  })();
+    var el = document.createElement("pointer-feedback");
+    el.setAttribute("project", "%VITE_POINTER_PROJECT%");
+    el.setAttribute("server", "%VITE_POINTER_SERVER%");
+    el.setAttribute("source-attr", "data-component-source");
+    document.body.appendChild(el);
+  }
 </script>
 ```
 
-</br>
+Set the vars per environment (`.env`, `.env.staging`; omit in production to disable):
 
-### Step 5: Open Your Project in the Browser
-
-**Open your Project HTML file in the browser** — either as a local server or directly:
-
-- **Test file:** Open the included `test.html` file directly in your browser (file is at the project root)
-- **Your project:** Open your own HTML file or project URL
-- **Local server:** Open `http://localhost:8000`, `http://localhost:3000`, etc. (use whatever port your project runs on)
-- **Static file:** Open `file:///path/to/your/project.html` (open HTML file directly without a server)
-
-
-</br>
-
-
-### Step 6: Start Commenting
-
-1. **Click the "🐕 Pointer" bookmarklet** from your bookmarks bar if it's not opened
-2. A toolbar appears in the top-right corner
-3. Click **"+ Add Comment"** button
-4. **Click any element on the page** to attach a comment
-5. Type your feedback and submit
-6. See **numbered pins** appear on the element
-
-
-</br>
-
-
-### Step 7: View & Manage Comments
-
-1. Click **"All Comments"** button in the toolbar
-2. The sidebar opens showing all comments on the page
-3. You can:
-   - **Reply** to comments to discuss changes
-   - **Delete** comments you no longer need
-   - **Read** full comment history with replies
-
-
-</br>
-
-
-### Step 8: Queue Changes for your AI Agent
-
-When ready to apply a comment:
-
-1. Click **"Ready to Apply"** button on the comment
-2. The status changes to **"Pending Apply"** (highlighted in yellow)
-3. If the comment has replies, you can mark individual replies instead
-4. The comment is now in the queue for your AI to process
-
-</br>
-
-
-
-### Step 9: Apply Changes with your AI Agent
-
-#### First Time Setup (One-Time Only)
-
-Before applying comments, ask your AI agent to understand how Pointer works:
-
-```
-Check Pointer folder and understand how pointer tool works, don't create overview.md
+```bash
+VITE_POINTER_ENABLED=true
+VITE_POINTER_SERVER=http://localhost:3001
+VITE_POINTER_PROJECT=checkout-app
 ```
 
-This helps the AI agent understand the Pointer workflow, comments structure, and how to apply changes correctly.
+> **Two independent switches:** `VITE_POINTER_ENABLED` controls the overlay; `VITE_DEBUG` (your app's own flag, if any) controls whether elements emit `data-component-source` for precise source paths. Turn both off in true public production.
 
-</br>
+> **Tip — precise applies:** if your app stamps elements with a source path (e.g. `data-component-source="src/components/Hero.tsx:14"`), Pointer captures it so the AI edits the exact file. Without it, the AI finds the source by searching your codebase using the captured element context.
 
-#### Apply Pending Comments
+### 3. Give feedback
 
-After the AI understands Pointer, use this single command with any AI agent:
+Open your app, enter your **name + role** once (Client / PM / Tester / Developer), click **➕ Comment**, click an element, and type your feedback. Pins and a sidebar show all comments. Mark a comment **Ready to Apply** when you want it actioned.
 
-```
-apply pending comments
-```
+### 4. Apply with any AI tool (just curl — no install)
 
-**Supported AI Agents:**
-- Claude Code
-- ChatGPT
-- Gemini
-- Copilot
-- And any other AI agent
+Install the AI skill once (committed to your repo):
 
-Your AI agent will:
-- Read all queued comments from `pending-apply.json`
-- Apply each change to the corresponding HTML file
-- Add an AI reply showing what was changed
-- Mark the comment as ✓ Applied
-
-**Refresh your browser** to see the changes. 
-
-> 💡 **Pro tip:** If you want the browser to refresh automatically after applying comments, ask your AI agent to add a browser refresh step to the flow.
-
-**That's it!** Your HTML is now updated with all the changes. 🎉
-
-</br>
-</br>
-
-## API Quick Reference
-
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| GET | `/api/comments?page_url=...` | Fetch comments for a page |
-| POST | `/api/comments` | Create a comment |
-| POST | `/api/comments/:id/reply` | Add reply to comment |
-| PATCH | `/api/comments/:id` | Update status (for AI apply workflow) |
-| DELETE | `/api/comments/:id` | Delete comment |
-
-
-</br>
-</br>
-
-## Apply with Claude Code
-
-Mark comments as **"pending-apply"** in the UI, then tell Claude Code:
-
-```
-Apply pending comments from pending-apply.json. Read the file,
-apply each requested change to its HTML file, add AI replies to comments.json,
-and clear pending-apply.json when done.
+```bash
+mkdir -p .claude/skills/pointer-feedback
+curl -s http://localhost:3001/skill.md -o .claude/skills/pointer-feedback/SKILL.md
 ```
 
-Claude will:
-- Read `pending-apply.json` (auto-generated work queue)
-- Edit HTML files on disk
-- Update `comments.json` with AI replies
-- Mark comments as ✓ applied
+Then tell your AI tool **"what are the pointer comments?"** or **"apply pending pointer comments"**. The skill reads `VITE_POINTER_SERVER`/`VITE_POINTER_PROJECT` from the app's `.env`, `curl`s the server, applies each item via its `source_path`, and `PATCH`es the comment to `applied`. Your dev server's HMR shows the change live. See **[CLAUDE_CODE_INTEGRATION.md](comments-skill/CLAUDE_CODE_INTEGRATION.md)** for source resolution + CSS rules.
 
-See [CLAUDE_CODE_INTEGRATION.md](comments-skill/CLAUDE_CODE_INTEGRATION.md) for details.
+## Where the server runs
 
+One standalone, zero-dependency Node server — run it however suits you:
 
-</br>
-</br>
-
-
-## File Structure
-
-```
-Pointer/
-├── comments-skill/
-│   ├── server.js                    # Express API server
-│   ├── inject.js                    # Browser overlay & UI (~22KB)
-│   ├── comments.json                # All comments (auto-created)
-│   ├── pending-apply.json           # Work queue for AI apply
-│   ├── config.json                  # Configuration
-│   ├── package.json                 # Dependencies
-│   ├── package-lock.json            # Locked dependencies
-│   ├── README.md                    # Full documentation
-│   ├── QUICK_REFERENCE.md           # Quick lookup
-│   ├── SKILL_SETUP.md               # Setup guide
-│   └── CLAUDE_CODE_INTEGRATION.md   # AI apply workflow
-│
-├── assets/
-│   └── images/
-│       ├── pointer-icon.png         # Main icon (draggable bookmark)
-│       ├── pointer-icon-16.png      # Small icon variant
-│       ├── pointer-icon-favicon.png # Favicon for bookmarklet page
-│       └── favicon.ico              # Standard favicon
-│
-├── test.html                        # Example/demo page
-├── README.md                        # Main documentation
-└── package-lock.json                # Root dependencies lock
-```
-
-</br>
-</br>
-
-
-## Configuration
-
-Edit `comments-skill/config.json`:
-
-```json
-{
-  "project_root": "../",            // Path to HTML files
-  "server_port": 3001,              // Server port
-  "url_base": "http://localhost:8000", // Your local server URL
-  "comments_file": "./comments.json" // Where comments are stored
-}
-```
-
-
-</br>
-</br>
+- **Local (solo):** `node server.js` on your machine; point the app's `VITE_POINTER_SERVER` at `http://localhost:3001`. Expose it with a tunnel (e.g. `cloudflared`) if remote stakeholders need it.
+- **Deploy once (team):** copy the few Node files to Render/Fly/a VPS and run `node server.js`; apps point `VITE_POINTER_SERVER` at the stable URL.
 
 ## Storage
 
-- **comments.json** — All comments with full history (append-only)
-- **pending-apply.json** — Work queue (auto-managed, cleared after applying)
+Comments live on the **server**, never in app repos:
 
-Both are plain JSON — edit directly if needed.
-
-
-</br>
-</br>
-
-
-## Example Comment in comments.json
-
-```json
-{
-  "id": "c_1718450000_abc123",
-  "page_url": "file:///Users/you/project/test.html",
-  "html_file_path": "../test.html",
-  "element_selector": "body > main > h1.title",
-  "element_snapshot": "<h1 class=\"title\">Dashboard</h1>",
-  "element_tag": "h1",
-  "element_classes": ["title"],
-  "element_id": null,
-  "computed_styles": {
-    "font-size": "36px",
-    "font-weight": "700"
-  },
-  "applied_css_rules": [],
-  "parent_element_info": {
-    "tag": "main",
-    "classes": [],
-    "id": null
-  },
-  "pin_x": 50.5,
-  "pin_y": 75.0,
-  "author": "Alice",
-  "text": "Change font to Inter",
-  "status": "applied",
-  "scope": "element",
-  "apply_to": "element-only",
-  "created_at": "2026-06-16T10:00:00Z",
-  "replies": [
-    {
-      "id": "r_1718450100_xyz",
-      "author": "Bob",
-      "text": "Suggested: use font-weight 600",
-      "created_at": "2026-06-16T10:05:00Z",
-      "status": "open"
-    },
-    {
-      "id": "r_1718450150_uvw",
-      "author": "Charlie",
-      "text": "I think 700 is better",
-      "created_at": "2026-06-16T10:10:00Z",
-      "status": "pending-apply"
-    },
-    {
-      "id": "r_1718450200_ai",
-      "author": "AI",
-      "is_ai": true,
-      "text": "✓ Applied — Changed font-family to 'Inter', font-weight to 700",
-      "created_at": "2026-06-16T10:15:00Z",
-      "status": "applied"
-    }
-  ]
-}
+```
+comments-skill/data/<project>/comments.json   # full history (append-only)
+comments-skill/data/<project>/pending.json     # work queue (auto-managed)
 ```
 
-
-</br>
-</br>
-
-
-## Example Pending Apply in pending-apply.json
-
-```json
-{
-  "id": "c_1718450000_abc123",
-  "apply_comment": true,
-  "apply_reply_ids": ["r_1718450150_uvw"],
-  "original_comment": {
-    "text": "Change font to Inter",
-    "status": "applied"
-  },
-  "replies": [
-    {
-      "id": "r_1718450100_xyz",
-      "author": "Bob",
-      "text": "Suggested: use font-weight 600",
-      "created_at": "2026-06-16T10:05:00Z",
-      "status": "open"
-    },
-    {
-      "id": "r_1718450150_uvw",
-      "author": "Charlie",
-      "text": "I think 700 is better",
-      "created_at": "2026-06-16T10:10:00Z",
-      "status": "pending-apply"
-    }
-  ],
-  "element_selector": "body > main > h1.title",
-  "page_url": "file:///Users/you/project/test.html",
-  "author": "Alice",
-  "created_at": "2026-06-16T10:00:00Z",
-  "pin_x": 50.5,
-  "pin_y": 75.0
-}
-```
-
-</br>
-</br>
-
-
-## Workflow
-
-1. **Add** — Click element, type feedback, submit
-2. **Discuss** — Reply in context with team
-3. **Mark** — Click "Mark Apply" when ready for AI
-4. **Apply** — Tell Claude Code "apply pending comments"
-5. **Done** — AI replies appear, changes live, status → ✓
-
-
-</br>
-</br>
-
-## Why This Approach?
-
-- **No database** — Plain JSON files, easy to version control
-- **No auth** — Local team skill, no user management needed
-- **No external API** — Claude Code applies changes locally
-- **Portable** — Ship with your project, works anywhere
-- **Transparent** — See exactly what's being applied
-
-
-</br>
-</br>
+Both are plain JSON, created lazily on first write. Override the location with `POINTER_DATA` (env) or `data_dir` in `config.json`.
 
 ## Limitations
 
-- Local/localhost only (not internet-facing)
-- Single-process concurrency (file-based writes)
-- No real-time sync across multiple users
-- Node.js 14+ required
-
-
-
-</br>
-</br>
-
-## Troubleshooting
-
-**Server won't start?**
-```bash
-# Kill process on port 3001
-kill -9 $(lsof -t -i :3001)
-
-# Start fresh
-npm start
-```
-
-**Bookmarklet not loading?**
-- Check browser console (F12)
-- Verify `config.json` url_base matches your server
-- Ensure CORS is enabled (it is by default)
-
-**Comments not showing?**
-- Refresh page
-- Check `comments-skill/comments.json` exists
-- Verify paths in config are correct
-
-
-</br>
-</br>
+- File-based, single-process writes (no locking) — coordinate concurrent applies
+- No built-in auth / access control (roadmap)
+- No real-time multi-user sync
 
 ## Creator
 
-**Osama Eldrieny**
-- 🌐 [Website](https://www.osamaeldrieny.com/)
-- 💼 [LinkedIn](https://www.linkedin.com/in/osamaeldrieny/)
-
-
-</br>
-</br>
+**Osama Eldrieny** — [Website](https://www.osamaeldrieny.com/) · [LinkedIn](https://www.linkedin.com/in/osamaeldrieny/)
 
 ## License
 
 MIT
-
-
-</br>
-</br>
-
-## See Also
-
-- [Full Documentation](comments-skill/README.md)
-- [Quick Reference](comments-skill/QUICK_REFERENCE.md)
-- [Claude Code Integration](comments-skill/CLAUDE_CODE_INTEGRATION.md)
-- [Setup Guide](comments-skill/SKILL_SETUP.md)

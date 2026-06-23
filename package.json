@@ -1,0 +1,10 @@
+{
+  "name": "pointer-netlify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Netlify deployment wrapper for the Pointer backend (functions + blobs). The standalone zero-dependency server lives in comments-skill/.",
+  "license": "MIT",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
