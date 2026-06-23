@@ -116,7 +116,21 @@ You'll see:
 
 </br>
 
-### Step 4: One-Time Setup - Pointer for Easy Access
+### Step 4: Setup AI Agent Integration (One-Time Only)
+
+Install the Pointer skill file to your project (this teaches your AI agent how to apply comments):
+
+```bash
+mkdir -p .claude/skills/pointer
+curl -o .claude/skills/pointer/SKILL.md \
+  https://raw.githubusercontent.com/osama-eldrieny/Pointer/main/.claude/skills/pointer/SKILL.md
+```
+
+Once installed, you can simply tell Claude Code `apply pending comments` and it will automatically know how to apply all your pending feedback!
+
+</br>
+
+### Step 5: One-Time Setup - Pointer for Easy Access
 
 Benefits of this one-time setup:
 - ✅ Comments UI loads **automatically** on every page load
@@ -147,7 +161,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 
 </br>
 
-### Step 5: Open Your Project in the Browser
+### Step 6: Open Your Project in the Browser
 
 **Open your Project HTML file in the browser** — either as a local server or directly:
 
@@ -160,7 +174,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </br>
 
 
-### Step 6: Start Commenting
+### Step 7: Start Commenting
 
 1. **Click the "🐕 Pointer" bookmarklet** from your bookmarks bar if it's not opened
 2. A toolbar appears in the top-right corner
@@ -173,7 +187,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </br>
 
 
-### Step 7: View & Manage Comments
+### Step 8: View & Manage Comments
 
 1. Click **"All Comments"** button in the toolbar
 2. The sidebar opens showing all comments on the page
@@ -186,7 +200,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </br>
 
 
-### Step 8: Queue Changes for your AI Agent
+### Step 9: Queue Changes for your AI Agent
 
 When ready to apply a comment:
 
@@ -199,23 +213,9 @@ When ready to apply a comment:
 
 
 
-### Step 9: Apply Changes with your AI Agent
+### Step 10: Apply Pending Comments
 
-#### First Time Setup (One-Time Only)
-
-Install the Pointer skill file to your project (this teaches your AI agent how to apply comments):
-
-```bash
-mkdir -p .claude/skills/pointer
-curl -o .claude/skills/pointer/SKILL.md \
-  https://raw.githubusercontent.com/osama-eldrieny/Pointer/main/.claude/skills/pointer/SKILL.md
-```
-
-</br>
-
-#### Apply Pending Comments
-
-Once the skill file is installed, simply tell Claude Code:
+Once the skill file is set up (Step 4), simply tell Claude Code:
 
 ```
 apply pending comments
@@ -231,8 +231,6 @@ Claude will:
 > 💡 **Pro tip:** If you want the browser to refresh automatically after applying comments, ask Claude to add a browser refresh step to the flow.
 
 **That's it!** Your HTML is now updated with all the changes. 🎉
-
-**Note:** The skill file (`.claude/skills/pointer/SKILL.md`) is optional but recommended — it makes the apply workflow much smoother. If you prefer, you can also use Claude Code without it by providing manual instructions.
 
 </br>
 </br>
