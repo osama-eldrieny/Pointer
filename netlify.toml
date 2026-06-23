@@ -1,0 +1,13 @@
+# Netlify deployment for the Pointer backend.
+#   - Static:   /pointer.js and /skill.md (copied into netlify/public at build)
+#   - API:      /api/*  → netlify/functions/api.mjs (Netlify Blobs storage)
+#
+# Apps set window.POINTER_CONFIG.server (or POINTER_SERVER in .env) to this site's URL. No persistent server needed.
+
+[build]
+  command = "mkdir -p netlify/public && cp src/pointer.js src/skill.md netlify/public/"
+  publish = "netlify/public"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
