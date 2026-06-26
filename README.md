@@ -230,7 +230,7 @@ Tell Claude Code: "apply pending comments"
 ```
 Claude will:
 - Read pending changes from `pending-apply.json`
-- Apply CSS changes to your HTML files
+- Apply changes to your HTML files (CSS, HTML structure, content, etc.)
 - Mark comments as "✓ Applied"
 - Refresh your browser to see changes
 
@@ -346,7 +346,7 @@ apply pending comments
 
 Claude will:
 - Read all queued comments from `pending-apply.json`
-- Apply each change to the corresponding HTML file
+- Apply each change to the corresponding HTML file (CSS, HTML, content, etc.)
 - Mark the comment/reply status as ✓ Applied
 
 **Refresh your browser** to see the changes.
