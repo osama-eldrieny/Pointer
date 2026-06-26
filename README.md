@@ -410,8 +410,6 @@ For Front-end Developers applying team feedback in local code:
 ### How to merge and apply comments:
 
 1. **Receive the ZIP file** from designer/QA
-   - Save it in your project folder
-   - Or keep it anywhere accessible
 
 2. **Open Claude Code at project root**
    - Make sure you're at the Pointer project root folder
