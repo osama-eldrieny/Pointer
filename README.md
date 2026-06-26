@@ -197,21 +197,25 @@ You'll see:
 
 ### Step 4: Setup AI Agent Integration (One-Time Only)
 
-The Pointer skill is automatically set up and documented at the **project root**:
-- `SKILL.md` — Complete workflow documentation
-- `WORKFLOWS.md` — Quick entry point
-- `.claude/settings.json` — AI directives
+Install the Pointer skill files to your project (this teaches your AI agent how to apply and merge comments):
 
-**Important:** When using Claude Code with Pointer, open it at the **project root** (the `pointer/` folder):
-
-```
-✅ CORRECT: Open Claude Code at /Users/oo/Desktop/Pointer/ (project root)
-❌ WRONG: Open Claude Code at /Users/oo/Desktop/Pointer/comments-skill/
+```bash
+mkdir -p .claude/skills/pointer
+curl -o .claude/skills/pointer/SKILL.md \
+  https://raw.githubusercontent.com/osama-eldrieny/Pointer/main/SKILL.md
+curl -o .claude/skills/pointer/WORKFLOWS.md \
+  https://raw.githubusercontent.com/osama-eldrieny/Pointer/main/WORKFLOWS.md
 ```
 
-Once set up, you can simply tell Claude Code:
-- `"apply pending comments"` — Claude will read `SKILL.md` and apply all queued changes
-- `"merge comments"` — Claude will read `SKILL.md` and import team comments with URL mapping
+**What you just installed:**
+- `SKILL.md` — Complete workflow guide (Apply & Merge workflows with examples)
+- `WORKFLOWS.md` — Quick reference for which command to use
+
+**Once installed, you can simply tell Claude Code:**
+- `"apply pending comments"` — Claude will apply all queued changes to your HTML files
+- `"merge comments"` — Claude will import team comments with automatic URL mapping
+
+**Important:** When using Claude Code with Pointer, open it at your **project root** for full functionality.
 
 </br>
 
