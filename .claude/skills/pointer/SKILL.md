@@ -2,6 +2,15 @@
 
 Manage HTML comments and apply feedback using Claude Code.
 
+⚠️ **PRIMARY LOCATION:** This skill documentation is now at `/SKILL.md` (project root, tracked in git, accessible to team).
+
+This file (`.claude/skills/pointer/SKILL.md`) is kept for local Claude Code discovery and backward compatibility.
+
+**To use Pointer with Claude Code:**
+1. Open Claude Code at the **project root** (`pointer/` folder)
+2. Say: `"apply pending comments"` or `"merge comments"`
+3. Claude will read `SKILL.md` and execute the workflow
+
 ## 🎯 Quick Reference: TWO DISTINCT WORKFLOWS
 
 | User says... | Workflow | Action |
@@ -515,7 +524,100 @@ AI: Saving mapping to pointer/comments-skill/url-mappings.json...
 
 ---
 
+## Detailed Examples
+
+### Apply Workflow Example
+
+**Scenario:** User marks 2 comments for apply on index.html
+
+**User input:** "apply pending comments"
+
+**File reads:**
+- `pointer/comments-skill/pending-apply.json` contains:
+```json
+[
+  {
+    "id": "c_1718450000_abc123",
+    "html_file_path": "../index.html",
+    "element_selector": "body > header h1.title",
+    "element_snapshot": "<h1 class=\"title\">Dashboard</h1>",
+    "applied_css_rules": [
+      { "selector": "h1", "styles": "font-size: 36px;" },
+      { "selector": ".title", "styles": "color: #333;" }
+    ],
+    "text": "Change font-size to 24px",
+    "apply_to": "element-only"
+  },
+  {
+    "id": "c_1718450100_xyz789",
+    "html_file_path": "../index.html",
+    "element_selector": ".button-primary",
+    "element_snapshot": "<button class=\"button-primary\">Submit</button>",
+    "applied_css_rules": [
+      { "selector": ".button-primary", "styles": "background-color: #007bff;" }
+    ],
+    "text": "Change button color to red",
+    "apply_to": "all-similar"
+  }
+]
+```
+
+**Claude applies:**
+1. Reads pending-apply.json (2 items)
+2. Opens `../index.html`
+3. **Comment 1:** Updates `h1` rule (highest specificity in applied_css_rules)
+   - Before: `h1 { font-size: 36px; }`
+   - After: `h1 { font-size: 24px; }`
+4. **Comment 2:** Updates `.button-primary` rule (affects all similar buttons)
+   - Before: `.button-primary { background-color: #007bff; }`
+   - After: `.button-primary { background-color: red; }`
+5. Updates `pointer/comments-skill/comments.json`: both comments now have status="applied"
+6. Clears `pointer/comments-skill/pending-apply.json`
+
+**Result:** User refreshes browser → sees changes live with green ✓ badges
+
+---
+
+### Merge Workflow Example
+
+**Scenario:** Teammate sends pointer-export.zip with comments from dev.company.com
+
+**User input:** "merge comments"
+
+**File reads:**
+- ZIP contains `comments.json` with 8 comments from `https://dev.company.com/dashboard`
+- `pointer/comments-skill/url-mappings.json` is empty (first import)
+
+**Claude merges:**
+1. Extracts ZIP to `pointer/comments-skill/import-staging/`
+2. Reads imported comments → finds origin: `https://dev.company.com`
+3. Checks `pointer/comments-skill/url-mappings.json` → not mapped yet
+4. **Asks user:** "Found 8 comments from https://dev.company.com. Map to which local URL?"
+5. User responds: "http://localhost:3000"
+6. Saves new mapping to `pointer/comments-skill/url-mappings.json`:
+```json
+[
+  {
+    "group_id": "dev_company",
+    "origins": ["https://dev.company.com", "http://localhost:3000"],
+    "local_origin": "http://localhost:3000",
+    "created_at": "2026-06-26T15:30:00Z"
+  }
+]
+```
+7. Transforms each comment: changes `page_url` from `https://dev.company.com/dashboard` → `http://localhost:3000/dashboard`
+8. Merges into `pointer/comments-skill/comments.json` (8 new + 0 local = 8 total)
+9. Merges pending comments into `pointer/comments-skill/pending-apply.json` if any
+10. Cleans up `pointer/comments-skill/import-staging/`
+
+**Next import:** Teammate sends more comments from same origin → mapping auto-applies, no questions asked
+
+**Result:** Comments from dev.company.com now appear on localhost:3000 automatically
+
+---
+
 **For more details, see:**
-- `comments-skill/CLAUDE_CODE_INTEGRATION.md` — Integration guide
+- `comments-skill/CLAUDE_CODE_INTEGRATION.md` — Detailed guide with more examples
+- `comments-skill/QUICK_REFERENCE.md` — Quick lookup
 - `comments-skill/server.js` — Backend implementation
 - `comments-skill/config.json` — Configuration options

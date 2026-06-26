@@ -608,7 +608,9 @@ AI: Saving mapping to pointer/comments-skill/url-mappings.json...
 ---
 
 **For more details, see:**
+- `WORKFLOWS.md` — Quick entry point (which command to use)
 - `comments-skill/CLAUDE_CODE_INTEGRATION.md` — Detailed guide with more examples
 - `comments-skill/QUICK_REFERENCE.md` — Quick lookup
+- `comments-skill/SKILL_SETUP.md` — Architecture and v2.0 features
 - `comments-skill/server.js` — Backend implementation
 - `comments-skill/config.json` — Configuration options

@@ -118,7 +118,10 @@ You'll see:
 
 ### Step 4: Setup AI Agent Integration (One-Time Only)
 
-The Pointer skill is automatically set up in `.claude/skills/pointer/SKILL.md` and `.claude/settings.json`.
+The Pointer skill is automatically set up and documented at the **project root**:
+- `SKILL.md` — Complete workflow documentation
+- `WORKFLOWS.md` — Quick entry point
+- `.claude/settings.json` — AI directives
 
 **Important:** When using Claude Code with Pointer, open it at the **project root** (the `pointer/` folder):
 
@@ -128,8 +131,8 @@ The Pointer skill is automatically set up in `.claude/skills/pointer/SKILL.md` a
 ```
 
 Once set up, you can simply tell Claude Code:
-- `"apply pending comments"` — Claude will apply all queued changes
-- `"merge comments"` — Claude will import team comments and map URLs
+- `"apply pending comments"` — Claude will read `SKILL.md` and apply all queued changes
+- `"merge comments"` — Claude will read `SKILL.md` and import team comments with URL mapping
 
 </br>
 

@@ -64,11 +64,15 @@ merge comments
 
 ## Full Documentation
 
-- **SKILL.md** — Complete workflow guide (you are here)
-- **QUICK_REFERENCE.md** — Quick lookup for common tasks
-- **CLAUDE_CODE_INTEGRATION.md** — Detailed guide with extra examples
-- **SKILL_SETUP.md** — Architecture and v2.0 features
+**Root Level (Primary):**
+- **SKILL.md** — Complete workflow guide (primary source)
+- **WORKFLOWS.md** — This file (quick entry point)
 - **README.md** — Full project documentation
+
+**Technical Reference (in comments-skill/):**
+- **comments-skill/QUICK_REFERENCE.md** — Quick lookup for common tasks
+- **comments-skill/CLAUDE_CODE_INTEGRATION.md** — Detailed guide with extra examples
+- **comments-skill/SKILL_SETUP.md** — Architecture and v2.0 features
 
 ---
 
