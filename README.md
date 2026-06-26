@@ -287,36 +287,12 @@ This is how you add comments to any page (localhost, live URLs, static files):
 - ✅ Static files (file:///path/to/page.html)
 - ✅ Dev/staging servers (dev.company.com)
 
-</br>
-
-
-### Step 7: View & Manage Comments
-
-1. Click the **expand icon** (≡) in the toolbar to open the comments sidebar
-2. The sidebar opens showing all comments on the page
-3. You can:
-   - **Reply** to comments to discuss changes before applying
-   - **Delete** comments you no longer need
-   - **Read** full comment history with replies
-
+**Note:** If you refresh the page, you'll need to **click the bookmark again** to open Pointer. If you want Pointer to open automatically on every page load, check **Step 7 (One-Time Setup)** below to install it into your HTML.
 
 </br>
 
 
-### Step 8: Queue Changes for your AI Agent
-
-When ready to apply a comment:
-
-1. Click **"Ready to Apply"** button on the comment
-2. The status changes to **"Pending Apply"** (highlighted in yellow)
-3. If the comment has replies, you can mark individual replies instead
-4. The comment is now in the queue for your AI to process
-
-
-</br>
-
-
-### Step 9: One-Time Setup (Optional) - Auto-Load Pointer
+### Step 7: One-Time Setup (Optional) - Auto-Load Pointer
 
 Benefits of this optional one-time setup:
 - ✅ Comments UI loads **automatically** on every page load
@@ -346,6 +322,31 @@ To make Pointer always open and survive page refreshes, add one of these script 
 ```
 
 **Note:** This is optional. Most users just click the bookmarklet when they want to add comments.
+
+</br>
+
+
+### Step 8: View & Manage Comments
+
+1. Click the **expand icon** (≡) in the toolbar to open the comments sidebar
+2. The sidebar opens showing all comments on the page
+3. You can:
+   - **Reply** to comments to discuss changes before applying
+   - **Delete** comments you no longer need
+   - **Read** full comment history with replies
+
+
+</br>
+
+
+### Step 9: Queue Changes for your AI Agent
+
+When ready to apply a comment:
+
+1. Click **"Ready to Apply"** button on the comment
+2. The status changes to **"Pending Apply"** (highlighted in yellow)
+3. If the comment has replies, you can mark individual replies instead
+4. The comment is now in the queue for your AI to process
 
 </br>
 
