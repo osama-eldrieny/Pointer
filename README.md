@@ -371,7 +371,9 @@ Claude will:
 </br>
 </br>
 
-## Step 11: Team Collaboration — Add Comments on Live/Testing Servers
+## Step 11: Add Comments on Live/Testing Servers
+
+For Designers, QA, Product Managers, or anyone reviewing on live environments:
 
 Works on **any page** — not just localhost!
 
@@ -381,9 +383,7 @@ Works on **any page** — not just localhost!
 - ✅ Development servers (`https://dev.company.com`)
 - ✅ Static files (`file:///path/to/page.html`)
 
-### Complete Team Workflow:
-
-**Designer/QA adds comments on live server:**
+### How to add comments and send to developer:
 
 1. **Run Pointer server** (Steps 1-3 — same as always)
 2. **Open the live URL** in your browser
@@ -399,10 +399,15 @@ Works on **any page** — not just localhost!
    - Click the **export icon** (⬇️) in the toolbar
    - Download the ZIP file (contains all comments)
 6. **Send the file to developer**
-   - Share the ZIP file with front-end developer
-   - They can apply the comments using Claude Code
+   - Share the ZIP file with front-end developer or team
 
-**Developer applies comments in their local code:**
+</br>
+
+## Step 12: Merge and Apply Comments (Developer Workflow)
+
+For Front-end Developers applying team feedback in local code:
+
+### How to merge and apply comments:
 
 1. **Receive the ZIP file** from designer/QA
 2. **Tell Claude Code:** `merge comments`
@@ -416,7 +421,7 @@ Works on **any page** — not just localhost!
    - Claude edits your HTML files with the changes
    - Refresh to see changes live
 
-**Key benefits:**
+### Key benefits:
 - ✅ Comments stay private (no cloud upload)
 - ✅ Works on any environment (live, staging, dev, etc.)
 - ✅ Team can review without local setup
