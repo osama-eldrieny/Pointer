@@ -1,4 +1,4 @@
-<img src="./assets/images/pointer-icon.png" alt="Pointer Logo" width="120" height="120">
+<img src="https://uimarkets.com/images/pointer/assets/images/pointer-icon.png" alt="Pointer Logo" width="120" height="120">
 
 # 🐕 Pointer
 
@@ -66,9 +66,6 @@ pointer/
 ├── .claude/
 │   ├── settings.json ................. 🔧 AI directives (local)
 │   └── skills/pointer/SKILL.md ....... Reference copy (local)
-│
-├── assets/
-│   └── images/pointer-icon.png ....... Logo
 │
 └── test.html ......................... Example demo page
 ```
