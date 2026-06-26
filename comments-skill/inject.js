@@ -368,6 +368,7 @@ const init = () => {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
       display: flex;
       gap: 8px;
+      align-items: center;
       backdrop-filter: blur(8px);
       transition: gap 0.3s ease, padding 0.3s ease;
     }
@@ -378,8 +379,6 @@ const init = () => {
 
     #hct-toolbar:not(.hct-toolbar-collapsed) {
       width: 302px;
-      display: flex;
-      justify-content: space-between;
       box-shadow: none;
     }
 
@@ -396,6 +395,10 @@ const init = () => {
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
+    }
+
+    #hct-btn-export {
+      margin-left: auto !important;
     }
 
     .hct-toolbar-toggle:hover {
@@ -431,6 +434,14 @@ const init = () => {
 
     #hct-toolbar button:active {
       transform: none;
+    }
+
+    #hct-toolbar #hct-btn-export {
+      display: none !important;
+    }
+
+    #hct-toolbar #hct-btn-export.hct-btn-export-visible {
+      display: inline-flex !important;
     }
 
     #hct-toolbar #hct-btn-sidebar {
@@ -1149,6 +1160,7 @@ const renderToolbar = () => {
   const isCollapsed = localStorage.getItem('hct_toolbar_collapsed') !== 'false';
   toolbar.innerHTML = `
     <button id="hct-btn-comment"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h8"/><path d="M12 8v8"/></svg><span id="hct-btn-comment-text" class="${isCollapsed ? 'hct-toolbar-hidden' : ''}">Add Comment</span></button>
+    <button id="hct-btn-export" class="hct-toolbar-toggle" title="Export comments as ZIP"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
     <button id="hct-btn-toggle-toolbar" class="hct-toolbar-toggle"><svg id="hct-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${isCollapsed ? '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>' : '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/>'}</svg></button>
   `;
   document.body.appendChild(toolbar);
@@ -1157,12 +1169,16 @@ const renderToolbar = () => {
   }
 
   document.getElementById('hct-btn-comment').addEventListener('click', togglePickMode);
+  document.getElementById('hct-btn-export').addEventListener('click', exportComments);
   document.getElementById('hct-btn-toggle-toolbar').addEventListener('click', toggleToolbarCollapse);
 
   // Restore sidebar state if toolbar is expanded
   if (!isCollapsed) {
     HCT.sidebarOpen = true;
   }
+
+  // Update export button visibility based on initial sidebar state
+  updateExportButtonVisibility();
 };
 
 const toggleToolbarCollapse = () => {
@@ -1242,7 +1258,9 @@ const renderSidebar = () => {
           </div>
           <div class="hct-comment-content" data-collapsed="${comment.id}">
             <div class="hct-comment-text">${escapeHtml(comment.text)}</div>
+            ${comment._pin_orphaned ? `<div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 4px; padding: 8px; margin: 8px 0; font-size: 12px; color: #92400e;"><strong>ℹ️ Pin couldn't be placed</strong> — Click below to place it manually.</div>` : ''}
             <div class="hct-comment-actions">
+              ${comment._pin_orphaned ? `<button class="hct-comment-btn" onclick="HCT.startPinPlacement('${comment.id}')" style="background: #f59e0b; color: white;">📍 Place pin manually</button>` : ''}
               <button class="hct-comment-btn" onclick="HCT.toggleReply('${comment.id}')">Reply</button>
               <button class="hct-comment-btn" onclick="HCT.toggleApply('${comment.id}')">${comment.status === 'pending-apply' ? 'Cancel' : 'Ready to Apply'}</button>
               <button class="hct-comment-btn" onclick="HCT.deleteComment('${comment.id}')">Delete</button>
@@ -1558,6 +1576,58 @@ const renderSidebar = () => {
     }
   };
 
+  window.HCT.startPinPlacement = (commentId) => {
+    const comment = HCT.comments.find(c => c.id === commentId);
+    if (!comment) return;
+
+    // Show instruction
+    showToast('📍 Click the element to place the pin', 'info');
+
+    // Add temporary click handler
+    let isPlacing = true;
+    const tempClickHandler = (e) => {
+      if (!isPlacing) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      isPlacing = false;
+      document.removeEventListener('click', tempClickHandler, true);
+
+      const el = e.target;
+      const newSelector = generateSelector(el);
+      const newSnapshot = el.outerHTML;
+
+      // Update the comment with the new selector
+      fetch(`${getBackendUrl()}/api/comments/${commentId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: comment.text }) // Just to trigger an update
+      })
+        .then(() => {
+          comment.element_selector = newSelector;
+          comment.element_snapshot = newSnapshot;
+          comment._pin_orphaned = false;
+          renderSidebar();
+          renderPins();
+          showToast('✓ Pin placed successfully', 'success');
+        })
+        .catch(() => showToast('Error updating pin', 'error'));
+    };
+
+    document.addEventListener('click', tempClickHandler, true);
+
+    // Allow cancel with ESC key
+    const cancelHandler = (e) => {
+      if (e.key === 'Escape' && isPlacing) {
+        isPlacing = false;
+        document.removeEventListener('click', tempClickHandler, true);
+        document.removeEventListener('keydown', cancelHandler);
+        showToast('Cancelled', 'info');
+      }
+    };
+    document.addEventListener('keydown', cancelHandler);
+  };
+
   window.HCT.highlightCommentElement = highlightCommentElement;
   window.HCT.removeElementHighlight = removeElementHighlight;
   window.HCT.closeSidebar = closeSidebar;
@@ -1571,6 +1641,29 @@ const renderSidebar = () => {
       HCT.sidebarOpen = true;
       document.body.classList.add('hct-sidebar-open');
     }
+  }
+};
+
+const exportComments = async () => {
+  try {
+    const API_URL = getBackendUrl();
+    const response = await fetch(`${API_URL}/api/export`);
+    if (!response.ok) throw new Error('Export failed');
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'pointer-export.zip';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+
+    showToast('✅ Comments exported!');
+  } catch (error) {
+    console.error('Export error:', error);
+    showToast('❌ Export failed: ' + error.message);
   }
 };
 
@@ -1622,6 +1715,18 @@ const closeSidebar = (persistState = false) => {
       localStorage.setItem('hct_sidebar_open', 'false');
     }
   }
+  updateExportButtonVisibility();
+};
+
+const updateExportButtonVisibility = () => {
+  const exportBtn = document.getElementById('hct-btn-export');
+  if (exportBtn) {
+    if (HCT.sidebarOpen) {
+      exportBtn.classList.add('hct-btn-export-visible');
+    } else {
+      exportBtn.classList.remove('hct-btn-export-visible');
+    }
+  }
 };
 
 const toggleSidebar = (forceOpen = null) => {
@@ -1654,6 +1759,8 @@ const toggleSidebar = (forceOpen = null) => {
       removeElementHighlight();
     }
   }
+
+  updateExportButtonVisibility();
 };
 
 const fetchComments = () => {
@@ -1867,6 +1974,27 @@ const matchCommentToElement = (comment) => {
     if (el) return el;
   } catch (e) {}
 
+  // Fuzzy matching for cross-env/imported comments
+  if (comment._is_cross_env || comment._imported) {
+    const selector = comment.element_selector;
+    const segments = selector.split('>').map(s => s.trim());
+
+    if (segments.length > 1) {
+      // Try suffix matching: last 2, 3, 4, 5 segments
+      for (let suffixLen = Math.min(5, segments.length); suffixLen >= 2; suffixLen--) {
+        const suffixSegments = segments.slice(-suffixLen);
+        const suffixSelector = suffixSegments.join('>');
+
+        try {
+          const matches = document.querySelectorAll(suffixSelector);
+          if (matches.length === 1) {
+            return matches[0];
+          }
+        } catch (e) {}
+      }
+    }
+  }
+
   if (comment.element_snapshot) {
     const allEls = document.querySelectorAll('*');
     for (const el of allEls) {
@@ -1878,6 +2006,11 @@ const matchCommentToElement = (comment) => {
         return el;
       }
     }
+  }
+
+  // Mark as orphaned if no match found
+  if (comment._is_cross_env || comment._imported) {
+    comment._pin_orphaned = true;
   }
 
   return null;

@@ -235,6 +235,70 @@ Claude will:
 </br>
 </br>
 
+## New Features (v2.0)
+
+### 🌐 Live URL Commenting
+
+The bookmarklet now works on **any page** — not just localhost!
+
+- ✅ Production sites
+- ✅ Dev/staging environments (https://dev.company.com)
+- ✅ Static HTML files (file://)
+- ✅ Any localhost port
+
+Simply click the bookmarklet on any page and start commenting. Comments are saved to your local server.
+
+### 🗺️ Environment Mapping
+
+Same page served under different URLs? Pointer merges comments automatically.
+
+**Example:**
+- Dev version: `https://dev.company.com/dashboard`
+- Local version: `http://localhost:3000/dashboard`
+
+Set up a mapping group once, and comments from dev appear on localhost automatically.
+
+**How to use:**
+1. Click "🗺 Manage Mappings" link on the bookmarklet page
+2. Create a new group with both origins
+3. Comments from one origin appear on the other
+
+### 👥 Team Sync with Comments
+
+Share comments from your teammate's machine directly.
+
+**How it works:**
+1. Teammate clicks "📦 Export ZIP" on their mappings page
+2. Teammate shares the ZIP with you
+3. You tell Claude Code: `merge comments`
+4. Claude reads the SKILL.md and:
+   - Extracts comments from the ZIP
+   - Maps teammate's URLs to your local URLs (asks if new)
+   - Saves the mapping for future imports
+   - Merges all comments into your local project
+
+**Key benefit:** Comments stay private (no cloud upload). Mappings persist, so repeat imports are automatic.
+
+### 🏗️ Per-Project Setup
+
+Run Pointer inside each project for isolated comments:
+
+```bash
+# Project 1
+cd project-alpha
+pointer/comments-skill npm start    # :3001
+
+# In another terminal
+# Project 2
+cd project-beta
+pointer/comments-skill npm start    # :3001 (after closing project-alpha)
+```
+
+One bookmarklet works for all projects — comments are naturally isolated per project.
+
+</br>
+</br>
+
 ## API Quick Reference
 
 | Method | Endpoint | Purpose |

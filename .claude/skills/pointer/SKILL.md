@@ -6,27 +6,33 @@ Manage HTML comments and apply feedback using Claude Code.
 
 | User says... | Workflow | Action |
 |---|---|---|
-| **"apply pending comments"** | Apply Workflow | Read `pending-apply.json`, apply changes to HTML, update status to ✓ applied |
+| **"apply pending comments"** | Apply Workflow | Read `pointer/comments-skill/pending-apply.json`, apply changes to HTML, update status to ✓ applied |
 | **"merge comments"** | Merge Workflow | Read new comments/ZIP, map URLs, merge into storage, ask about mappings |
 
 ⚠️ **CRITICAL:** These are DIFFERENT workflows. Do NOT mix them up.
-- **Apply** = execute pending changes (edits HTML files, modifies pending-apply.json)
-- **Merge** = import team comments (only modifies comments.json and mappings, does NOT edit HTML)
+- **Apply** = execute pending changes (edits HTML files, modifies `pointer/comments-skill/pending-apply.json`)
+- **Merge** = import team comments (only modifies `pointer/comments-skill/comments.json`, `pointer/comments-skill/pending-apply.json`, `pointer/comments-skill/url-mappings.json` — does NOT edit HTML files, does NOT change comment status)
 
 ---
 
 ## WORKFLOW 1️⃣: APPLY PENDING COMMENTS
 
 **Triggered by:** User says "apply pending comments"  
-**Files modified:** HTML files (edits), `comments.json` (status updates), `pending-apply.json` (cleared)  
-**Files read:** `pending-apply.json`, `comments.json`
+**Files modified:** 
+- HTML files (edits)
+- `pointer/comments-skill/comments.json` (status updates)
+- `pointer/comments-skill/pending-apply.json` (cleared)
+
+**Files read:**
+- `pointer/comments-skill/pending-apply.json`
+- `pointer/comments-skill/comments.json`
 
 ### Detailed Steps
 
 #### Step 1: Read the work queue
 
 ```bash
-cat ./comments-skill/pending-apply.json
+cat pointer/comments-skill/pending-apply.json
 ```
 
 If empty (`[]`), stop and tell user: "No pending comments to apply."
@@ -78,10 +84,10 @@ Each pending item contains:
 
 #### Step 3: Update status in comments.json
 
-For the applied comment:
+Read and update `pointer/comments-skill/comments.json`:
 
 ```javascript
-const allComments = JSON.parse(fs.readFileSync('./comments-skill/comments.json', 'utf8'));
+const allComments = JSON.parse(fs.readFileSync('pointer/comments-skill/comments.json', 'utf8'));
 const comment = allComments.find(c => c.id === pendingItem.id);
 
 if (comment) {
@@ -96,13 +102,13 @@ if (comment) {
   }
 }
 // Save updated comments.json
-fs.writeFileSync('./comments-skill/comments.json', JSON.stringify(allComments, null, 2), 'utf8');
+fs.writeFileSync('pointer/comments-skill/comments.json', JSON.stringify(allComments, null, 2), 'utf8');
 ```
 
 #### Step 4: Clear the queue
 
 ```bash
-echo "[]" > ./comments-skill/pending-apply.json
+echo "[]" > pointer/comments-skill/pending-apply.json
 ```
 
 #### Step 5: Done!
@@ -118,15 +124,28 @@ Tell user:
 ## WORKFLOW 2️⃣: MERGE COMMENTS
 
 **Triggered by:** User says "merge comments" or "import team comments"  
-**Files modified:** `comments.json`, `pending-apply.json`, `url-mappings.json`  
-**Files read:** new comments (ZIP or JSON), `comments.json`, `url-mappings.json`  
+**Files modified:** 
+- `pointer/comments-skill/comments.json`
+- `pointer/comments-skill/pending-apply.json`
+- `pointer/comments-skill/url-mappings.json`
+
+**Files read:**
+- New comments (ZIP or JSON)
+- `pointer/comments-skill/comments.json`
+- `pointer/comments-skill/url-mappings.json`
+
 **HTML files:** NOT modified (merge only, no applying)
 
 ### Critical Rules
 
 🔴 **NEVER apply pending comments during merge**  
-🔴 **ONLY merge comments, do NOT edit HTML files**  
-🔴 **Ask user about new URL mappings before proceeding**
+🔴 **ONLY merge comments, do NOT:**
+   - Edit HTML files
+   - Change comment status (leave as-is from imported comments)
+   - Apply any pending comments
+   - Clear pending-apply.json
+
+🔴 **ASK user about new URL mappings before proceeding**
 
 ### Detailed Steps
 
@@ -139,7 +158,7 @@ find . -maxdepth 2 -name "*.zip" -o -name "pointer-export.zip" | head -1
 
 If found:
 ```bash
-unzip pointer-export.zip -d ./comments-skill/import-staging/
+unzip pointer-export.zip -d pointer/comments-skill/import-staging/
 ```
 
 **Option B: User provides JSON directly**
@@ -153,8 +172,8 @@ unzip pointer-export.zip -d ./comments-skill/import-staging/
 #### Step 2: Read imported comments and mappings
 
 ```javascript
-const importedComments = JSON.parse(fs.readFileSync('./comments-skill/import-staging/comments.json', 'utf8'));
-const currentMappings = JSON.parse(fs.readFileSync('./comments-skill/url-mappings.json', 'utf8'));
+const importedComments = JSON.parse(fs.readFileSync('pointer/comments-skill/import-staging/comments.json', 'utf8'));
+const currentMappings = JSON.parse(fs.readFileSync('pointer/comments-skill/url-mappings.json', 'utf8'));
 ```
 
 #### Step 3: Identify unique origins in imported comments
@@ -233,8 +252,10 @@ const transformedComments = importedComments.map(comment => {
 
 #### Step 6: Merge into comments.json
 
+Merge new comments into `pointer/comments-skill/comments.json`:
+
 ```javascript
-const localComments = JSON.parse(fs.readFileSync('./comments-skill/comments.json', 'utf8'));
+const localComments = JSON.parse(fs.readFileSync('pointer/comments-skill/comments.json', 'utf8'));
 const merged = [...localComments, ...transformedComments];
 
 // Deduplicate by ID (skip if ID already exists)
@@ -242,15 +263,17 @@ const deduped = Object.values(
   Object.fromEntries(merged.map(c => [c.id, c]))
 );
 
-fs.writeFileSync('./comments-skill/comments.json', JSON.stringify(deduped, null, 2), 'utf8');
+fs.writeFileSync('pointer/comments-skill/comments.json', JSON.stringify(deduped, null, 2), 'utf8');
 ```
 
 Report deduplication: "Skipped X duplicate comments (already imported)"
 
 #### Step 7: Merge into pending-apply.json (same logic)
 
+Merge pending comments into `pointer/comments-skill/pending-apply.json`:
+
 ```javascript
-const localPending = JSON.parse(fs.readFileSync('./comments-skill/pending-apply.json', 'utf8'));
+const localPending = JSON.parse(fs.readFileSync('pointer/comments-skill/pending-apply.json', 'utf8'));
 const importedPending = transformedComments.filter(c => 
   c.status === 'pending-apply' || (c.replies && c.replies.some(r => r.status === 'pending-apply'))
 );
@@ -260,19 +283,19 @@ const dedupedPending = Object.values(
   Object.fromEntries(mergedPending.map(c => [c.id, c]))
 );
 
-fs.writeFileSync('./comments-skill/pending-apply.json', JSON.stringify(dedupedPending, null, 2), 'utf8');
+fs.writeFileSync('pointer/comments-skill/pending-apply.json', JSON.stringify(dedupedPending, null, 2), 'utf8');
 ```
 
 #### Step 8: Save new mappings
 
 ```javascript
-fs.writeFileSync('./comments-skill/url-mappings.json', JSON.stringify(currentMappings, null, 2), 'utf8');
+fs.writeFileSync('pointer/comments-skill/url-mappings.json', JSON.stringify(currentMappings, null, 2), 'utf8');
 ```
 
 #### Step 9: Cleanup
 
 ```bash
-rm -rf ./comments-skill/import-staging/
+rm -rf pointer/comments-skill/import-staging/
 rm -f pointer-export.zip
 ```
 
@@ -334,7 +357,7 @@ If `element_selector` doesn't work in the HTML:
 
 ## URL Mapping Structure
 
-The `url-mappings.json` file stores groups of related URLs:
+The `pointer/comments-skill/url-mappings.json` file stores groups of related URLs:
 
 ```json
 [
@@ -387,8 +410,11 @@ A: Stop and ask the user: "Found comments from {origin}. What local URL does thi
 **Q: What if imported comments have elements that don't exist locally?**
 A: That's OK — merge them anyway. Browser will try fuzzy pin matching (due to `_imported: true` flag). If matching fails, user can manually place pins.
 
-**Q: Can I apply pending comments after merging?**
-A: YES, but only if the user asks. **Merge and Apply are separate actions.** After merging, tell user: "Merged {N} comments. To apply any pending comments, say: 'apply pending comments'"
+**Q: Should I apply comments after merging?**
+A: NO, NEVER. Only merge when user says "merge comments". **Do NOT apply pending comments** — that's a separate action only when user explicitly says "apply pending comments". After merging, tell user: "Merged {N} comments. Comments are ready to apply when you're ready. To apply any pending comments, say: 'apply pending comments'"
+
+**Q: Will merging change the status of comments?**
+A: NO. Keep imported comments exactly as they are (preserve their status from the ZIP). Only update status during the APPLY workflow, never during merge.
 
 ---
 
@@ -399,19 +425,23 @@ User says...
 │
 ├─ "apply pending comments" / "apply comments"
 │  └─ → WORKFLOW 1: APPLY PENDING COMMENTS
-│     • Read pending-apply.json
-│     • Edit HTML files
-│     • Update comments.json status
-│     • Clear pending-apply.json
+│     • Read: pointer/comments-skill/pending-apply.json
+│     • EDIT HTML files (apply CSS changes)
+│     • UPDATE: pointer/comments-skill/comments.json (status → "applied")
+│     • CLEAR: pointer/comments-skill/pending-apply.json
+│     • Result: HTML files changed, comments marked ✓
 │
 ├─ "merge comments" / "import team comments" / "import comments"
 │  └─ → WORKFLOW 2: MERGE COMMENTS
-│     • Find ZIP or read JSON
-│     • Map URLs (ask user if needed)
-│     • Merge into comments.json
-│     • Save mappings
-│     • DO NOT edit HTML
-│     • DO NOT clear pending-apply.json
+│     • READ: ZIP or JSON with new comments
+│     • MERGE: pointer/comments-skill/comments.json
+│     • MERGE: pointer/comments-skill/pending-apply.json
+│     • SAVE: pointer/comments-skill/url-mappings.json
+│     • DO NOT: Edit HTML files
+│     • DO NOT: Change comment status
+│     • DO NOT: Apply pending comments
+│     • DO NOT: Clear pending-apply.json
+│     • Result: Comments imported, mappings saved, no HTML changed
 │
 └─ Anything else
    └─ Ask for clarification
@@ -422,31 +452,65 @@ User says...
 ## Example Conversation Flow
 
 ### Apply Workflow
+
 ```
 User: "apply pending comments"
-AI: ✓ Applied 3 pending comments to 2 HTML files
-    • test.html — updated 2 styles
-    • about.html — updated 1 style
-    Refresh browser to see changes.
+
+AI: Reading pointer/comments-skill/pending-apply.json...
+    Found 3 pending comments.
+    
+    Applying changes:
+    • test.html — Updated .main-section h1 (font-size: 24px)
+    • test.html — Updated .button (color: blue)
+    • about.html — Updated .title (font-weight: bold)
+    
+    ✓ Applied 3 comments to 2 HTML files
+    
+    Updating pointer/comments-skill/comments.json...
+    Clearing pointer/comments-skill/pending-apply.json...
+    
+    Done! Refresh your browser to see the changes.
 ```
 
 ### Merge Workflow
+
 ```
 User: "merge comments from my teammate"
-AI: Found pointer-export.zip
+
+AI: Looking for ZIP file...
+    Found: pointer-export.zip
+    
+    Extracting to pointer/comments-skill/import-staging/...
+    
+    Analyzing imported comments:
     Found 12 comments from: www.uimarkets.com
     
-    Is www.uimarkets.com equivalent to your local development URL?
+    Checking pointer/comments-skill/url-mappings.json...
+    This is a NEW origin (not mapped yet).
+    
+    Question: www.uimarkets.com corresponds to which local URL?
     (e.g., http://localhost:5000)
 
-User: "yes, localhost:5000"
-AI: ✓ Merged 12 comments
+User: "localhost:5000"
+
+AI: Saving mapping to pointer/comments-skill/url-mappings.json...
+    ✓ Mapping saved: www.uimarkets.com → http://localhost:5000
+    
+    Transforming imported comments...
+    Merging into pointer/comments-skill/comments.json...
+    Merging into pointer/comments-skill/pending-apply.json...
+    
+    Cleaning up import-staging folder...
+    
+    ✓ Merged 12 comments
     - Added 12 new comments
     - Skipped 0 duplicates
     - Mapping saved: www.uimarkets.com → http://localhost:5000
     
     Visit the page in your browser to see the merged pins.
-    To apply any of these comments, say: "apply pending comments"
+    Comments are ready to apply when you're ready.
+    
+    To apply any pending comments, say: "apply pending comments"
 ```
 
 ---
