@@ -253,9 +253,72 @@ Claude will:
 
 </br>
 
-### Step 5: One-Time Setup - Pointer for Easy Access
+### Step 5: Open Your Project in the Browser
 
-Benefits of this one-time setup:
+**Open your Project HTML file in the browser** — either as a local server or directly:
+
+- **Test file:** Open the included `test.html` file directly in your browser (file is at the project root)
+- **Your project:** Open your own HTML file or project URL
+- **Local server:** Open `http://localhost:8000`, `http://localhost:3000`, etc. (use whatever port your project runs on)
+- **Static file:** Open `file:///path/to/your/project.html` (open HTML file directly without a server)
+
+
+</br>
+
+
+### Step 6: Start Commenting
+
+This is how you add comments to any page (localhost, live URLs, static files):
+
+1. **Click the "🐕 Pointer" bookmarklet** from your bookmarks bar
+   - The Pointer toolbar appears in the **top-right corner**
+   - The comments UI opens on the **right side**
+2. Click **"+ Add Comment"** button in the toolbar
+3. **Click any element on the page** you want to comment on
+4. A popover appears with a text field
+5. **Type your feedback** (be specific: "Make this text red", "Change font size to 16px", etc.)
+6. **Submit your comment**
+7. See a **numbered pin** appear on the element
+8. Your comment is now saved to `pointer/comments-skill/comments.json`
+
+**Works on:**
+- ✅ Localhost pages (http://localhost:3000, etc.)
+- ✅ Live URLs (https://www.yoursite.com)
+- ✅ Static files (file:///path/to/page.html)
+- ✅ Dev/staging servers (dev.company.com)
+
+</br>
+
+
+### Step 7: View & Manage Comments
+
+1. Click **"All Comments"** button in the toolbar
+2. The sidebar opens showing all comments on the page
+3. You can:
+   - **Reply** to comments to discuss changes
+   - **Delete** comments you no longer need
+   - **Read** full comment history with replies
+
+
+</br>
+
+
+### Step 8: Queue Changes for your AI Agent
+
+When ready to apply a comment:
+
+1. Click **"Ready to Apply"** button on the comment
+2. The status changes to **"Pending Apply"** (highlighted in yellow)
+3. If the comment has replies, you can mark individual replies instead
+4. The comment is now in the queue for your AI to process
+
+
+</br>
+
+
+### Step 9: One-Time Setup (Optional) - Auto-Load Pointer
+
+Benefits of this optional one-time setup:
 - ✅ Comments UI loads **automatically** on every page load
 - ✅ No need to click the bookmarklet each time
 - ✅ Comments persist across page refreshes
@@ -282,55 +345,7 @@ To make Pointer always open and survive page refreshes, add one of these script 
 </script>
 ```
 
-</br>
-
-### Step 6: Open Your Project in the Browser
-
-**Open your Project HTML file in the browser** — either as a local server or directly:
-
-- **Test file:** Open the included `test.html` file directly in your browser (file is at the project root)
-- **Your project:** Open your own HTML file or project URL
-- **Local server:** Open `http://localhost:8000`, `http://localhost:3000`, etc. (use whatever port your project runs on)
-- **Static file:** Open `file:///path/to/your/project.html` (open HTML file directly without a server)
-
-
-</br>
-
-
-### Step 7: Start Commenting
-
-1. **Click the "🐕 Pointer" bookmarklet** from your bookmarks bar if it's not opened
-2. A toolbar appears in the top-right corner
-3. Click **"+ Add Comment"** button
-4. **Click any element on the page** to attach a comment
-5. Type your feedback and submit
-6. See **numbered pins** appear on the element
-
-
-</br>
-
-
-### Step 8: View & Manage Comments
-
-1. Click **"All Comments"** button in the toolbar
-2. The sidebar opens showing all comments on the page
-3. You can:
-   - **Reply** to comments to discuss changes
-   - **Delete** comments you no longer need
-   - **Read** full comment history with replies
-
-
-</br>
-
-
-### Step 9: Queue Changes for your AI Agent
-
-When ready to apply a comment:
-
-1. Click **"Ready to Apply"** button on the comment
-2. The status changes to **"Pending Apply"** (highlighted in yellow)
-3. If the comment has replies, you can mark individual replies instead
-4. The comment is now in the queue for your AI to process
+**Note:** This is optional. Most users just click the bookmarklet when they want to add comments.
 
 </br>
 
