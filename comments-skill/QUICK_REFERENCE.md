@@ -63,9 +63,41 @@ File: `comments-skill/config.json`
 }
 ```
 
+## TWO WORKFLOWS
+
+### 1. Apply Pending Comments (Execute changes)
+```
+User: "apply pending comments"
+  ↓
+Claude reads pointer/comments-skill/pending-apply.json
+  ↓
+Claude edits HTML files (CSS changes)
+  ↓
+Claude updates pointer/comments-skill/comments.json (status → "applied")
+  ↓
+Result: HTML files changed, comments marked ✓
+```
+
+### 2. Merge Comments (Import team feedback)
+```
+User: "merge comments"
+  ↓
+Claude finds ZIP file or reads JSON
+  ↓
+Claude asks: "Map URL to local? (e.g., dev.company.com → localhost:5000)"
+  ↓
+Claude merges into pointer/comments-skill/comments.json
+  ↓
+Claude saves mapping to pointer/comments-skill/url-mappings.json
+  ↓
+Result: Comments imported, HTML NOT changed, mappings saved for next import
+```
+
+---
+
 ## Comments Storage
 
-**comments.json** — All comments with full history
+**pointer/comments-skill/comments.json** — All comments with full history
 ```json
 [
   {
@@ -89,7 +121,7 @@ File: `comments-skill/config.json`
 ]
 ```
 
-**pending-apply.json** — Work queue (auto-managed, read by Claude Code)
+**pointer/comments-skill/pending-apply.json** — Work queue (auto-managed, read by Claude Code)
 ```json
 [
   {
@@ -100,6 +132,19 @@ File: `comments-skill/config.json`
 ]
 ```
 ⚠️ Don't edit manually — server manages it automatically
+
+**pointer/comments-skill/url-mappings.json** — Environment mappings (for merge workflow)
+```json
+[
+  {
+    "group_id": "dev_company",
+    "origins": ["https://dev.company.com", "http://localhost:5000"],
+    "local_origin": "http://localhost:5000",
+    "created_at": "2026-06-26T15:30:00Z"
+  }
+]
+```
+⚠️ Auto-populated during merge — ask Claude to merge comments to create mappings
 
 ## API Endpoints
 | Method | Path | Purpose |
@@ -113,25 +158,50 @@ File: `comments-skill/config.json`
 
 ## Common Prompts for Claude Code
 
-### Quick and simple
+### Apply Pending Comments
+
+**Quick:**
 ```
 Apply pending comments.
 ```
 
-### With full instructions (recommended)
+**Detailed (recommended):**
 ```
-Apply pending comments from pending-apply.json. This file is self-contained with everything you need:
-- If apply_type is "reply": apply only the marked reply's requested change (full conversation in replies array for context)
-- If apply_type is "comment": apply the main comment
-- Read element_selector and element_snapshot to locate the element
-- Read the marked item's text to understand what change is requested
-- Apply to the HTML file at html_file_path
-- Update comments.json: mark the applied item as status: "applied"
-- pending-apply.json will be auto-cleared by the server
+Apply pending comments from pointer/comments-skill/pending-apply.json.
+Read element_selector and element_snapshot to locate each element.
+Update the CSS rule from applied_css_rules (never create new rules).
+Update pointer/comments-skill/comments.json: mark as status "applied".
 ```
 
-### Key principle
-**Read ONLY `pending-apply.json`** — it contains all info needed. No need to reference `comments.json` while applying. The pending-apply.json queue is self-contained and the single source of truth for what to apply.
+### Merge Comments
+
+**Quick:**
+```
+Merge comments.
+```
+
+**Detailed (recommended):**
+```
+Merge comments from ZIP file. Read pointer/comments-skill/url-mappings.json.
+For each unique origin in comments, ask user what local URL it maps to.
+Save mappings to url-mappings.json for future imports.
+Merge into pointer/comments-skill/comments.json and pending-apply.json.
+Do NOT edit HTML files or apply comments.
+```
+
+### Key Principles
+
+**Apply workflow:**
+- Read ONLY `pointer/comments-skill/pending-apply.json` (self-contained)
+- Update `pointer/comments-skill/comments.json` (mark as applied)
+- Edit HTML files
+
+**Merge workflow:**
+- Read ZIP or JSON comments
+- Ask user about URL mappings
+- Merge into storage files
+- Do NOT edit HTML files
+- Save mappings for future use
 
 ## Troubleshooting
 
@@ -167,22 +237,24 @@ cd comments-skill && npm start
 
 | File | Purpose |
 |------|---------|
-| `server.js` | Node.js API server |
-| `inject.js` | Browser overlay UI |
-| `comments.json` | All comments (full history) |
-| `pending-apply.json` | Work queue for Claude Code (auto-managed) |
-| `config.json` | Configuration |
-| `README.md` | Full documentation |
-| `CLAUDE_CODE_INTEGRATION.md` | Claude Code workflow |
+| `pointer/comments-skill/server.js` | Node.js API server |
+| `pointer/comments-skill/inject.js` | Browser overlay UI |
+| `pointer/comments-skill/comments.json` | All comments (full history) |
+| `pointer/comments-skill/pending-apply.json` | Work queue for Claude Code (auto-managed) |
+| `pointer/comments-skill/url-mappings.json` | Environment mappings (for team sync) |
+| `pointer/comments-skill/config.json` | Configuration |
+| `pointer/comments-skill/README.md` | Full documentation |
+| `pointer/comments-skill/CLAUDE_CODE_INTEGRATION.md` | Detailed Claude Code guide |
 
 ## What Gets Stored Where
 
 | Data | Location |
 |------|----------|
-| All comments (history) | `comments.json` |
-| Pending comments (work queue) | `pending-apply.json` |
+| All comments (history) | `pointer/comments-skill/comments.json` |
+| Pending comments (work queue) | `pointer/comments-skill/pending-apply.json` |
+| URL mappings (team sync) | `pointer/comments-skill/url-mappings.json` |
 | User name | Browser localStorage |
-| Server config | `config.json` |
+| Server config | `pointer/comments-skill/config.json` |
 | HTML files | Your project (wherever they are) |
 
 ## Performance Notes

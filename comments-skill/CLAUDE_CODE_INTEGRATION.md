@@ -46,7 +46,7 @@ Copy and paste this into Claude Code when you're ready to apply comments:
 ### Prompt Template
 
 ```
-I'm using an HTML comments skill. Pending changes are in `comments-skill/pending-apply.json`.
+I'm using an HTML comments skill. Pending changes are in `pointer/comments-skill/pending-apply.json`.
 
 **🔴 SACRED RULE: ALWAYS update the actual CSS rule that styles the element. NEVER create new element-specific selector rules.**
 
@@ -129,7 +129,7 @@ For each comment:
 
 **Steps:**
 
-1. Read `comments-skill/pending-apply.json`
+1. Read `pointer/comments-skill/pending-apply.json`
 2. **For each comment, follow this workflow:**
 
    **STEP A: Extract Element Information**
@@ -295,7 +295,7 @@ Claude should apply the last one. Typically the last marked-for-apply takes prec
 ```javascript
 // Pseudo-code
 const fs = require('fs');
-const pending = JSON.parse(fs.readFileSync('./comments-skill/pending-apply.json', 'utf8'));
+const pending = JSON.parse(fs.readFileSync('pointer/comments-skill/pending-apply.json', 'utf8'));
 // That's it! All items in this file are ready to process
 ```
 
@@ -349,15 +349,15 @@ Object.entries(byFile).forEach(([filePath, commentsForFile]) => {
 });
 
 // 4. Update comments.json and remove from pending-apply.json
-const allComments = JSON.parse(fs.readFileSync('./comments-skill/comments.json', 'utf8'));
+const allComments = JSON.parse(fs.readFileSync('pointer/comments-skill/comments.json', 'utf8'));
 pending.forEach(appliedComment => {
   const commentInFile = allComments.find(c => c.id === appliedComment.id);
   if (commentInFile) {
     commentInFile.status = 'applied';
   }
 });
-fs.writeFileSync('./comments-skill/comments.json', JSON.stringify(allComments, null, 2), 'utf8');
-fs.writeFileSync('./comments-skill/pending-apply.json', '[]', 'utf8'); // Clear the queue
+fs.writeFileSync('pointer/comments-skill/comments.json', JSON.stringify(allComments, null, 2), 'utf8');
+fs.writeFileSync('pointer/comments-skill/pending-apply.json', '[]', 'utf8'); // Clear the queue
 ```
 
 ### 4. Efficiency Notes
@@ -434,7 +434,216 @@ Claude is good at this kind of interpretation, but for best results, comments sh
 
 ---
 
+## WORKFLOW 2: MERGE COMMENTS (Team Sync)
+
+When a teammate shares comments from another environment (production, dev, staging), you need to merge them into your local project.
+
+### Merge Workflow Overview
+
+```
+Teammate on dev.company.com adds comments
+  ↓
+Teammate clicks "Export ZIP" in bookmarklet
+  ↓
+Teammate shares ZIP with you
+  ↓
+You tell Claude: "merge comments"
+  ↓
+Claude extracts ZIP, asks about URL mapping
+  ↓
+Claude merges comments into your local storage
+  ↓
+Visit your local page in browser → see merged pins
+```
+
+### Critical Rules for Merge
+
+🔴 **NEVER:**
+- Edit HTML files during merge
+- Change comment status
+- Apply pending comments
+- Clear pending-apply.json
+
+✅ **ALWAYS:**
+- Ask user about URL mappings for new origins
+- Save mappings for future imports (persistent)
+- Deduplicate by comment ID (skip if already imported)
+- Preserve original comment status from ZIP
+
+### Merge Workflow Steps
+
+#### Step 1: Find and Extract ZIP
+
+```bash
+find . -maxdepth 2 -name "*.zip" -o -name "pointer-export.zip" | head -1
+```
+
+If found:
+```bash
+unzip pointer-export.zip -d pointer/comments-skill/import-staging/
+```
+
+#### Step 2: Read Imported Comments and Mappings
+
+```javascript
+const importedComments = JSON.parse(
+  fs.readFileSync('pointer/comments-skill/import-staging/comments.json', 'utf8')
+);
+const currentMappings = JSON.parse(
+  fs.readFileSync('pointer/comments-skill/url-mappings.json', 'utf8')
+);
+```
+
+#### Step 3: Identify Unique Origins
+
+```javascript
+const uniqueOrigins = [...new Set(importedComments.map(c => {
+  const url = new URL(c.page_url);
+  return `${url.protocol}//${url.host}`;  // e.g., "https://www.uimarkets.com"
+}))];
+```
+
+#### Step 4: Map Each Origin (Ask User if New)
+
+**For each unique origin:**
+
+```javascript
+const mapping = currentMappings.find(group => 
+  group.origins.includes(origin)
+);
+
+if (!mapping) {
+  // NEW origin — ASK USER
+  // "Found comments from https://www.uimarkets.com. 
+  //  Map to which local URL? (e.g., http://localhost:5000)"
+  // User responds with local URL
+  // Save to url-mappings.json
+}
+```
+
+#### Step 5: Transform Comments with Mapped URLs
+
+```javascript
+const transformedComments = importedComments.map(comment => {
+  const commentOrigin = new URL(comment.page_url);
+  const originString = `${commentOrigin.protocol}//${commentOrigin.host}`;
+  
+  const mapping = currentMappings.find(group => 
+    group.origins.includes(originString)
+  );
+  
+  const localOrigin = mapping.local_origin;
+  const newPageUrl = comment.page_url.replace(originString, localOrigin);
+  
+  return {
+    ...comment,
+    page_url: newPageUrl,
+    _imported: true,
+    _import_source: originString
+  };
+});
+```
+
+#### Step 6-7: Merge into Storage Files
+
+```javascript
+// Merge into comments.json
+const localComments = JSON.parse(
+  fs.readFileSync('pointer/comments-skill/comments.json', 'utf8')
+);
+const merged = [...localComments, ...transformedComments];
+const deduped = Object.values(
+  Object.fromEntries(merged.map(c => [c.id, c]))
+);
+fs.writeFileSync(
+  'pointer/comments-skill/comments.json',
+  JSON.stringify(deduped, null, 2),
+  'utf8'
+);
+
+// Merge into pending-apply.json (same logic)
+const localPending = JSON.parse(
+  fs.readFileSync('pointer/comments-skill/pending-apply.json', 'utf8')
+);
+const importedPending = transformedComments.filter(c => 
+  c.status === 'pending-apply' || 
+  (c.replies && c.replies.some(r => r.status === 'pending-apply'))
+);
+const mergedPending = [...localPending, ...importedPending];
+const dedupedPending = Object.values(
+  Object.fromEntries(mergedPending.map(c => [c.id, c]))
+);
+fs.writeFileSync(
+  'pointer/comments-skill/pending-apply.json',
+  JSON.stringify(dedupedPending, null, 2),
+  'utf8'
+);
+```
+
+#### Step 8: Save New Mappings
+
+```javascript
+fs.writeFileSync(
+  'pointer/comments-skill/url-mappings.json',
+  JSON.stringify(currentMappings, null, 2),
+  'utf8'
+);
+```
+
+#### Step 9: Cleanup
+
+```bash
+rm -rf pointer/comments-skill/import-staging/
+rm -f pointer-export.zip
+```
+
+#### Step 10: Report Success
+
+```
+✓ Merged 12 comments
+  - Added 12 new comments
+  - Skipped 0 duplicates
+  - Mapping: www.uimarkets.com → localhost:5000
+  
+Visit your local page to see the merged pins.
+To apply any pending comments, say: "apply pending comments"
+```
+
+---
+
+### Merge Workflow Example
+
+**Scenario:** Teammate from dev team sends ZIP with 8 comments from `https://dev.company.com`
+
+**User input:** "merge comments"
+
+**Execution:**
+1. Claude finds `pointer-export.zip`
+2. Extracts to `pointer/comments-skill/import-staging/`
+3. Reads 8 comments from `https://dev.company.com/dashboard`
+4. Checks `pointer/comments-skill/url-mappings.json` → not found (first import from this origin)
+5. **Asks user:** "Found 8 comments from https://dev.company.com. Map to which local URL?"
+6. User responds: "http://localhost:3000"
+7. Creates mapping:
+```json
+{
+  "group_id": "dev_company",
+  "origins": ["https://dev.company.com", "http://localhost:3000"],
+  "local_origin": "http://localhost:3000",
+  "created_at": "2026-06-26T15:30:00Z"
+}
+```
+8. Transforms each comment: `https://dev.company.com/dashboard` → `http://localhost:3000/dashboard`
+9. Merges into `pointer/comments-skill/comments.json`
+10. Cleans up, reports success
+
+**Next time:** Teammate sends more comments from same origin → mapping auto-applies, no questions asked
+
+---
+
 ## FAQ
+
+### Apply Workflow Questions
 
 **Q: Can Claude apply comments to multiple HTML files?**
 A: Yes! Each comment has `html_file_path`. Claude will read/edit multiple files as needed.
@@ -456,6 +665,29 @@ A: Yes! Comments stay in `comments.json` with status "applied" and the AI reply.
 **Q: Can multiple people apply comments?**
 A: Each time someone tells Claude to apply, it reads the current state of `comments.json`. As long as you're taking turns or working on different files, it should be fine. For concurrent work, coordinate who's applying when.
 
+### Merge Workflow Questions
+
+**Q: What is the merge workflow?**
+A: When teammates work on different environments (dev, staging, production), they can export comments as ZIP. You import their ZIP, and Claude merges the comments into your local project while mapping URLs appropriately.
+
+**Q: How does URL mapping work?**
+A: When merging comments from a new origin (e.g., `https://dev.company.com`), Claude asks: "What local URL does this map to?" You respond (e.g., `http://localhost:3000`), and Claude saves this mapping. Next import from same origin auto-applies without asking.
+
+**Q: What happens to duplicate comments?**
+A: Comments are deduplicated by ID. If a comment with the same ID already exists locally, it's skipped. This prevents duplicates when re-importing.
+
+**Q: Should I apply comments immediately after merging?**
+A: No! Merge and Apply are separate actions. After merging, review comments in your browser first. Apply only when ready by saying "apply pending comments".
+
+**Q: Will merged comments change my local HTML?**
+A: No! Merging ONLY imports comments into storage. It does NOT edit HTML files. Only the Apply workflow edits HTML.
+
+**Q: What if merged comments reference elements that don't exist locally?**
+A: That's OK. Comments are stored with their selectors. If the element doesn't exist, the pin won't appear on the page, but the comment remains for reference. You can manually place the pin or update the element.
+
+**Q: Can I merge from multiple teammates?**
+A: Yes! Each teammate's ZIP can be merged independently. As long as their origins are mapped to your local URLs, comments will merge correctly.
+
 ---
 
 ## Example: Full Workflow Transcript
@@ -466,7 +698,7 @@ A: Each time someone tells Claude to apply, it reads the current state of `comme
 
 [Claude]
 "I'll apply the pending comments from your HTML comments skill. Let me read the comments file first."
-[Claude reads comments-skill/comments.json]
+[Claude reads pointer/comments-skill/comments.json]
 
 "Found 2 pending comments:
 1. On index.html: 'Change header font to Inter'

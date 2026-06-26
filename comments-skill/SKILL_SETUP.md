@@ -1,14 +1,20 @@
-# HTML Comments Skill — Implementation Complete ✓
+# HTML Comments Skill — Pointer v2.0
 
 ## What Was Built
 
-A **Figma-style commenting overlay** for HTML pages with **Claude Code integration**. Team members can:
+A **Figma-style commenting overlay** for HTML pages with **Claude Code integration** and **team collaboration**.
 
-1. ✅ Click elements on any localhost HTML page to add comments
-2. ✅ See all comments in a sidebar with author, timestamp, and reply threads
+### Core Features
+
+1. ✅ Click elements on any localhost/live HTML page to add comments
+2. ✅ See all comments in a sidebar with author, timestamp, and threaded replies
 3. ✅ Mark comments as "Pending Apply" to queue them for Claude Code
-4. ✅ Tell Claude Code "apply pending comments" — Claude reads `comments.json`, edits HTML files, and marks them as applied
-5. ✅ Export clean HTML without the commenting overlay
+4. ✅ **Apply workflow:** Tell Claude "apply pending comments" — Claude reads `pending-apply.json`, edits HTML files, marks as applied
+5. ✅ **Merge workflow:** Tell Claude "merge comments" — Claude imports team comments from ZIP, maps URLs, saves mappings for future imports
+6. ✅ Export clean HTML without the commenting overlay
+7. ✅ **NEW (v2.0):** Live URL commenting (production, staging, dev)
+8. ✅ **NEW (v2.0):** Environment mapping (dev.company.com ↔ localhost:5000)
+9. ✅ **NEW (v2.0):** Team sync with ZIP export/import
 
 ---
 
@@ -16,15 +22,17 @@ A **Figma-style commenting overlay** for HTML pages with **Claude Code integrati
 
 | File | Purpose |
 |------|---------|
-| `server.js` | Express server — CRUD API, serves inject.js |
-| `inject.js` | Client overlay UI (vanilla JS, ~900 lines) |
-| `comments.json` | All comments with full history |
-| `pending-apply.json` | Work queue (auto-managed by server) |
-| `config.json` | Configuration (project_root, url_base, port) |
-| `package.json` | Dependencies (express, cors) |
-| `bookmarklet.txt` | One-liner to load skill in browser |
-| `README.md` | Full documentation |
-| `.gitignore` | Excludes node_modules, comments.json, etc. |
+| `pointer/comments-skill/server.js` | Express server — CRUD API, serves inject.js |
+| `pointer/comments-skill/inject.js` | Client overlay UI (vanilla JS, ~900 lines) |
+| `pointer/comments-skill/comments.json` | All comments with full history |
+| `pointer/comments-skill/pending-apply.json` | Work queue (auto-managed by server) |
+| `pointer/comments-skill/url-mappings.json` | **NEW:** URL mappings for team sync |
+| `pointer/comments-skill/config.json` | Configuration (project_root, url_base, port) |
+| `pointer/comments-skill/package.json` | Dependencies (express, cors, archiver) |
+| `pointer/comments-skill/README.md` | Full documentation |
+| `pointer/comments-skill/QUICK_REFERENCE.md` | Quick lookup guide |
+| `pointer/comments-skill/CLAUDE_CODE_INTEGRATION.md` | Claude Code integration guide |
+| `pointer/comments-skill/SKILL_SETUP.md` | Setup and architecture |
 
 ---
 
@@ -108,6 +116,65 @@ Claude will:
 2. Click the bookmarklet again
 3. Your comments now show green ✓ pins
 4. Export the updated HTML if needed
+
+---
+
+## v2.0 Features: Team Collaboration
+
+### 1. Live URL Commenting
+
+The bookmarklet now works on **any page** — not just localhost:
+
+- ✅ Production sites: `https://www.yoursite.com`
+- ✅ Staging: `https://staging.yoursite.com`
+- ✅ Dev servers: `https://dev.company.com`
+- ✅ Local files: `file:///path/to/page.html`
+- ✅ Any localhost port: `http://localhost:8000`, `http://localhost:3000`, etc.
+
+Comments are saved to your local `pointer/comments-skill/comments.json` regardless of where the page is hosted.
+
+### 2. Environment Mapping
+
+Same page served under different URLs? Pointer automatically merges comments.
+
+**Example:**
+```
+Dev version:    https://dev.company.com/dashboard
+Local version:  http://localhost:5000/dashboard
+
+Set up mapping once in url-mappings.json.
+Comments from dev automatically appear on localhost.
+```
+
+**How to use:**
+1. Tell Claude: "merge comments"
+2. Claude asks: "dev.company.com maps to which local URL?"
+3. You respond: "localhost:5000"
+4. Claude saves mapping for future imports
+5. Next import from same origin: auto-applies without asking
+
+### 3. Team Sync with ZIP Export/Import
+
+Share comments with teammates without cloud upload.
+
+**Workflow:**
+```
+Teammate on dev.company.com:
+  1. Clicks "📦 Export ZIP" on bookmarklet page
+  2. Shares ZIP file with you
+
+You:
+  1. Tell Claude: "merge comments"
+  2. Claude extracts ZIP, asks about URL mapping
+  3. Comments merged into your local project
+  4. Mapping saved for next import
+```
+
+**Benefits:**
+- Comments stay private (no cloud upload)
+- Mappings persist (repeat imports are automatic)
+- Collaborative feedback without meetings
+- Full conversation history preserved
 
 ---
 
@@ -290,29 +357,49 @@ When asking Claude to apply comments, be specific:
 - "Fix the HTML" (Claude won't know to read comments.json)
 - "Update the website" (too vague)
 
-### Example full prompt for Claude Code:
+### Example prompts for Claude Code:
 
+**Apply Pending Comments:**
 ```
-I have an HTML project with a comments skill in `comments-skill/`.
+Apply pending comments. Read pointer/comments-skill/pending-apply.json.
+For each comment, update the HTML file at html_file_path.
+Find the CSS rule from applied_css_rules and modify it (never create new rules).
+Update pointer/comments-skill/comments.json: mark as status "applied".
+Report what was applied.
+```
 
-Comments are stored in `comments-skill/comments.json` as an array where each comment has:
-- id, page_url, html_file_path, element_selector, element_snapshot, text, status, replies
+**Merge Comments:**
+```
+Merge comments from ZIP file. 
+Extract to pointer/comments-skill/import-staging/.
+Check pointer/comments-skill/url-mappings.json for existing mappings.
+For each unique origin in comments, ask me what local URL it maps to.
+Save mappings to url-mappings.json for future imports.
+Merge comments into pointer/comments-skill/comments.json and pending-apply.json.
+Do NOT edit HTML files.
+Report what was merged.
+```
 
-I need you to:
-1. Read comments.json
-2. Find all comments where status === "pending-apply"
-3. For each pending comment:
-   a. Read the HTML file at html_file_path
-   b. Find the target element using element_selector (or element_snapshot if selector fails)
-   c. Apply the change from comment.text
-   d. Save the updated HTML
-4. For each applied comment:
-   a. Add a reply object with author: "AI", text: "Applied ✓ — [summary of change]", created_at: timestamp
-   b. Change status to "applied"
-5. Save the updated comments.json
-6. Report what was applied
+**Full Apply Prompt:**
+```
+I have a comments skill in `pointer/comments-skill/`.
 
-Here are my HTML files: [list your files or point Claude to the folder]
+Comments are stored in:
+- pointer/comments-skill/comments.json (full history)
+- pointer/comments-skill/pending-apply.json (work queue)
+
+Apply workflow:
+1. Read pointer/comments-skill/pending-apply.json
+2. For each pending comment:
+   a. Read HTML file at html_file_path
+   b. Find target element using element_selector (or element_snapshot)
+   c. Analyze applied_css_rules (last rule = highest specificity)
+   d. Update that CSS rule in <style> tag
+   e. Save HTML file
+3. Update pointer/comments-skill/comments.json: mark as status "applied"
+4. Report what was applied
+
+Critical: ALWAYS modify the actual CSS rule from applied_css_rules. NEVER create new element-specific selectors.
 ```
 
 ---
