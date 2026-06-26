@@ -13,11 +13,11 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 
 ## 🚀 Quick Navigation
 
-**Just want to use Claude Code?** → Go to [`WORKFLOWS.md`](./WORKFLOWS.md) ⭐  
+**Just want to use your AI Agent?** → Go to [`WORKFLOWS.md`](./WORKFLOWS.md) ⭐  
 **First time setting up?** → Scroll down to [Quick Start](#quick-start)  
 **Looking for something specific?**
 - 📖 Features → See [Features](#features) below
-- 🤖 Claude Code guide → See [`SKILL.md`](./SKILL.md)
+- 🤖 AI Agent guide → See [`SKILL.md`](./SKILL.md)
 - 🔧 Technical details → See [`comments-skill/README.md`](./comments-skill/README.md)
 - ❓ Troubleshooting → See [`SKILL.md`](./SKILL.md) or [`comments-skill/QUICK_REFERENCE.md`](./comments-skill/QUICK_REFERENCE.md)
 
@@ -29,13 +29,13 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 
 | Need | File | Purpose |
 |------|------|---------|
-| **Using with Claude Code** | [`WORKFLOWS.md`](./WORKFLOWS.md) | Quick guide: which command to use |
-| **Claude Code detailed guide** | [`SKILL.md`](./SKILL.md) | Complete workflow documentation & examples |
+| **Using with your AI Agent** | [`WORKFLOWS.md`](./WORKFLOWS.md) | Quick guide: which command to use |
+| **AI Agent workflow guide** | [`SKILL.md`](./SKILL.md) | Complete workflow documentation & examples |
 | **Setup & browser usage** | Below | Install and test Pointer locally |
 | **Technical reference** | [`comments-skill/`](./comments-skill/) | API, config, implementation details |
 
 **Quick Paths:**
-- 🎯 **Apply comments with Claude Code:** WORKFLOWS.md → SKILL.md → `"apply pending comments"`
+- 🎯 **Apply comments with your AI Agent:** WORKFLOWS.md → SKILL.md → `"apply pending comments"`
 - 👥 **Merge team comments:** WORKFLOWS.md → SKILL.md → `"merge comments"`
 - 🏗️ **Build with Pointer API:** See comments-skill/README.md
 
@@ -46,7 +46,7 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 ```
 pointer/
 ├── README.md ......................... This file (overview & setup)
-├── SKILL.md .......................... 🤖 How to use with Claude Code ⭐
+├── SKILL.md .......................... 🤖 How to use with your AI Agent ⭐
 ├── WORKFLOWS.md ...................... 🎯 Which command to use ⭐
 │
 ├── comments-skill/
@@ -54,7 +54,7 @@ pointer/
 │   ├── server.js ..................... Express API server
 │   ├── inject.js ..................... Browser overlay UI
 │   ├── comments.json ................. Comments storage
-│   ├── pending-apply.json ............ Work queue for Claude Code
+│   ├── pending-apply.json ............ Work queue for your AI Agent
 │   ├── url-mappings.json ............ URL environment mappings
 │   ├── config.json ................... Configuration
 │   │
@@ -71,7 +71,7 @@ pointer/
 ```
 
 **Documentation hierarchy:**
-- **Root level** (README, SKILL.md, WORKFLOWS.md): User-facing, setup, Claude Code usage
+- **Root level** (README, SKILL.md, WORKFLOWS.md): User-facing, setup, AI Agent usage
 - **comments-skill/**: Technical reference, API, implementation
 
 </br>
@@ -146,7 +146,7 @@ Facilitate faster design reviews and feedback loops, reduce communication overhe
 ## Quick Start (Setup & Browser Usage)
 
 This section covers installation and local testing. 
-**For Claude Code integration, see [`WORKFLOWS.md`](./WORKFLOWS.md) and [`SKILL.md`](./SKILL.md)**
+**For AI Agent integration, see [`WORKFLOWS.md`](./WORKFLOWS.md) and [`SKILL.md`](./SKILL.md)**
 
 </br>
 
@@ -211,22 +211,22 @@ curl -o .claude/skills/pointer/WORKFLOWS.md \
 - `SKILL.md` — Complete workflow guide (Apply & Merge workflows with examples)
 - `WORKFLOWS.md` — Quick reference for which command to use
 
-**Once installed, you can simply tell Claude Code:**
+**Once installed, you can simply tell your AI Agent:**
 - `"apply pending comments"` — Claude will apply all queued changes to your HTML files
 - `"merge comments"` — Claude will import team comments with automatic URL mapping
 
-**Important:** When using Claude Code with Pointer, open it at your **project root** for full functionality.
+**Important:** When using your AI Agent with Pointer, open it at your **project root** for full functionality.
 
 </br>
 
-### 🤖 Claude Code Integration Guide
+### 🤖 AI Agent Integration Guide
 
-Pointer has two main workflows with Claude Code:
+Pointer has two main workflows with your AI Agent:
 
 #### ✨ Workflow 1: Apply Pending Comments
 Apply changes from comments you've marked as "Pending Apply"
 ```
-Tell Claude Code: "apply pending comments"
+Tell your AI Agent: "apply pending comments"
 ```
 Claude will:
 - Read pending changes from `pending-apply.json`
@@ -237,7 +237,7 @@ Claude will:
 #### ✨ Workflow 2: Merge Comments
 Import comments from teammates (team collaboration feature)
 ```
-Tell Claude Code: "merge comments"
+Tell your AI Agent: "merge comments"
 ```
 Claude will:
 - Find your ZIP file with team comments
@@ -249,7 +249,7 @@ Claude will:
 - Quick start? → Read [`WORKFLOWS.md`](./WORKFLOWS.md)
 - Detailed guide? → Read [`SKILL.md`](./SKILL.md)
 
-**Important:** Open Claude Code at **project root**, not in comments-skill/ folder
+**Important:** Open your AI Agent at **project root**, not in comments-skill/ folder
 
 </br>
 
@@ -354,7 +354,7 @@ When ready to apply a comment:
 
 ### Step 10: Apply Pending Comments
 
-Once the skill file is set up (Step 4), simply tell Claude Code:
+Once the skill file is set up (Step 4), simply tell your AI Agent:
 
 ```
 apply pending comments
@@ -411,8 +411,8 @@ For Front-end Developers applying team feedback in local code:
 
 1. **Receive the ZIP file** from designer/QA
 
-2. **Upload ZIP and tell Claude Code:** `merge comments`
-   - In Claude Code, upload the ZIP file you got it from team mate and ask claude to "Merge Comments"
+2. **Upload ZIP and tell your AI Agent:** `merge comments`
+   - Upload the ZIP file to your AI Agent and ask it to `merge comments`
    - Claude will extract the ZIP and process the comments
 
 3. **Answer URL mapping question** (if needed)
@@ -424,6 +424,7 @@ For Front-end Developers applying team feedback in local code:
    - Refresh your browser to see your teammate's comments added to Pointer
 
 5. **Apply comments** when ready
+   - Mark any comment or reply by clicking on: `Ready to apply`
    - Tell Claude Code: `apply pending comments`
    - Claude edits your HTML files with the changes
    - Refresh to see changes live
