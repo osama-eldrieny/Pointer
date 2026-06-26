@@ -11,6 +11,75 @@ Quick, targeted feedback directly on HTML elements. No lengthy descriptions—ju
 </br>
 </br>
 
+## 🚀 Quick Navigation
+
+**Just want to use Claude Code?** → Go to [`WORKFLOWS.md`](./WORKFLOWS.md) ⭐  
+**First time setting up?** → Scroll down to [Quick Start](#quick-start)  
+**Looking for something specific?**
+- 📖 Features → See [Features](#features) below
+- 🤖 Claude Code guide → See [`SKILL.md`](./SKILL.md)
+- 🔧 Technical details → See [`comments-skill/README.md`](./comments-skill/README.md)
+- ❓ Troubleshooting → See [`SKILL.md`](./SKILL.md) or [`comments-skill/QUICK_REFERENCE.md`](./comments-skill/QUICK_REFERENCE.md)
+
+</br>
+
+## 📚 Documentation Guide
+
+**Where to go depends on what you need:**
+
+| Need | File | Purpose |
+|------|------|---------|
+| **Using with Claude Code** | [`WORKFLOWS.md`](./WORKFLOWS.md) | Quick guide: which command to use |
+| **Claude Code detailed guide** | [`SKILL.md`](./SKILL.md) | Complete workflow documentation & examples |
+| **Setup & browser usage** | Below | Install and test Pointer locally |
+| **Technical reference** | [`comments-skill/`](./comments-skill/) | API, config, implementation details |
+
+**Quick Paths:**
+- 🎯 **Apply comments with Claude Code:** WORKFLOWS.md → SKILL.md → `"apply pending comments"`
+- 👥 **Merge team comments:** WORKFLOWS.md → SKILL.md → `"merge comments"`
+- 🏗️ **Build with Pointer API:** See comments-skill/README.md
+
+</br>
+
+## 📁 Project Structure
+
+```
+pointer/
+├── README.md ......................... This file (overview & setup)
+├── SKILL.md .......................... 🤖 How to use with Claude Code ⭐
+├── WORKFLOWS.md ...................... 🎯 Which command to use ⭐
+│
+├── comments-skill/
+│   ├── README.md ..................... Technical documentation
+│   ├── server.js ..................... Express API server
+│   ├── inject.js ..................... Browser overlay UI
+│   ├── comments.json ................. Comments storage
+│   ├── pending-apply.json ............ Work queue for Claude Code
+│   ├── url-mappings.json ............ URL environment mappings
+│   ├── config.json ................... Configuration
+│   │
+│   ├── QUICK_REFERENCE.md ........... Quick lookup guide
+│   ├── CLAUDE_CODE_INTEGRATION.md ... Detailed Claude guide
+│   ├── SKILL_SETUP.md ............... Architecture & v2.0 features
+│   └── package.json .................. Dependencies
+│
+├── .claude/
+│   ├── settings.json ................. 🔧 AI directives (local)
+│   └── skills/pointer/SKILL.md ....... Reference copy (local)
+│
+├── assets/
+│   └── images/pointer-icon.png ....... Logo
+│
+└── test.html ......................... Example demo page
+```
+
+**Documentation hierarchy:**
+- **Root level** (README, SKILL.md, WORKFLOWS.md): User-facing, setup, Claude Code usage
+- **comments-skill/**: Technical reference, API, implementation
+
+</br>
+</br>
+
 ## Features
 
 ✨ **Bookmarklet-based** — Works on any localhost HTML page or static HTML file  
@@ -73,7 +142,11 @@ Facilitate faster design reviews and feedback loops, reduce communication overhe
 </br>
 
 
-## Quick Start
+## Quick Start (Setup & Browser Usage)
+
+This section covers installation and local testing. 
+**For Claude Code integration, see [`WORKFLOWS.md`](./WORKFLOWS.md) and [`SKILL.md`](./SKILL.md)**
+
 </br>
 
 ### Step 1: Clone the Repository
@@ -133,6 +206,40 @@ The Pointer skill is automatically set up and documented at the **project root**
 Once set up, you can simply tell Claude Code:
 - `"apply pending comments"` — Claude will read `SKILL.md` and apply all queued changes
 - `"merge comments"` — Claude will read `SKILL.md` and import team comments with URL mapping
+
+</br>
+
+### 🤖 Claude Code Integration Guide
+
+Pointer has two main workflows with Claude Code:
+
+#### ✨ Workflow 1: Apply Pending Comments
+Apply changes from comments you've marked as "Pending Apply"
+```
+Tell Claude Code: "apply pending comments"
+```
+Claude will:
+- Read pending changes from `pending-apply.json`
+- Apply CSS changes to your HTML files
+- Mark comments as "✓ Applied"
+- Refresh your browser to see changes
+
+#### ✨ Workflow 2: Merge Comments
+Import comments from teammates (team collaboration feature)
+```
+Tell Claude Code: "merge comments"
+```
+Claude will:
+- Find your ZIP file with team comments
+- Ask you to map URLs (dev.company.com → localhost:5000)
+- Merge comments into your project
+- Save mappings for future imports
+
+#### 📖 Complete Guides
+- Quick start? → Read [`WORKFLOWS.md`](./WORKFLOWS.md)
+- Detailed guide? → Read [`SKILL.md`](./SKILL.md)
+
+**Important:** Open Claude Code at **project root**, not in comments-skill/ folder
 
 </br>
 
@@ -242,6 +349,25 @@ Claude will:
 </br>
 
 ## New Features (v2.0)
+
+### 🤖 Claude Code Integration (NEW!)
+Two powerful commands for AI-assisted workflows:
+
+**Apply Pending Comments**
+```
+apply pending comments
+```
+Tell Claude Code to automatically apply CSS changes to your HTML files.
+See: [`SKILL.md`](./SKILL.md) → Workflow 1
+
+**Merge Comments**
+```
+merge comments
+```
+Import comments from teammates with automatic URL mapping across environments.
+See: [`SKILL.md`](./SKILL.md) → Workflow 2
+
+---
 
 ### 🌐 Live URL Commenting
 
@@ -586,7 +712,20 @@ MIT
 
 ## See Also
 
-- [Full Documentation](comments-skill/README.md)
-- [Quick Reference](comments-skill/QUICK_REFERENCE.md)
-- [Claude Code Integration](comments-skill/CLAUDE_CODE_INTEGRATION.md)
-- [Setup Guide](comments-skill/SKILL_SETUP.md)
+### 🤖 For Claude Code Users
+- [`WORKFLOWS.md`](./WORKFLOWS.md) — Which command to use (Start here!)
+- [`SKILL.md`](./SKILL.md) — Complete workflow guide with examples
+
+### 📚 For Technical Details
+- [`comments-skill/README.md`](./comments-skill/README.md) — Full technical documentation
+- [`comments-skill/QUICK_REFERENCE.md`](./comments-skill/QUICK_REFERENCE.md) — Quick lookup
+- [`comments-skill/CLAUDE_CODE_INTEGRATION.md`](./comments-skill/CLAUDE_CODE_INTEGRATION.md) — Detailed guide
+- [`comments-skill/SKILL_SETUP.md`](./comments-skill/SKILL_SETUP.md) — Architecture & v2.0 features
+
+### 🔗 Documentation Hierarchy
+```
+You are here: README.md (overview & setup)
+   ↓
+For Claude Code? → WORKFLOWS.md (quick) or SKILL.md (detailed)
+For technical details? → comments-skill/ folder
+```
