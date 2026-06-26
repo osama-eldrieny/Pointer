@@ -118,15 +118,18 @@ You'll see:
 
 ### Step 4: Setup AI Agent Integration (One-Time Only)
 
-Install the Pointer skill file to your project (this teaches your AI agent how to apply comments):
+The Pointer skill is automatically set up in `.claude/skills/pointer/SKILL.md` and `.claude/settings.json`.
 
-```bash
-mkdir -p .claude/skills/pointer
-curl -o .claude/skills/pointer/SKILL.md \
-  https://raw.githubusercontent.com/osama-eldrieny/Pointer/main/.claude/skills/pointer/SKILL.md
+**Important:** When using Claude Code with Pointer, open it at the **project root** (the `pointer/` folder):
+
+```
+✅ CORRECT: Open Claude Code at /Users/oo/Desktop/Pointer/ (project root)
+❌ WRONG: Open Claude Code at /Users/oo/Desktop/Pointer/comments-skill/
 ```
 
-Once installed, you can simply tell Claude Code `apply pending comments` and it will automatically know how to apply all your pending feedback!
+Once set up, you can simply tell Claude Code:
+- `"apply pending comments"` — Claude will apply all queued changes
+- `"merge comments"` — Claude will import team comments and map URLs
 
 </br>
 
