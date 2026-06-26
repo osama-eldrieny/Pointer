@@ -292,10 +292,10 @@ This is how you add comments to any page (localhost, live URLs, static files):
 
 ### Step 7: View & Manage Comments
 
-1. Click **"All Comments"** button in the toolbar
+1. Click the **expand icon** (≡) in the toolbar to open the comments sidebar
 2. The sidebar opens showing all comments on the page
 3. You can:
-   - **Reply** to comments to discuss changes
+   - **Reply** to comments to discuss changes before applying
    - **Delete** comments you no longer need
    - **Read** full comment history with replies
 
