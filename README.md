@@ -471,34 +471,6 @@ See [CLAUDE_CODE_INTEGRATION.md](comments-skill/CLAUDE_CODE_INTEGRATION.md) for 
 </br>
 
 
-## File Structure
-
-```
-Pointer/
-├── comments-skill/
-│   ├── server.js                    # Express API server
-│   ├── inject.js                    # Browser overlay & UI (~22KB)
-│   ├── comments.json                # All comments (auto-created)
-│   ├── pending-apply.json           # Work queue for AI apply
-│   ├── config.json                  # Configuration
-│   ├── package.json                 # Dependencies
-│   ├── package-lock.json            # Locked dependencies
-│   ├── README.md                    # Full documentation
-│   ├── QUICK_REFERENCE.md           # Quick lookup
-│   ├── SKILL_SETUP.md               # Setup guide
-│   └── CLAUDE_CODE_INTEGRATION.md   # AI apply workflow
-│
-├── assets/
-│   └── images/
-│       └── pointer-icon.png         # Main logo (used in README)
-│
-├── test.html                        # Example/demo page
-├── README.md                        # Main documentation
-└── package-lock.json                # Root dependencies lock
-```
-
-</br>
-</br>
 
 
 ## Configuration
