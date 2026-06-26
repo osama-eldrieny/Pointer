@@ -376,25 +376,6 @@ Claude will:
 
 ## New Features (v2.0)
 
-### 🤖 Claude Code Integration (NEW!)
-Two powerful commands for AI-assisted workflows:
-
-**Apply Pending Comments**
-```
-apply pending comments
-```
-Tell Claude Code to automatically apply CSS changes to your HTML files.
-See: [`SKILL.md`](./SKILL.md) → Workflow 1
-
-**Merge Comments**
-```
-merge comments
-```
-Import comments from teammates with automatic URL mapping across environments.
-See: [`SKILL.md`](./SKILL.md) → Workflow 2
-
----
-
 ### 🌐 Live URL Commenting
 
 The bookmarklet now works on **any page** — not just localhost!
